@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Game API Test</h1>
+    
+    <div class="card">
+        <h2>Đăng ký</h2>
+        <button onclick="register()">Test Đăng ký</button>
+        <pre id="register-result"></pre>
+    </div>
+    
+    <div class="card">
+        <h2>Đăng nhập</h2>
+        <button onclick="login()">Test Đăng nhập</button>
+        <pre id="login-result"></pre>
+    </div>
+    
+    <div class="card">
+        <h2>Lấy tiến độ game</h2>
+        <button onclick="getProgress()">Test Lấy tiến độ</button>
+        <pre id="progress-result"></pre>
+    </div>
+    
+    <div class="card">
+        <h2>Lấy inventory</h2>
+        <button onclick="getInventory()">Test Lấy inventory</button>
+        <pre id="inventory-result"></pre>
+    </div>
+    
+    <div class="card">
+        <h2>Lấy quests</h2>
+        <button onclick="getQuests()">Test Lấy quests</button>
+        <pre id="quests-result"></pre>
+    </div>
+    
+    <script>
+        let token = '';
+        
+        async function register() {
+            const resultElement = document.getElementById('register-result');
+            resultElement.textContent = 'Đang gửi request...';
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'testuser' + Math.floor(Math.random() * 1000),
+                        password: 'password123',
+                        email: 'test' + Math.floor(Math.random() * 1000) + '@example.com'
+                    })
+                });
+                
+                const data = await response.json();
+                resultElement.textContent = JSON.stringify(data, null, 2);
+                
+                if (data.token) {
+                    token = data.token;
+                }
+            } catch (error) {
+                resultElement.textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        async function login() {
+            const resultElement = document.getElementById('login-result');
+            resultElement.textContent = 'Đang gửi request...';
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'testuser789',
+                        password: 'password123'
+                    })
+                });
+                
+                const data = await response.json();
+                resultElement.textContent = JSON.stringify(data, null, 2);
+                
+                if (data.token) {
+                    token = data.token;
+                }
+            } catch (error) {
+                resultElement.textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        async function getProgress() {
+            const resultElement = document.getElementById('progress-result');
+            resultElement.textContent = 'Đang gửi request...';
+            
+            if (!token) {
+                resultElement.textContent = 'Vui lòng đăng nhập trước';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/progress/get/3', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                
+                const data = await response.json();
+                resultElement.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultElement.textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        async function getInventory() {
+            const resultElement = document.getElementById('inventory-result');
+            resultElement.textContent = 'Đang gửi request...';
+            
+            if (!token) {
+                resultElement.textContent = 'Vui lòng đăng nhập trước';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/inventory/get/3', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                
+                const data = await response.json();
+                resultElement.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultElement.textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        async function getQuests() {
+            const resultElement = document.getElementById('quests-result');
+            resultElement.textContent = 'Đang gửi request...';
+            
+            if (!token) {
+                resultElement.textContent = 'Vui lòng đăng nhập trước';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/quests/get/1', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                
+                const data = await response.json();
+                resultElement.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultElement.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html> 

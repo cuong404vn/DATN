@@ -1,0 +1,8 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Chuyển hướng tất cả các request bắt đầu bằng /api/ đến api.php
+RewriteBase /
+RewriteRule ^api/(.*)$ api.php [QSA,L] 
