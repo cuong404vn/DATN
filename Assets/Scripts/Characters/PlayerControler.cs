@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public int maxJumps = 2;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
+    private bool isAttacking;
 
     void Start()
     {
@@ -22,18 +23,21 @@ public class PlayerController : MonoBehaviour
     {
         Move();
         Jump();
+        Attack();
         UpdateAnimation();
     }
 
     void Move()
     {
+        if (isAttacking) return; // Không di chuyển khi đang tấn công
+
         float moveInput = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
 
         if (moveInput > 0)
-            spriteRenderer.flipX = false; // Hướng sang phải
+            spriteRenderer.flipX = false;
         else if (moveInput < 0)
-            spriteRenderer.flipX = true; // Hướng sang trái
+            spriteRenderer.flipX = true;
 
         animator.SetBool("isRunning", moveInput != 0);
     }
@@ -46,20 +50,32 @@ public class PlayerController : MonoBehaviour
             jumpCount++;
 
             if (jumpCount == 1)
-                animator.SetTrigger("Jump1"); // Hoạt ảnh nhảy lần 1
+                animator.SetTrigger("Jump1");
             else if (jumpCount == 2)
-                animator.SetTrigger("Jump2"); // Hoạt ảnh nhảy lần 2
+                animator.SetTrigger("Jump2");
         }
+    }
+
+    void Attack()
+    {
+        if (Input.GetMouseButtonDown(0) && !isAttacking)
+        {
+            isAttacking = true;
+            animator.SetTrigger("Attack");
+            Invoke("ResetAttack", 0.5f); // Reset attack sau 0.5 giây
+        }
+    }
+
+    void ResetAttack()
+    {
+        isAttacking = false;
     }
 
     void UpdateAnimation()
     {
         if (isGrounded)
         {
-            if (rb.linearVelocity.x == 0)
-                animator.SetBool("isIdle", true);
-            else
-                animator.SetBool("isIdle", false);
+            animator.SetBool("isIdle", rb.linearVelocity.x == 0);
         }
     }
 
@@ -68,7 +84,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
-            jumpCount = 0; // Reset số lần nhảy khi chạm đất
+            jumpCount = 0;
             animator.SetBool("isGrounded", true);
         }
     }
