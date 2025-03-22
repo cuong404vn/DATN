@@ -14,10 +14,13 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking;
     private Vector3 startPosition;
     public GameObject GameOver;
+    private Gamemanager gamemanager;
 
     private static PlayerController instance; 
 
-    void Awake()
+    
+
+    private void Awake()
     {
         if (instance == null) 
         {
@@ -28,6 +31,9 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(gameObject); 
         }
+
+        gamemanager = FindAnyObjectByType<Gamemanager>();
+
     }
 
     void Start()
@@ -41,6 +47,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (gamemanager.IsGameOver()) return;
+
         Move();
         Jump();
         Attack();

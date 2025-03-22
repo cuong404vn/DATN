@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      beige_border2_0: 4215667755152557005
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

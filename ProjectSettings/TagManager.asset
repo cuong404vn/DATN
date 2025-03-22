@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Ground
   - DungNham
+  - Coin
+  - Trap
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -13,7 +16,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 
@@ -42,6 +45,21 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: BackGround
+    uniqueID: 3536490809
+    locked: 0
+  - name: Item
+    uniqueID: 1613012999
+    locked: 0
+  - name: Ground
+    uniqueID: 529683187
+    locked: 0
+  - name: Ui
+    uniqueID: 686076197
+    locked: 0
+  - name: Enemy
+    uniqueID: 653830823
     locked: 0
   m_RenderingLayers:
   - Default

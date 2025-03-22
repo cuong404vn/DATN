@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      big-ball-button_0: 3948443663533631400
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
