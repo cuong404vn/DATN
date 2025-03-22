@@ -2,19 +2,19 @@
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform player;  // Nhân vật cần theo dõi
-    public Vector3 offset;    // Khoảng cách giữa camera và player
-    public float smoothSpeed = 5f; // Tốc độ di chuyển mượt
+    public Transform player;  
+    public Vector3 offset;    
+    public float smoothSpeed = 5f; 
 
     void LateUpdate()
     {
-        if (player == null) // Nếu chưa có Player, tìm lại
+        if (player == null) 
         {
             FindPlayer();
             return;
         }
 
-        // Di chuyển camera theo player với hiệu ứng mượt
+        
         Vector3 targetPosition = player.position + offset;
         transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed * Time.deltaTime);
     }
