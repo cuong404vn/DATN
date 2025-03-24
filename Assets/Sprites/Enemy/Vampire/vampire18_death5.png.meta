@@ -509,7 +509,23 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      vampire18_death5_0: 247842239067570529
+      vampire18_death5_1: 8120484098917364431
+      vampire18_death5_10: -4147436650305888657
+      vampire18_death5_11: -20520878124024767
+      vampire18_death5_12: -1855338700042338984
+      vampire18_death5_13: 5093901884737167664
+      vampire18_death5_14: -6861554737010069901
+      vampire18_death5_15: -5430993715158611674
+      vampire18_death5_2: 7275119539806039544
+      vampire18_death5_3: -8916169825013704483
+      vampire18_death5_4: -2495458753287060002
+      vampire18_death5_5: -6196619348421541963
+      vampire18_death5_6: -7309044801009333587
+      vampire18_death5_7: 8925718108849177854
+      vampire18_death5_8: -1747771660542959146
+      vampire18_death5_9: 6122563498488479668
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

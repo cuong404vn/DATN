@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      vampire02_idle2_0: -4875543769119494536
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

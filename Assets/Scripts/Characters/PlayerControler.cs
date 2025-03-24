@@ -14,26 +14,20 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking;
     private Vector3 startPosition;
     public GameObject GameOver;
-    private Gamemanager gamemanager;
 
-    private static PlayerController instance; 
-
-    
+    private static PlayerController instance;
 
     private void Awake()
     {
-        if (instance == null) 
+        if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject); 
+            Destroy(gameObject);
         }
-
-        gamemanager = FindAnyObjectByType<Gamemanager>();
-
     }
 
     void Start()
@@ -42,13 +36,10 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         startPosition = transform.position;
-
     }
 
     void Update()
     {
-        if (gamemanager.IsGameOver()) return;
-
         Move();
         Jump();
         Attack();
@@ -60,7 +51,7 @@ public class PlayerController : MonoBehaviour
         if (isAttacking) return;
 
         float moveInput = Input.GetAxis("Horizontal");
-        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y); 
+        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
 
         if (moveInput > 0)
             spriteRenderer.flipX = false;
@@ -74,7 +65,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && jumpCount < maxJumps)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce); 
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpCount++;
 
             if (jumpCount == 1)
@@ -129,8 +120,5 @@ public class PlayerController : MonoBehaviour
     public void ChangeScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
-       
     }
-
-
 }
