@@ -19,9 +19,9 @@ public class AuthManager : MonoBehaviour
     public TMP_Text errorMessageText;
     public Button closeButton;
     public Button registerButton;
-    public GameObject loadingIndicator; 
+    public GameObject loadingIndicator;
 
-    private string apiUrl = "https://shopnickgame.online/api/auth"; 
+    private string apiUrl = "https://shopnickgame.online/api/auth";
 
     void Start()
     {
@@ -29,7 +29,6 @@ public class AuthManager : MonoBehaviour
         registerButton.onClick.AddListener(() => GoToRegisterScene());
         closeButton.onClick.AddListener(() => errorPopup.SetActive(false));
 
-        
         errorPopup.SetActive(false);
         if (loadingIndicator) loadingIndicator.SetActive(false);
     }
@@ -45,36 +44,39 @@ public class AuthManager : MonoBehaviour
             return;
         }
 
-        if (loadingIndicator) loadingIndicator.SetActive(true); 
+        if (loadingIndicator) loadingIndicator.SetActive(true);
 
-        LoginRequest loginData = new LoginRequest { username = username, password = password };
-        string requestBody = JsonUtility.ToJson(loginData);
+        string token = await SendLoginRequest(username, password);
 
-        string response = await SendLoginRequest(requestBody);
+        if (loadingIndicator) loadingIndicator.SetActive(false);
 
-        if (loadingIndicator) loadingIndicator.SetActive(false); 
-
-        if (!string.IsNullOrEmpty(response))
+        if (!string.IsNullOrEmpty(token))
         {
-            LoginResponse responseData = JsonUtility.FromJson<LoginResponse>(response);
-            if (!string.IsNullOrEmpty(responseData.token))
+            try
             {
-                Debug.Log("Đăng nhập thành công!" + responseData.token);
-                PlayerPrefs.SetString("auth_token", responseData.token);
+                Debug.Log("Đăng nhập thành công với token: " + token);
+
+                // Không cần làm gì thêm với user_id vì đã được xử lý trong SendLoginRequest
+
+                // Đợi 0.5 giây để đảm bảo PlayerPrefs được lưu
+                await Task.Delay(500);
+
                 LoadMapBossScene();
             }
-            else
+            catch (System.Exception e)
             {
-                ShowError("Sai Tên Đăng Nhập Hoặc Mật Khẩu");
+                Debug.LogError("Lỗi khi xử lý phản hồi JSON: " + e.Message);
+                Debug.LogError("Phản hồi gốc: " + token);
+                ShowError("Lỗi khi xử lý dữ liệu từ máy chủ");
             }
         }
     }
 
-    private async Task<string> SendLoginRequest(string requestBody)
+    private async Task<string> SendLoginRequest(string username, string password)
     {
         using (UnityWebRequest request = new UnityWebRequest(apiUrl + "/login", "POST"))
         {
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(requestBody);
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new LoginRequest { username = username, password = password }));
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
@@ -88,7 +90,84 @@ public class AuthManager : MonoBehaviour
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                return request.downloadHandler.text;
+                string jsonResponse = request.downloadHandler.text;
+                Debug.Log("Phản hồi đầy đủ từ API: " + jsonResponse);
+
+                // Phân tích JSON
+                try
+                {
+                    // Tìm userID trong đối tượng userData
+                    string userDataKey = "\"userData\":";
+                    int userDataStart = jsonResponse.IndexOf(userDataKey);
+
+                    if (userDataStart != -1)
+                    {
+                        // Tìm userID trong userData
+                        string userIDKey = "\"userID\":\"";
+                        int userIDStart = jsonResponse.IndexOf(userIDKey, userDataStart) + userIDKey.Length;
+                        int userIDEnd = jsonResponse.IndexOf("\"", userIDStart);
+
+                        if (userIDStart > userIDKey.Length && userIDEnd > userIDStart)
+                        {
+                            string userID = jsonResponse.Substring(userIDStart, userIDEnd - userIDStart);
+                            Debug.Log("✅ Đã tìm thấy userID trong userData: " + userID);
+
+                            // Lưu userID vào PlayerPrefs
+                            PlayerPrefs.SetString("user_id", userID);
+                            Debug.Log("✅ Đã lưu user_id: " + userID);
+
+                            // Tìm token
+                            string tokenKey = "\"token\":\"";
+                            int tokenStart = jsonResponse.IndexOf(tokenKey) + tokenKey.Length;
+                            int tokenEnd = jsonResponse.IndexOf("\"", tokenStart);
+                            string token = jsonResponse.Substring(tokenStart, tokenEnd - tokenStart);
+
+                            // Lưu token vào PlayerPrefs
+                            PlayerPrefs.SetString("auth_token", token);
+                            Debug.Log("✅ Đã lưu auth_token: " + token);
+
+                            return token;
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Không tìm thấy userID trong userData, sử dụng username thay thế");
+                            PlayerPrefs.SetString("user_id", username);
+                            Debug.Log("✅ Lưu user_id vào PlayerPrefs: " + username);
+
+                            // Tìm token
+                            string tokenKey = "\"token\":\"";
+                            int tokenStart = jsonResponse.IndexOf(tokenKey) + tokenKey.Length;
+                            int tokenEnd = jsonResponse.IndexOf("\"", tokenStart);
+                            string token = jsonResponse.Substring(tokenStart, tokenEnd - tokenStart);
+
+                            // Lưu token vào PlayerPrefs
+                            PlayerPrefs.SetString("auth_token", token);
+
+                            return token;
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Không tìm thấy userData trong phản hồi, sử dụng username thay thế");
+                        PlayerPrefs.SetString("user_id", username);
+
+                        // Tìm token
+                        string tokenKey = "\"token\":\"";
+                        int tokenStart = jsonResponse.IndexOf(tokenKey) + tokenKey.Length;
+                        int tokenEnd = jsonResponse.IndexOf("\"", tokenStart);
+                        string token = jsonResponse.Substring(tokenStart, tokenEnd - tokenStart);
+
+                        // Lưu token vào PlayerPrefs
+                        PlayerPrefs.SetString("auth_token", token);
+
+                        return token;
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError("Lỗi khi xử lý JSON: " + e.Message);
+                    return null;
+                }
             }
             else
             {
@@ -109,15 +188,14 @@ public class AuthManager : MonoBehaviour
 
     private void LoadMapBossScene()
     {
-        Debug.Log("🔄 Chuyển sang màn hình MAP_BOSS...");
-        SceneManager.LoadScene("MAP BOSS");
+        Debug.Log("🔄 Chuyển sang màn hình HOME...");
+        SceneManager.LoadScene("Home");
     }
-
 
     private void GoToRegisterScene()
     {
         Debug.Log("Đang chuyển sang màn hình đăng ký...");
-        SceneManager.LoadScene("Register"); 
+        SceneManager.LoadScene("Register");
     }
 }
 
@@ -132,5 +210,5 @@ public class LoginRequest
 public class LoginResponse
 {
     public string token;
+    public string user_id; // Thêm user_id
 }
-
