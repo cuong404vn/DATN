@@ -48,3 +48,14 @@ V1
 2:mapOrder,N1
 2:highestUnlockedIndex,e5
 2:currentMapIndex,G0
+2:DropItem,JD
+2:item,P
+2:amount,a
+2:randomOffset,HH
+2:spawnPosition,F2
+2:ResetPlayerState,K
+2:player,fD
+2:animator,V9
+2:rb,lL
+2:playerController,a3
+2:cameraFollow,NS

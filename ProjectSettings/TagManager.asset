@@ -8,17 +8,18 @@ TagManager:
   - DungNham
   - Coin
   - Trap
+  - Item
   - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Enemy
   - Water
   - UI
   - Ground
-  - 
-  - 
+  - Item
+  - Player
   - 
   - 
   - 
@@ -63,3 +64,5 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
+  - 1
+  - Layer 2

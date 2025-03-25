@@ -19,7 +19,7 @@ public class CameraFollow : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed * Time.deltaTime);
     }
 
-    void FindPlayer()
+    public void FindPlayer() 
     {
         GameObject foundPlayer = GameObject.FindGameObjectWithTag("Player");
         if (foundPlayer != null)

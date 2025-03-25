@@ -56,9 +56,7 @@ public class AuthManager : MonoBehaviour
             {
                 Debug.Log("Đăng nhập thành công với token: " + token);
 
-                // Không cần làm gì thêm với user_id vì đã được xử lý trong SendLoginRequest
-
-                // Đợi 0.5 giây để đảm bảo PlayerPrefs được lưu
+ 
                 await Task.Delay(500);
 
                 LoadMapBossScene();
@@ -93,16 +91,16 @@ public class AuthManager : MonoBehaviour
                 string jsonResponse = request.downloadHandler.text;
                 Debug.Log("Phản hồi đầy đủ từ API: " + jsonResponse);
 
-                // Phân tích JSON
+               
                 try
                 {
-                    // Tìm userID trong đối tượng userData
+                   
                     string userDataKey = "\"userData\":";
                     int userDataStart = jsonResponse.IndexOf(userDataKey);
 
                     if (userDataStart != -1)
                     {
-                        // Tìm userID trong userData
+                      
                         string userIDKey = "\"userID\":\"";
                         int userIDStart = jsonResponse.IndexOf(userIDKey, userDataStart) + userIDKey.Length;
                         int userIDEnd = jsonResponse.IndexOf("\"", userIDStart);
@@ -112,17 +110,17 @@ public class AuthManager : MonoBehaviour
                             string userID = jsonResponse.Substring(userIDStart, userIDEnd - userIDStart);
                             Debug.Log("✅ Đã tìm thấy userID trong userData: " + userID);
 
-                            // Lưu userID vào PlayerPrefs
+                    
                             PlayerPrefs.SetString("user_id", userID);
                             Debug.Log("✅ Đã lưu user_id: " + userID);
 
-                            // Tìm token
+                           
                             string tokenKey = "\"token\":\"";
                             int tokenStart = jsonResponse.IndexOf(tokenKey) + tokenKey.Length;
                             int tokenEnd = jsonResponse.IndexOf("\"", tokenStart);
                             string token = jsonResponse.Substring(tokenStart, tokenEnd - tokenStart);
 
-                            // Lưu token vào PlayerPrefs
+                          
                             PlayerPrefs.SetString("auth_token", token);
                             Debug.Log("✅ Đã lưu auth_token: " + token);
 
@@ -134,13 +132,13 @@ public class AuthManager : MonoBehaviour
                             PlayerPrefs.SetString("user_id", username);
                             Debug.Log("✅ Lưu user_id vào PlayerPrefs: " + username);
 
-                            // Tìm token
+                            
                             string tokenKey = "\"token\":\"";
                             int tokenStart = jsonResponse.IndexOf(tokenKey) + tokenKey.Length;
                             int tokenEnd = jsonResponse.IndexOf("\"", tokenStart);
                             string token = jsonResponse.Substring(tokenStart, tokenEnd - tokenStart);
 
-                            // Lưu token vào PlayerPrefs
+                            
                             PlayerPrefs.SetString("auth_token", token);
 
                             return token;
@@ -151,13 +149,13 @@ public class AuthManager : MonoBehaviour
                         Debug.LogWarning("Không tìm thấy userData trong phản hồi, sử dụng username thay thế");
                         PlayerPrefs.SetString("user_id", username);
 
-                        // Tìm token
+                     
                         string tokenKey = "\"token\":\"";
                         int tokenStart = jsonResponse.IndexOf(tokenKey) + tokenKey.Length;
                         int tokenEnd = jsonResponse.IndexOf("\"", tokenStart);
                         string token = jsonResponse.Substring(tokenStart, tokenEnd - tokenStart);
 
-                        // Lưu token vào PlayerPrefs
+                       
                         PlayerPrefs.SetString("auth_token", token);
 
                         return token;
@@ -210,5 +208,4 @@ public class LoginRequest
 public class LoginResponse
 {
     public string token;
-    public string user_id; // Thêm user_id
-}
+    public string user_id; 
