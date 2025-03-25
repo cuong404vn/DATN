@@ -11,15 +11,15 @@ public class HomeManager : MonoBehaviour
     [Header("UI Elements")]
     public TMP_Text currentMapText;
     public TMP_Text totalStarsText;
-    public Transform mapsGrid; // Grid Layout Group chứa các map
-    public GameObject mapPanelPrefab; // Prefab cho mỗi map panel
+    public Transform mapsGrid; 
+    public GameObject mapPanelPrefab; 
     public Button logoutButton;
     public GameObject loadingIndicator;
 
     [Header("Map Images")]
-    public Sprite[] mapImages; // Mảng hình ảnh cho các map
-    public Sprite lockIcon; // Icon khóa
-    public Sprite unlockIcon; // Icon mở khóa
+    public Sprite[] mapImages; 
+    public Sprite lockIcon; 
+    public Sprite unlockIcon; 
 
     private string userId;
     private string apiUrl = "https://shopnickgame.online/api/progress/get/";
@@ -38,7 +38,7 @@ public class HomeManager : MonoBehaviour
             return;
         }
 
-        // Khởi tạo dữ liệu map mặc định
+        
         InitializeMapData();
 
         StartCoroutine(LoadGameProgress());
@@ -48,7 +48,7 @@ public class HomeManager : MonoBehaviour
 
     void InitializeMapData()
     {
-        // Khởi tạo dữ liệu mặc định cho 4 map - Sửa key để khớp với mapID
+       
         mapDataDict.Add("map1", new MapData { mapID = "map1", displayName = "Map 01", status = "locked", stars = 0, highScore = 0 });
         mapDataDict.Add("map2", new MapData { mapID = "map2", displayName = "Map 02", status = "locked", stars = 0, highScore = 0 });
         mapDataDict.Add("map3", new MapData { mapID = "map3", displayName = "Map 03", status = "locked", stars = 0, highScore = 0 });
@@ -76,7 +76,6 @@ public class HomeManager : MonoBehaviour
             string jsonResponse = request.downloadHandler.text;
             Debug.Log("📥 Phản hồi từ API: " + jsonResponse);
 
-            // Hiển thị dữ liệu JSON đã nhận được
             Debug.Log("=================================================");
             Debug.Log("📊 THÔNG TIN PROGRESS CỦA USER " + userId);
             Debug.Log(jsonResponse);
@@ -84,7 +83,7 @@ public class HomeManager : MonoBehaviour
 
             try
             {
-                // Phân tích JSON thủ công
+                
                 GameProgress progress = ParseJsonManually(jsonResponse);
 
                 if (progress != null)
@@ -100,103 +99,103 @@ public class HomeManager : MonoBehaviour
                         }
                     }
 
-                    // Cập nhật dữ liệu map và UI
+                    
                     UpdateMapData(progress);
                     UpdateUI();
                 }
                 else
                 {
                     Debug.LogError("❌ Không thể phân tích JSON từ API.");
-                    UpdateUI(); // Hiển thị dữ liệu mặc định
+                    UpdateUI(); 
                 }
             }
             catch (System.Exception e)
             {
                 Debug.LogError("❌ Lỗi khi xử lý JSON: " + e.Message);
                 Debug.LogError("Stack trace: " + e.StackTrace);
-                UpdateUI(); // Hiển thị dữ liệu mặc định
+                UpdateUI(); 
             }
         }
         else
         {
             Debug.LogError("❌ Lỗi tải tiến độ game: " + request.error);
             Debug.LogError("Response code: " + request.responseCode);
-            UpdateUI(); // Hiển thị dữ liệu mặc định
+            UpdateUI(); 
         }
     }
 
-    // Phân tích JSON thủ công
+
     GameProgress ParseJsonManually(string json)
     {
         try
         {
-            // Tạo một đối tượng GameProgress mới
+            
             GameProgress progress = new GameProgress();
             progress.unlockedMaps = new List<UnlockedMap>();
 
-            // Lấy giá trị status
+            
             string statusKey = "\"status\":\"";
             int statusStart = json.IndexOf(statusKey) + statusKey.Length;
             int statusEnd = json.IndexOf("\"", statusStart);
             progress.status = json.Substring(statusStart, statusEnd - statusStart);
 
-            // Lấy giá trị currentMap
+            
             string currentMapKey = "\"currentMap\":\"";
             int currentMapStart = json.IndexOf(currentMapKey) + currentMapKey.Length;
             int currentMapEnd = json.IndexOf("\"", currentMapStart);
             progress.currentMap = json.Substring(currentMapStart, currentMapEnd - currentMapStart);
 
-            // Lấy giá trị totalStars
+            
             string totalStarsKey = "\"totalStars\":";
             int totalStarsStart = json.IndexOf(totalStarsKey) + totalStarsKey.Length;
             int totalStarsEnd = json.IndexOf(",", totalStarsStart);
-            if (totalStarsEnd == -1) // Nếu không có dấu phẩy, có thể là cuối chuỗi
+            if (totalStarsEnd == -1) 
                 totalStarsEnd = json.IndexOf("}", totalStarsStart);
             string totalStarsStr = json.Substring(totalStarsStart, totalStarsEnd - totalStarsStart).Trim();
             progress.totalStars = int.Parse(totalStarsStr);
 
-            // Lấy mảng unlockedMaps
+            
             string unlockedMapsKey = "\"unlockedMaps\":";
             int unlockedMapsStart = json.IndexOf(unlockedMapsKey) + unlockedMapsKey.Length;
 
-            // Tìm vị trí bắt đầu của mảng
+            
             int arrayStart = json.IndexOf("[", unlockedMapsStart);
 
-            // Tìm vị trí kết thúc của mảng
+            
             int arrayEnd = json.LastIndexOf("]");
 
-            // Lấy chuỗi JSON của mảng
+            
             string arrayJson = json.Substring(arrayStart + 1, arrayEnd - arrayStart - 1);
 
-            // Tách các đối tượng trong mảng
+           
             List<string> mapJsons = SplitJsonArray(arrayJson);
 
             foreach (string mapJson in mapJsons)
             {
                 UnlockedMap map = new UnlockedMap();
 
-                // Lấy giá trị mapID
+                
                 string mapIDKey = "\"mapID\":\"";
                 int mapIDStart = mapJson.IndexOf(mapIDKey) + mapIDKey.Length;
                 int mapIDEnd = mapJson.IndexOf("\"", mapIDStart);
                 map.mapID = mapJson.Substring(mapIDStart, mapIDEnd - mapIDStart);
 
-                // Lấy giá trị status
+                
                 string mapStatusKey = "\"status\":\"";
                 int mapStatusStart = mapJson.IndexOf(mapStatusKey) + mapStatusKey.Length;
                 int mapStatusEnd = mapJson.IndexOf("\"", mapStatusStart);
                 map.status = mapJson.Substring(mapStatusStart, mapStatusEnd - mapStatusStart);
 
-                // Lấy giá trị stars
+                
                 string starsKey = "\"stars\":";
                 int starsStart = mapJson.IndexOf(starsKey) + starsKey.Length;
                 int starsEnd = mapJson.IndexOf(",", starsStart);
-                if (starsEnd == -1) // Nếu không có dấu phẩy, có thể là cuối chuỗi
+                if (starsEnd == -1) 
                     starsEnd = mapJson.IndexOf("}", starsStart);
                 string starsStr = mapJson.Substring(starsStart, starsEnd - starsStart).Trim();
                 map.stars = int.Parse(starsStr);
 
-                // Lấy giá trị highScore
+               
                 string highScoreKey = "\"highScore\":";
                 int highScoreStart = mapJson.IndexOf(highScoreKey) + highScoreKey.Length;
                 int highScoreEnd = mapJson.IndexOf("}", highScoreStart);
@@ -215,7 +214,7 @@ public class HomeManager : MonoBehaviour
         }
     }
 
-    // Tách các đối tượng trong mảng JSON
+
     List<string> SplitJsonArray(string arrayJson)
     {
         List<string> result = new List<string>();
@@ -251,19 +250,19 @@ public class HomeManager : MonoBehaviour
     {
         Debug.Log("🔄 BẮT ĐẦU CẬP NHẬT DỮ LIỆU MAP");
 
-        // Cập nhật thông tin tổng quát
+     
         currentMapText.text = "Map: " + progress.currentMap;
         totalStarsText.text = "Sao: " + progress.totalStars + " ★";
 
         Debug.Log($"📝 Cập nhật thông tin tổng quát: Map={progress.currentMap}, Sao={progress.totalStars}");
 
-        // Danh sách các map theo thứ tự
+       
         List<string> mapOrder = new List<string> { "map1", "map2", "map3", "map4" };
 
-        // Tìm map cao nhất đã mở khóa từ API
+     
         int highestUnlockedIndex = -1;
 
-        // Tìm index của currentMap trong mapOrder
+        
         int currentMapIndex = mapOrder.IndexOf(progress.currentMap);
         if (currentMapIndex > highestUnlockedIndex)
         {
@@ -271,7 +270,7 @@ public class HomeManager : MonoBehaviour
             Debug.Log($"🔓 Map cao nhất từ currentMap: {progress.currentMap}, index={currentMapIndex}");
         }
 
-        // Tạo một Dictionary để lưu trữ dữ liệu từ API theo mapID
+       
         Dictionary<string, UnlockedMap> apiMapData = new Dictionary<string, UnlockedMap>();
 
         if (progress.unlockedMaps != null && progress.unlockedMaps.Count > 0)
@@ -280,14 +279,14 @@ public class HomeManager : MonoBehaviour
 
             foreach (UnlockedMap map in progress.unlockedMaps)
             {
-                // Lưu dữ liệu map từ API vào dictionary
+                
                 if (!apiMapData.ContainsKey(map.mapID))
                 {
                     apiMapData.Add(map.mapID, map);
                     Debug.Log($"➕ Thêm map vào apiMapData: {map.mapID}, Status={map.status}, Stars={map.stars}, HighScore={map.highScore}");
                 }
 
-                // Tìm vị trí của map này trong danh sách thứ tự
+               
                 int mapIndex = mapOrder.IndexOf(map.mapID);
                 if (mapIndex > highestUnlockedIndex &&
                     (map.status == "completed" || map.status == "unlocked"))
@@ -300,7 +299,7 @@ public class HomeManager : MonoBehaviour
 
         Debug.Log($"🔑 Map cao nhất đã mở khóa: index={highestUnlockedIndex}, mapID={(highestUnlockedIndex >= 0 ? mapOrder[highestUnlockedIndex] : "none")}");
 
-        // Mở khóa tất cả các map từ map1 đến map cao nhất đã mở khóa
+       
         for (int i = 0; i <= highestUnlockedIndex; i++)
         {
             string mapID = mapOrder[i];
@@ -308,7 +307,7 @@ public class HomeManager : MonoBehaviour
             {
                 mapDataDict[mapID].status = "unlocked";
 
-                // Cập nhật số sao và điểm cao từ API nếu có
+               
                 if (apiMapData.ContainsKey(mapID))
                 {
                     int oldStars = mapDataDict[mapID].stars;
@@ -326,7 +325,7 @@ public class HomeManager : MonoBehaviour
             }
         }
 
-        // In ra thông tin tất cả các map sau khi cập nhật
+       
         Debug.Log("===== THÔNG TIN MAP SAU KHI CẬP NHẬT =====");
         foreach (var entry in mapDataDict)
         {
@@ -338,68 +337,68 @@ public class HomeManager : MonoBehaviour
 
     void UpdateUI()
     {
-        // In ra thông tin tất cả các map trước khi cập nhật UI
+       
         Debug.Log("===== THÔNG TIN MAP TRƯỚC KHI CẬP NHẬT UI =====");
         foreach (var entry in mapDataDict)
         {
             Debug.Log($"Map {entry.Key}: Status={entry.Value.status}, Stars={entry.Value.stars}, HighScore={entry.Value.highScore}");
         }
 
-        // Xóa tất cả các map panel cũ
+       
         foreach (Transform child in mapsGrid)
         {
             Destroy(child.gameObject);
         }
 
-        // Kiểm tra mapsGrid
+       
         if (mapsGrid == null)
         {
             Debug.LogError("mapsGrid không được gán trong Inspector!");
             return;
         }
 
-        // Kiểm tra mapPanelPrefab
+        
         if (mapPanelPrefab == null)
         {
             Debug.LogError("mapPanelPrefab không được gán trong Inspector!");
             return;
         }
 
-        // Tạo các map panel mới
+       
         int index = 0;
         foreach (var mapEntry in mapDataDict)
         {
             MapData mapData = mapEntry.Value;
             Debug.Log($"Tạo panel cho map {mapData.mapID}: Status={mapData.status}, Stars={mapData.stars}, HighScore={mapData.highScore}");
 
-            // Tạo map panel
+           
             GameObject mapPanel = Instantiate(mapPanelPrefab, mapsGrid);
 
             try
             {
-                // Tìm tất cả các Image trong mapPanel
+                
                 Image[] images = mapPanel.GetComponentsInChildren<Image>(true);
                 Debug.Log($"Số lượng Image trong panel: {images.Length}");
 
-                // Tìm tất cả các Text trong mapPanel
+               
                 TMP_Text[] texts = mapPanel.GetComponentsInChildren<TMP_Text>(true);
                 Debug.Log($"Số lượng TMP_Text trong panel: {texts.Length}");
 
-                // Cập nhật hình ảnh map (giả sử image đầu tiên là hình ảnh map)
+                
                 if (images.Length > 0 && index < mapImages.Length && mapImages[index] != null)
                 {
                     images[0].sprite = mapImages[index];
                     Debug.Log($"Đã cập nhật hình ảnh cho {mapData.mapID}");
                 }
 
-                // Cập nhật tên map (giả sử text đầu tiên là tên map)
+                
                 if (texts.Length > 0)
                 {
                     texts[0].text = mapData.displayName;
                     Debug.Log($"Đã cập nhật tên cho {mapData.mapID}: {mapData.displayName}");
                 }
 
-                // Cập nhật số sao (giả sử text thứ hai là số sao)
+                
                 if (texts.Length > 1)
                 {
                     string oldText = texts[1].text;
@@ -407,7 +406,7 @@ public class HomeManager : MonoBehaviour
                     Debug.Log($"Đã cập nhật số sao cho {mapData.mapID}: {mapData.stars}, Text thay đổi từ '{oldText}' thành '{texts[1].text}'");
                 }
 
-                // Cập nhật điểm cao (giả sử text thứ ba là điểm cao)
+                
                 if (texts.Length > 2)
                 {
                     string oldText = texts[2].text;
@@ -415,23 +414,23 @@ public class HomeManager : MonoBehaviour
                     Debug.Log($"Đã cập nhật điểm cao cho {mapData.mapID}: {mapData.highScore}, Text thay đổi từ '{oldText}' thành '{texts[2].text}'");
                 }
 
-                // Cập nhật icon trạng thái (giả sử image thứ hai là icon trạng thái)
+                
                 if (images.Length > 1 && lockIcon != null && unlockIcon != null)
                 {
                     images[1].sprite = mapData.status == "unlocked" ? unlockIcon : lockIcon;
                     Debug.Log($"Đã cập nhật icon trạng thái cho {mapData.mapID}: {mapData.status}");
                 }
 
-                // Cập nhật button
+                
                 Button mapButton = mapPanel.GetComponent<Button>();
                 if (mapButton != null)
                 {
-                    // Cho phép click nếu map đã hoàn thành hoặc đã mở khóa
+                    
                     bool isUnlocked = mapData.status == "completed" || mapData.status == "unlocked";
                     mapButton.interactable = isUnlocked;
                     Debug.Log($"Đã cập nhật button cho {mapData.mapID}: interactable={isUnlocked}, status={mapData.status}");
 
-                    // Thêm sự kiện click
+                    
                     string mapID = mapData.mapID;
                     mapButton.onClick.RemoveAllListeners();
                     mapButton.onClick.AddListener(() => LoadMap(mapID));
@@ -467,7 +466,7 @@ public class HomeManager : MonoBehaviour
 
         Debug.Log("Đang đăng xuất...");
 
-        // Đợi một frame
+        
         yield return null;
 
         Debug.Log("Chuyển về màn hình đăng nhập");
@@ -498,7 +497,7 @@ public class MapData
 {
     public string mapID;
     public string displayName;
-    public string status; // "locked" hoặc "unlocked"
+    public string status; 
     public int stars;
     public int highScore;
 }

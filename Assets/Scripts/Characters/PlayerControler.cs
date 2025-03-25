@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         startPosition = transform.position;
+        Debug.Log("PlayerController Activated");
     }
 
     void Update()
