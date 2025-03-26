@@ -1,0 +1,767 @@
+fileFormatVersion: 2
+guid: 1fa72df73fbf7c44dafdafc0f0a84ee6
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2517054176031135740
+    second: vampire17_death4_0
+  - first:
+      213: 2250154701535057187
+    second: vampire17_death4_1
+  - first:
+      213: -5743693664591262241
+    second: vampire17_death4_2
+  - first:
+      213: 6600657961694452095
+    second: vampire17_death4_3
+  - first:
+      213: -6166071799852924808
+    second: vampire17_death4_4
+  - first:
+      213: 5731359362630528120
+    second: vampire17_death4_5
+  - first:
+      213: -592033827502570438
+    second: vampire17_death4_6
+  - first:
+      213: -2140453964608604435
+    second: vampire17_death4_7
+  - first:
+      213: -7594697904053010325
+    second: vampire17_death4_8
+  - first:
+      213: 2014524604527594097
+    second: vampire17_death4_9
+  - first:
+      213: 2014769784959276732
+    second: vampire17_death4_10
+  - first:
+      213: 5476095035386472688
+    second: vampire17_death4_11
+  - first:
+      213: -575647241262578622
+    second: vampire17_death4_12
+  - first:
+      213: -8812294396675819787
+    second: vampire17_death4_13
+  - first:
+      213: -308264491197157540
+    second: vampire17_death4_14
+  - first:
+      213: 643135447143919998
+    second: vampire17_death4_15
+  - first:
+      213: -2826216471816889170
+    second: vampire17_death4_16
+  - first:
+      213: -8408161033890781831
+    second: vampire17_death4_17
+  - first:
+      213: -3000016639484975713
+    second: vampire17_death4_18
+  - first:
+      213: 1020097406108494390
+    second: vampire17_death4_19
+  - first:
+      213: -2617923188329263649
+    second: vampire17_death4_20
+  - first:
+      213: -1829700414934798223
+    second: vampire17_death4_21
+  - first:
+      213: 5073201655551761053
+    second: vampire17_death4_22
+  - first:
+      213: -758866794935229342
+    second: vampire17_death4_23
+  - first:
+      213: 2199878122795240234
+    second: vampire17_death4_24
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: vampire17_death4_0
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 77
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40820451090a11dd0800000000000000
+      internalID: -2517054176031135740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_1
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 80
+        width: 9
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3251caa77c72a3f10800000000000000
+      internalID: 2250154701535057187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_2
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 85
+        width: 6
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdd406f1b0d4a40b0800000000000000
+      internalID: -5743693664591262241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_3
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 69
+        width: 8
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f79d6a2c17f3a9b50800000000000000
+      internalID: 6600657961694452095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_4
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 86
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87086360e56bd6aa0800000000000000
+      internalID: -6166071799852924808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_5
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 66
+        width: 10
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87ca3b969f0e98f40800000000000000
+      internalID: 5731359362630528120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_6
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 85
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a34c1b0ee5ca8c7f0800000000000000
+      internalID: -592033827502570438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_7
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 74
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de67d65b5749b42e0800000000000000
+      internalID: -2140453964608604435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_8
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 59
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b604484ae763a9690800000000000000
+      internalID: -7594697904053010325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_9
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 65
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17ac624547705fb10800000000000000
+      internalID: 2014524604527594097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_10
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 54
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb610b8d176e5fb10800000000000000
+      internalID: 2014769784959276732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_11
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 61
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f8ad7ccb6ffefb40800000000000000
+      internalID: 5476095035386472688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_12
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 68
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2444c9c42e3e208f0800000000000000
+      internalID: -575647241262578622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_13
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 50
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f6f8fd8fe074b580800000000000000
+      internalID: -8812294396675819787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_14
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 32
+        width: 11
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5fa3591413d8bbf0800000000000000
+      internalID: -308264491197157540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_15
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 55
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e71b97d1840ece800800000000000000
+      internalID: 643135447143919998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_16
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 47
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eac1ff2c71347c8d0800000000000000
+      internalID: -2826216471816889170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_17
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 56
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 975a8a88616305b80800000000000000
+      internalID: -8408161033890781831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_18
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 31
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f95ac3bd2cccd56d0800000000000000
+      internalID: -3000016639484975713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_19
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 42
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63ae467af2d182e00800000000000000
+      internalID: 1020097406108494390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_20
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 30
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdd40660bb44babd0800000000000000
+      internalID: -2617923188329263649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_21
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 36
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1703d62ba299b96e0800000000000000
+      internalID: -1829700414934798223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_22
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 27
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9a1619d602a76640800000000000000
+      internalID: 5073201655551761053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_23
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 28
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 264eb00bba6f775f0800000000000000
+      internalID: -758866794935229342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire17_death4_24
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 39
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2b0d5a4f79878e10800000000000000
+      internalID: 2199878122795240234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      vampire17_death4_0: -2517054176031135740
+      vampire17_death4_1: 2250154701535057187
+      vampire17_death4_10: 2014769784959276732
+      vampire17_death4_11: 5476095035386472688
+      vampire17_death4_12: -575647241262578622
+      vampire17_death4_13: -8812294396675819787
+      vampire17_death4_14: -308264491197157540
+      vampire17_death4_15: 643135447143919998
+      vampire17_death4_16: -2826216471816889170
+      vampire17_death4_17: -8408161033890781831
+      vampire17_death4_18: -3000016639484975713
+      vampire17_death4_19: 1020097406108494390
+      vampire17_death4_2: -5743693664591262241
+      vampire17_death4_20: -2617923188329263649
+      vampire17_death4_21: -1829700414934798223
+      vampire17_death4_22: 5073201655551761053
+      vampire17_death4_23: -758866794935229342
+      vampire17_death4_24: 2199878122795240234
+      vampire17_death4_3: 6600657961694452095
+      vampire17_death4_4: -6166071799852924808
+      vampire17_death4_5: 5731359362630528120
+      vampire17_death4_6: -592033827502570438
+      vampire17_death4_7: -2140453964608604435
+      vampire17_death4_8: -7594697904053010325
+      vampire17_death4_9: 2014524604527594097
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
