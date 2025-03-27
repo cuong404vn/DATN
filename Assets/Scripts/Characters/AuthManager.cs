@@ -61,10 +61,8 @@ public class AuthManager : MonoBehaviour
 
                 LoadMapBossScene();
             }
-            catch (System.Exception e)
+            catch 
             {
-                Debug.LogError("Lỗi khi xử lý phản hồi JSON: " + e.Message);
-                Debug.LogError("Phản hồi gốc: " + token);
                 ShowError("Lỗi khi xử lý dữ liệu từ máy chủ");
             }
         }
@@ -89,7 +87,7 @@ public class AuthManager : MonoBehaviour
             if (request.result == UnityWebRequest.Result.Success)
             {
                 string jsonResponse = request.downloadHandler.text;
-                Debug.Log("Phản hồi đầy đủ từ API: " + jsonResponse);
+                
 
                
                 try
@@ -108,11 +106,11 @@ public class AuthManager : MonoBehaviour
                         if (userIDStart > userIDKey.Length && userIDEnd > userIDStart)
                         {
                             string userID = jsonResponse.Substring(userIDStart, userIDEnd - userIDStart);
-                            Debug.Log("✅ Đã tìm thấy userID trong userData: " + userID);
+                          
 
                     
                             PlayerPrefs.SetString("user_id", userID);
-                            Debug.Log("✅ Đã lưu user_id: " + userID);
+                           
 
                            
                             string tokenKey = "\"token\":\"";
@@ -122,7 +120,7 @@ public class AuthManager : MonoBehaviour
 
                           
                             PlayerPrefs.SetString("auth_token", token);
-                            Debug.Log("✅ Đã lưu auth_token: " + token);
+                          
 
                             return token;
                         }
@@ -130,7 +128,7 @@ public class AuthManager : MonoBehaviour
                         {
                             Debug.LogWarning("Không tìm thấy userID trong userData, sử dụng username thay thế");
                             PlayerPrefs.SetString("user_id", username);
-                            Debug.Log("✅ Lưu user_id vào PlayerPrefs: " + username);
+                            
 
                             
                             string tokenKey = "\"token\":\"";
@@ -146,7 +144,7 @@ public class AuthManager : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning("Không tìm thấy userData trong phản hồi, sử dụng username thay thế");
+                        
                         PlayerPrefs.SetString("user_id", username);
 
                      
@@ -161,16 +159,16 @@ public class AuthManager : MonoBehaviour
                         return token;
                     }
                 }
-                catch (System.Exception e)
+                catch 
                 {
-                    Debug.LogError("Lỗi khi xử lý JSON: " + e.Message);
+                    
                     return null;
                 }
             }
             else
             {
                 string errorResponse = request.downloadHandler.text;
-                Debug.LogError("❌ Lỗi đăng nhập: " + errorResponse);
+                
                 ShowError("Lỗi từ máy chủ: " + errorResponse);
                 return null;
             }
@@ -186,13 +184,13 @@ public class AuthManager : MonoBehaviour
 
     private void LoadMapBossScene()
     {
-        Debug.Log("🔄 Chuyển sang màn hình HOME...");
+       
         SceneManager.LoadScene("Home");
     }
 
     private void GoToRegisterScene()
     {
-        Debug.Log("Đang chuyển sang màn hình đăng ký...");
+       
         SceneManager.LoadScene("Register");
     }
 }

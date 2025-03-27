@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public string mainMenuScene = "MainMenu";
     private string currentSceneName;
 
-    
+
     public delegate void CurrencyChanged(int value);
     public event CurrencyChanged OnCoinsChanged;
     public event CurrencyChanged OnKeysChanged;
@@ -39,23 +39,23 @@ public class GameManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-       
+        
         OnCoinsChanged?.Invoke(coins);
         OnKeysChanged?.Invoke(keys);
-        Debug.Log("Scene loaded. GameManager coins: " + coins);
+       
     }
 
     void Start()
     {
         currentSceneName = SceneManager.GetActiveScene().name;
-        Debug.Log("GameManager started. Instance: " + (Instance == this ? "Valid" : "Invalid"));
+        
     }
 
     public void AddCoins(int amount)
     {
         coins += amount;
         OnCoinsChanged?.Invoke(coins);
-        Debug.Log("Coins added: " + amount + ", Total: " + coins);
+       
     }
 
     public void AddKeys(int amount)
@@ -79,5 +79,14 @@ public class GameManager : MonoBehaviour
         
         OnCoinsChanged?.Invoke(coins);
         OnKeysChanged?.Invoke(keys);
+    }
+
+    public void NotifyEnemyDefeated()
+    {
+        LevelManager levelManager = FindAnyObjectByType<LevelManager>();
+        if (levelManager != null)
+        {
+            levelManager.EnemyDefeated();
+        }
     }
 }

@@ -28,7 +28,7 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth = maxHealth;
 
-    
+       
         if (gameOverPanel == null)
             gameOverPanel = GameObject.Find("GameOverPanel");
 
@@ -42,7 +42,7 @@ public class PlayerHealth : MonoBehaviour
             if (mainMenuButton == null)
                 mainMenuButton = gameOverPanel.transform.Find("MainMenuButton")?.GetComponent<Button>();
 
-           
+         
             if (retryButton != null)
             {
                 retryButton.onClick.RemoveAllListeners(); 
@@ -56,10 +56,10 @@ public class PlayerHealth : MonoBehaviour
             }
         }
 
-        
+      
         if (healthImages == null || healthImages.Length == 0)
         {
-       
+           
             Transform healthUI = GameObject.Find("HealthUI")?.transform;
             if (healthUI != null)
             {
@@ -109,12 +109,12 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
-    
+      
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
 
-          
+           
             if (retryButton != null && retryButton.onClick.GetPersistentEventCount() == 0)
                 retryButton.onClick.AddListener(RestartLevel);
 
@@ -122,16 +122,17 @@ public class PlayerHealth : MonoBehaviour
                 mainMenuButton.onClick.AddListener(() => GameManager.Instance.GoToMainMenu());
         }
 
+    
         GetComponent<PlayerController>().enabled = false;
 
-    
+      
     }
 
     IEnumerator BecomeInvincible()
     {
         isInvincible = true;
 
-     
+       
         SpriteRenderer sprite = GetComponent<SpriteRenderer>();
         for (float i = 0; i < invincibilityTime; i += 0.1f)
         {
@@ -150,26 +151,25 @@ public class PlayerHealth : MonoBehaviour
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
 
-   
         GameManager.Instance.ResetLevelStats();
 
-    
+      
         GetComponent<PlayerController>().enabled = false;
         GetComponent<Rigidbody2D>().simulated = false;
 
-   
+     
         StartCoroutine(LoadLevelWithReset());
     }
 
     private IEnumerator LoadLevelWithReset()
     {
-        
+       
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-       
+     
         yield return null;
 
-        
+      
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
@@ -197,7 +197,7 @@ public class PlayerHealth : MonoBehaviour
                 animator.Update(0f);
             }
 
-            
+          
             Transform spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint")?.transform;
             if (spawnPoint != null)
             {
@@ -206,19 +206,24 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-   
+    
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Trap"))
         {
-            
+           
             TakeDamage(1);
         }
         else if (other.CompareTag("DungNham"))
         {
-            
+           
             currentHealth = 0;
             Die();
         }
+    }
+
+    public void TakeDamageFromBoss(int damage)
+    {
+        TakeDamage(damage);
     }
 }

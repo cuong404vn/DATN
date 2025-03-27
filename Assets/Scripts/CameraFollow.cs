@@ -25,11 +25,11 @@ public class CameraFollow : MonoBehaviour
         if (foundPlayer != null)
         {
             player = foundPlayer.transform;
-            Debug.Log("Camera đã tìm thấy Player!");
+        
         }
         else
         {
-            Debug.LogError("Không tìm thấy Player! Kiểm tra lại Tag của Player.");
+        
         }
     }
 }
