@@ -11,6 +11,7 @@ TagManager:
   - Item
   - Enemy
   - Boss
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
