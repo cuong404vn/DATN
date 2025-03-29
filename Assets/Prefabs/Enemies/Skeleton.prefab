@@ -11,11 +11,9 @@ GameObject:
   - component: {fileID: 1689956498765404413}
   - component: {fileID: 5364764619157510169}
   - component: {fileID: 6701256029790146056}
-  - component: {fileID: 7310235982432622338}
   - component: {fileID: 3230342111991092949}
-  - component: {fileID: 6079511167580084860}
-  - component: {fileID: 3468513549192284701}
-  - component: {fileID: 925872060332786214}
+  - component: {fileID: 4993252749130148121}
+  - component: {fileID: 5540111547353858510}
   m_Layer: 3
   m_Name: Skeleton
   m_TagString: Enemy
@@ -31,9 +29,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3267271733689990091}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 22.7, y: 8.83, z: 0}
-  m_LocalScale: {x: 2.2024627, y: 2.2024627, z: 2.2024627}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.41, y: 0.14, z: 10.042813}
+  m_LocalScale: {x: -2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -79,8 +77,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 653830823
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -3263063400446308018, guid: 2f2ff744628d48946ac4c3bf463bf532, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -123,11 +121,11 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.11354095, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -137,35 +135,8 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.76, y: 0.7}
+  m_Size: {x: 0.33851355, y: 0.7}
   m_EdgeRadius: 0
---- !u!50 &7310235982432622338
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3267271733689990091}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!95 &3230342111991092949
 Animator:
   serializedVersion: 7
@@ -188,7 +159,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6079511167580084860
+--- !u!114 &4993252749130148121
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -197,19 +168,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 3267271733689990091}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5768fbd39b6c6044daace5ad978e0941, type: 3}
+  m_Script: {fileID: 11500000, guid: 21304be344e232742b5f278043a93392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 1
-  moveSpeed: 2
-  chaseSpeed: 3
-  detectionRange: 5
-  attackRange: 1.5
-  attackDamage: 1
-  attackCooldown: 1
-  patrolCenter: {fileID: 0}
-  patrolRange: 2
---- !u!114 &3468513549192284701
+  attackCooldown: 2
+  range: 2.65
+  damage: 1
+  colliderDistance: 0.25
+  boxCollider: {fileID: 6701256029790146056}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!114 &5540111547353858510
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,25 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 511fc15767188844b9ddb2dd2851afae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
-  currentHealth: 0
-  isBoss: 0
-  hitEffect: {fileID: 0}
-  deathEffect: {fileID: 0}
-  itemDrop: {fileID: 0}
-  exitGateSpawnPoint: {fileID: 0}
---- !u!114 &925872060332786214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3267271733689990091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07daf5ae19974f246854686e08d5f2b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  possibleItems: []
-  dropRadius: 1
-  customDropPoint: {fileID: 0}
+  startingHealth: 3
+  iFramesDuration: 0
+  numberOfFlashes: 0
+  components: []
