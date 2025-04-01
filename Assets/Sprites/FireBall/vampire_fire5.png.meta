@@ -1,55 +1,46 @@
 fileFormatVersion: 2
-guid: accc56a0483d9d84fbd53c06d13ba883
+guid: 7a0c225aeeaef7948bd20ffe15a997db
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 247842239067570529
-    second: vampire18_death5_0
+      213: -8780310287704637053
+    second: vampire_fire5_0
   - first:
-      213: 8120484098917364431
-    second: vampire18_death5_1
+      213: 712991059805428398
+    second: vampire_fire5_1
   - first:
-      213: 7275119539806039544
-    second: vampire18_death5_2
+      213: 1688914675471181901
+    second: vampire_fire5_2
   - first:
-      213: -8916169825013704483
-    second: vampire18_death5_3
+      213: 5715373740046256938
+    second: vampire_fire5_3
   - first:
-      213: -2495458753287060002
-    second: vampire18_death5_4
+      213: 8166864619039192891
+    second: vampire_fire5_4
   - first:
-      213: -6196619348421541963
-    second: vampire18_death5_5
+      213: 2532255469381765363
+    second: vampire_fire5_5
   - first:
-      213: -7309044801009333587
-    second: vampire18_death5_6
+      213: 4209909385815975933
+    second: vampire_fire5_6
   - first:
-      213: 8925718108849177854
-    second: vampire18_death5_7
+      213: -4497969653283184275
+    second: vampire_fire5_7
   - first:
-      213: -1747771660542959146
-    second: vampire18_death5_8
+      213: -702473143843950866
+    second: vampire_fire5_8
   - first:
-      213: 6122563498488479668
-    second: vampire18_death5_9
+      213: 5549421355257590767
+    second: vampire_fire5_9
   - first:
-      213: -4147436650305888657
-    second: vampire18_death5_10
+      213: 7569467951700123749
+    second: vampire_fire5_10
   - first:
-      213: -20520878124024767
-    second: vampire18_death5_11
+      213: -1034626798556685016
+    second: vampire_fire5_11
   - first:
-      213: -1855338700042338984
-    second: vampire18_death5_12
-  - first:
-      213: 5093901884737167664
-    second: vampire18_death5_13
-  - first:
-      213: -6861554737010069901
-    second: vampire18_death5_14
-  - first:
-      213: -5430993715158611674
-    second: vampire18_death5_15
+      213: -3248835608591506796
+    second: vampire_fire5_12
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -91,7 +82,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 0
   alignment: 0
@@ -145,13 +136,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: vampire18_death5_0
+      name: vampire_fire5_0
       rect:
         serializedVersion: 2
-        x: 44
-        y: 89
-        width: 12
-        height: 13
+        x: 17
+        y: 27
+        width: 8
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -160,20 +151,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 161c5fb0433807300800000000000000
-      internalID: 247842239067570529
+      spriteID: 38148ab3052162680800000000000000
+      internalID: -8780310287704637053
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: vampire18_death5_1
+      name: vampire_fire5_1
       rect:
         serializedVersion: 2
-        x: 57
-        y: 91
-        width: 15
-        height: 13
+        x: 22
+        y: 33
+        width: 9
+        height: 15
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -182,20 +173,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fc27d288341c1b070800000000000000
-      internalID: 8120484098917364431
+      spriteID: eaa5bbf579d05e900800000000000000
+      internalID: 712991059805428398
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: vampire18_death5_2
+      name: vampire_fire5_2
       rect:
         serializedVersion: 2
-        x: 61
-        y: 81
-        width: 7
-        height: 11
+        x: 31
+        y: 39
+        width: 11
+        height: 17
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -204,107 +195,63 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8fd64ac1daa66f460800000000000000
-      internalID: 7275119539806039544
+      spriteID: d486767f2fa307710800000000000000
+      internalID: 1688914675471181901
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: vampire18_death5_3
-      rect:
-        serializedVersion: 2
-        x: 36
-        y: 81
-        width: 6
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dd85007b8c6634480800000000000000
-      internalID: -8916169825013704483
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: vampire18_death5_4
+      name: vampire_fire5_3
       rect:
         serializedVersion: 2
         x: 37
-        y: 57
-        width: 14
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ed58fa24c795e5dd0800000000000000
-      internalID: -2495458753287060002
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: vampire18_death5_5
-      rect:
-        serializedVersion: 2
-        x: 50
-        y: 77
-        width: 6
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5bf7501a88f210aa0800000000000000
-      internalID: -6196619348421541963
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: vampire18_death5_6
-      rect:
-        serializedVersion: 2
-        x: 51
-        y: 63
-        width: 11
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: daa4c6c7a7e019a90800000000000000
-      internalID: -7309044801009333587
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: vampire18_death5_7
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 69
+        y: 27
         width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2b8d0e9226115f40800000000000000
+      internalID: 5715373740046256938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire_fire5_4
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 31
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b377982e918865170800000000000000
+      internalID: 8166864619039192891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire_fire5_5
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 26
+        width: 12
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -314,19 +261,85 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ef40a3b54558edb70800000000000000
-      internalID: 8925718108849177854
+      spriteID: 3f84a05dee0642320800000000000000
+      internalID: 2532255469381765363
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: vampire18_death5_8
+      name: vampire_fire5_6
       rect:
         serializedVersion: 2
-        x: 75
-        y: 73
-        width: 6
+        x: 13
+        y: 5
+        width: 13
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df7e426084a9c6a30800000000000000
+      internalID: 4209909385815975933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire_fire5_7
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 2
+        width: 13
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d61a19d7e600491c0800000000000000
+      internalID: -4497969653283184275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire_fire5_8
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 15
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eeeede4c5605046f0800000000000000
+      internalID: -702473143843950866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vampire_fire5_9
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 18
+        width: 10
         height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -336,42 +349,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6d1a7d05feaaeb7e0800000000000000
-      internalID: -1747771660542959146
+      spriteID: fe3781d0251830d40800000000000000
+      internalID: 5549421355257590767
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: vampire18_death5_9
-      rect:
-        serializedVersion: 2
-        x: 29
-        y: 36
-        width: 16
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4bfbd2a2017b7f450800000000000000
-      internalID: 6122563498488479668
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: vampire18_death5_10
+      name: vampire_fire5_10
       rect:
         serializedVersion: 2
         x: 46
-        y: 45
-        width: 10
-        height: 16
+        y: 7
+        width: 14
+        height: 17
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -380,20 +371,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f6ed41237585176c0800000000000000
-      internalID: -4147436650305888657
+      spriteID: 5602acf4ff62c0960800000000000000
+      internalID: 7569467951700123749
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: vampire18_death5_11
+      name: vampire_fire5_11
       rect:
         serializedVersion: 2
-        x: 54
-        y: 39
-        width: 9
-        height: 15
+        x: 37
+        y: 4
+        width: 8
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -402,41 +393,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 14c30fcbe5817bff0800000000000000
-      internalID: -20520878124024767
+      spriteID: 82dddec886444a1f0800000000000000
+      internalID: -1034626798556685016
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: vampire18_death5_12
+      name: vampire_fire5_12
       rect:
         serializedVersion: 2
-        x: 61
-        y: 52
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 85df0f548438046e0800000000000000
-      internalID: -1855338700042338984
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: vampire18_death5_13
-      rect:
-        serializedVersion: 2
-        x: 39
-        y: 37
-        width: 6
+        x: 48
+        y: 3
+        width: 11
         height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -446,52 +415,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 031a37886cc21b640800000000000000
-      internalID: 5093901884737167664
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: vampire18_death5_14
-      rect:
-        serializedVersion: 2
-        x: 45
-        y: 30
-        width: 6
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 37ead9d125cd6c0a0800000000000000
-      internalID: -6861554737010069901
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: vampire18_death5_15
-      rect:
-        serializedVersion: 2
-        x: 56
-        y: 32
-        width: 7
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 629879e9dfb31a4b0800000000000000
-      internalID: -5430993715158611674
+      spriteID: 49263402a31d9e2d0800000000000000
+      internalID: -3248835608591506796
       vertices: []
       indices: 
       edges: []
@@ -500,7 +425,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -510,22 +435,19 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      vampire18_death5_0: 247842239067570529
-      vampire18_death5_1: 8120484098917364431
-      vampire18_death5_10: -4147436650305888657
-      vampire18_death5_11: -20520878124024767
-      vampire18_death5_12: -1855338700042338984
-      vampire18_death5_13: 5093901884737167664
-      vampire18_death5_14: -6861554737010069901
-      vampire18_death5_15: -5430993715158611674
-      vampire18_death5_2: 7275119539806039544
-      vampire18_death5_3: -8916169825013704483
-      vampire18_death5_4: -2495458753287060002
-      vampire18_death5_5: -6196619348421541963
-      vampire18_death5_6: -7309044801009333587
-      vampire18_death5_7: 8925718108849177854
-      vampire18_death5_8: -1747771660542959146
-      vampire18_death5_9: 6122563498488479668
+      vampire_fire5_0: -8780310287704637053
+      vampire_fire5_1: 712991059805428398
+      vampire_fire5_10: 7569467951700123749
+      vampire_fire5_11: -1034626798556685016
+      vampire_fire5_12: -3248835608591506796
+      vampire_fire5_2: 1688914675471181901
+      vampire_fire5_3: 5715373740046256938
+      vampire_fire5_4: 8166864619039192891
+      vampire_fire5_5: 2532255469381765363
+      vampire_fire5_6: 4209909385815975933
+      vampire_fire5_7: -4497969653283184275
+      vampire_fire5_8: -702473143843950866
+      vampire_fire5_9: 5549421355257590767
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
