@@ -4,10 +4,13 @@ using System.Collections;
 
 public class EnemyHealth : MonoBehaviour
 {
-    public int maxHealth = 3;
-    public int currentHealth;
-    public bool isBoss = false;
+    [Header("Health")]
+    [SerializeField] private float startingHealth;
+    public float currentHealth { get; private set; }
+    private Animator anim;
+    private bool dead;
 
+<<<<<<< HEAD
     public GameObject hitEffect;
     public GameObject deathEffect;
 
@@ -19,9 +22,20 @@ public class EnemyHealth : MonoBehaviour
     private GameObject healthBarInstance;
     private Slider healthBarSlider;
     private Text enemyNameText;
+=======
+    [Header("iFrames")]
+    [SerializeField] private float iFramesDuration;
+    [SerializeField] private int numberOfFlashes;
+    private SpriteRenderer spriteRend;
 
-    void Start()
+    [Header("Components")]
+    [SerializeField] private Behaviour[] components;
+    private bool invulnerable;
+>>>>>>> 80917b7e59e816d461dd016f1335dd2987c52030
+
+    private void Awake()
     {
+<<<<<<< HEAD
         currentHealth = maxHealth;
         if (itemDrop == null)
             itemDrop = GetComponent<ItemDrop>();
@@ -43,12 +57,18 @@ public class EnemyHealth : MonoBehaviour
             if (enemyNameText != null)
                 enemyNameText.text = enemyName;
         }
+=======
+        currentHealth = startingHealth;
+        anim = GetComponent<Animator>();
+        spriteRend = GetComponent<SpriteRenderer>();
+>>>>>>> 80917b7e59e816d461dd016f1335dd2987c52030
     }
-
-    public void TakeDamage(int damage)
+    public void TakeDamage(float _damage)
     {
-        currentHealth -= damage;
+        if (invulnerable) return;
+        currentHealth = Mathf.Clamp(currentHealth - _damage, 0, startingHealth);
 
+<<<<<<< HEAD
         if (hitEffect != null)
             Instantiate(hitEffect, transform.position, Quaternion.identity);
 
@@ -59,9 +79,14 @@ public class EnemyHealth : MonoBehaviour
             healthBarSlider.value = currentHealth;
 
         if (currentHealth <= 0)
+=======
+        if (currentHealth > 0)
+>>>>>>> 80917b7e59e816d461dd016f1335dd2987c52030
         {
-            Die();
+            anim.SetTrigger("hurt");
+            StartCoroutine(Invunerability());
         }
+<<<<<<< HEAD
     }
 
     void Die()
@@ -78,26 +103,47 @@ public class EnemyHealth : MonoBehaviour
         {
             LevelManager levelManager = FindAnyObjectByType<LevelManager>();
             if (levelManager != null)
+=======
+        else
+        {
+            if (!dead)
+>>>>>>> 80917b7e59e816d461dd016f1335dd2987c52030
             {
-                Vector3 spawnPosition = exitGateSpawnPoint != null ?
-                    exitGateSpawnPoint.position : transform.position;
-                levelManager.ShowExitGate(spawnPosition);
+                anim.SetTrigger("die");
+
+                //Deactivate all attached component classes
+                foreach (Behaviour component in components)
+                    component.enabled = false;
+
+                dead = true;
             }
         }
+<<<<<<< HEAD
 
         if (itemDrop != null)
             itemDrop.DropItem();
 
         Destroy(healthBarInstance);
         Destroy(gameObject);
+=======
+>>>>>>> 80917b7e59e816d461dd016f1335dd2987c52030
     }
-
-    IEnumerator FlashEffect()
+    public void AddHealth(float _value)
     {
-        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
-        Color originalColor = sprite.color;
-        sprite.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
-        sprite.color = originalColor;
+        currentHealth = Mathf.Clamp(currentHealth + _value, 0, startingHealth);
+    }
+    private IEnumerator Invunerability()
+    {
+        invulnerable = true;
+        Physics2D.IgnoreLayerCollision(10, 11, true);
+        for (int i = 0; i < numberOfFlashes; i++)
+        {
+            spriteRend.color = new Color(1, 0, 0, 0.5f);
+            yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
+            spriteRend.color = Color.white;
+            yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
+        }
+        Physics2D.IgnoreLayerCollision(10, 11, false);
+        invulnerable = false;
     }
 }
