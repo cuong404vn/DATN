@@ -1987,6 +1987,8 @@ MonoBehaviour:
   deathEffect: {fileID: 0}
   itemDrop: {fileID: 0}
   exitGateSpawnPoint: {fileID: 0}
+  enemyName: Enemy
+  healthBarPrefab: {fileID: 0}
 --- !u!4 &515533863 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3236107757235206315, guid: d27190c4ced170e4ea04cbe0f543c2bd, type: 3}
@@ -2159,7 +2161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a67dba00e5340204cb739f1b94fed73c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapDungNham01: MapDungNham01
+  map2boos: 
 --- !u!61 &543083436
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15406,11 +15408,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8183508740223807701, guid: b427dcc13b3d3074c8c500155ff9846b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 36.45
+      value: -38.15
       objectReference: {fileID: 0}
     - target: {fileID: 8183508740223807701, guid: b427dcc13b3d3074c8c500155ff9846b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.01
+      value: -3.56
       objectReference: {fileID: 0}
     - target: {fileID: 8183508740223807701, guid: b427dcc13b3d3074c8c500155ff9846b, type: 3}
       propertyPath: m_LocalPosition.z
