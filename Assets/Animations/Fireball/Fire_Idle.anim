@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Vampire
+  m_Name: Fire_Idle
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,17 +21,13 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 9119338227570364963, guid: 1d5129e06735d5d4788cd65c8ed7ddd2, type: 3}
-    - time: 0.33333334
-      value: {fileID: 54168007892304030, guid: bdca18cefd6ff6b45947220b78788abb, type: 3}
-    - time: 0.5833333
-      value: {fileID: -4939603512989219945, guid: 40aba59506115e34c9a8bd8fd57ddc3e, type: 3}
+      value: {fileID: -8220435570257432188, guid: cd3ff26f1e74b9f48a0ffc6ea89bea07, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
     flags: 2
-  m_SampleRate: 24
+  m_SampleRate: 60
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -48,15 +44,13 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 9119338227570364963, guid: 1d5129e06735d5d4788cd65c8ed7ddd2, type: 3}
-    - {fileID: 54168007892304030, guid: bdca18cefd6ff6b45947220b78788abb, type: 3}
-    - {fileID: -4939603512989219945, guid: 40aba59506115e34c9a8bd8fd57ddc3e, type: 3}
+    - {fileID: -8220435570257432188, guid: cd3ff26f1e74b9f48a0ffc6ea89bea07, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.625
+    m_StopTime: 0.016666668
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
