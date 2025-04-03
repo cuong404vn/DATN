@@ -39,23 +39,23 @@ public class GameManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        
+
         OnCoinsChanged?.Invoke(coins);
         OnKeysChanged?.Invoke(keys);
-       
+
     }
 
     void Start()
     {
         currentSceneName = SceneManager.GetActiveScene().name;
-        
+
     }
 
     public void AddCoins(int amount)
     {
         coins += amount;
         OnCoinsChanged?.Invoke(coins);
-       
+
     }
 
     public void AddKeys(int amount)
@@ -72,11 +72,11 @@ public class GameManager : MonoBehaviour
 
     public void ResetLevelStats()
     {
-        
+
         coins = 0;
         keys = 0;
 
-        
+
         OnCoinsChanged?.Invoke(coins);
         OnKeysChanged?.Invoke(keys);
     }
@@ -88,5 +88,10 @@ public class GameManager : MonoBehaviour
         {
             levelManager.EnemyDefeated();
         }
+    }
+
+    public int GetCoinCount()
+    {
+        return coins;
     }
 }

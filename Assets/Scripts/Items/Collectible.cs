@@ -2,14 +2,14 @@
 
 public class Collectible : MonoBehaviour
 {
-    public enum CollectibleType { Health, Coin, Key }
+    public enum CollectibleType { Health, Coin, Key, HealthPotion }
 
     public CollectibleType type;
-    public int value = 1; 
+    public int value = 1;
 
-    public float moveSpeed = 1f; 
-    public float moveHeight = 0.5f; 
-    public float rotateSpeed = 100f; 
+    public float moveSpeed = 1f;
+    public float moveHeight = 0.5f;
+    public float rotateSpeed = 100f;
 
     private Vector3 startPosition;
 
@@ -20,10 +20,10 @@ public class Collectible : MonoBehaviour
 
     void Update()
     {
-        
+
         transform.position = startPosition + new Vector3(0, Mathf.Sin(Time.time * moveSpeed) * moveHeight, 0);
 
-        
+
         transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime);
     }
 
@@ -31,7 +31,7 @@ public class Collectible : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            
+
             switch (type)
             {
                 case CollectibleType.Health:
@@ -41,17 +41,23 @@ public class Collectible : MonoBehaviour
                     break;
 
                 case CollectibleType.Coin:
-                    
+
                     GameManager.Instance.AddCoins(value);
                     break;
 
                 case CollectibleType.Key:
-                    
+
                     GameManager.Instance.AddKeys(value);
+                    break;
+
+                case CollectibleType.HealthPotion:
+                    PlayerHealth playerHealthPotion = other.GetComponent<PlayerHealth>();
+                    if (playerHealthPotion != null)
+                        playerHealthPotion.AddHealthPotion(value);
                     break;
             }
 
-           
+
             Destroy(gameObject);
         }
     }
