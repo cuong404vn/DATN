@@ -10,6 +10,7 @@ TagManager:
   - Trap
   - Item
   - Enemy
+  - lua
   layers:
   - Default
   - TransparentFX
