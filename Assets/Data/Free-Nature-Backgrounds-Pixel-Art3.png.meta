@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: fee4f3b164d10d048aa7d221c27392d0
+guid: 9eaa983b67a2a9041a1af8b22ee9fec7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1955448553306655712
-    second: Background_0
+      213: 5251302981111514577
+    second: Free-Nature-Backgrounds-Pixel-Art3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Background_0
+      name: Free-Nature-Backgrounds-Pixel-Art3_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 960
-        height: 541
+        width: 1800
+        height: 1200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 024fa93b6e9dcd4e0800000000000000
-      internalID: -1955448553306655712
+      spriteID: 1d50a1d1d3060e840800000000000000
+      internalID: 5251302981111514577
       vertices: []
       indices: 
       edges: []
@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Free-Nature-Backgrounds-Pixel-Art3_0: 5251302981111514577
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

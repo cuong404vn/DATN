@@ -226,7 +226,7 @@ public class HomeManager : MonoBehaviour
     void UpdateMapData(GameProgress progress)
     {
         currentMapText.text = "Map: " + progress.currentMap;
-        totalStarsText.text = "Sao: " + progress.totalStars + " ★";
+        totalStarsText.text = "Total stars" + progress.totalStars ;
 
         List<string> mapOrder = new List<string> { "map1", "map2", "map3", "map4" };
 
@@ -334,13 +334,13 @@ public class HomeManager : MonoBehaviour
                 if (texts.Length > 1)
                 {
                     string oldText = texts[1].text;
-                    texts[1].text = "★ " + mapData.stars;
+                    texts[1].text = "STAR " + mapData.stars;
                 }
 
                 if (texts.Length > 2)
                 {
                     string oldText = texts[2].text;
-                    texts[2].text = "♛ " + mapData.highScore;
+                    texts[2].text = "SCORE " + mapData.highScore;
                 }
 
                 if (images.Length > 1 && lockIcon != null && unlockIcon != null)
