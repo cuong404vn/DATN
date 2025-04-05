@@ -59,3 +59,7 @@ V1
 2:rb,lL
 2:playerController,a3
 2:cameraFollow,NS
+2:itemDropped,f_
+2:dropPosition,w
+2:randomValue,WW
+2:randomIndex,o

@@ -22,7 +22,6 @@ public class PlayerController : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -36,7 +35,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         startPosition = transform.position;
-        Debug.Log("PlayerController Activated");
+        
     }
 
     void Update()
@@ -121,5 +120,33 @@ public class PlayerController : MonoBehaviour
     public void ChangeScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
+    }
+
+    public void ResetState()
+    {
+      
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+
+     
+        isGrounded = true;
+        jumpCount = 0;
+        isAttacking = false;
+
+      
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isGrounded", true);
+        animator.SetBool("isIdle", true);
+
+       
+        animator.ResetTrigger("Jump1");
+        animator.ResetTrigger("Jump2");
+        animator.ResetTrigger("Attack");
+
+        
+        animator.Play("Player_Idle");
+
+        
+        transform.position = startPosition;
     }
 }

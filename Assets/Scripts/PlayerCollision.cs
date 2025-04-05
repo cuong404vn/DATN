@@ -2,26 +2,37 @@
 
 public class PlayerCollision : MonoBehaviour
 {
-    private Gamemanager gamemanager;
 
-    private void Awake()
-    {
-        gamemanager = FindAnyObjectByType<Gamemanager>();
-    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
+      
+        GameManager gameManager = GameManager.Instance;
+
+   
+        if (gameManager == null)
+        {
+           
+            return;
+        }
+
         if (collision.CompareTag("Coin"))
         {
             Destroy(collision.gameObject);
-            gamemanager.AddScore(1);
+            gameManager.AddCoins(1);
+           
         }
         else if (collision.CompareTag("Trap"))
         {
-            gamemanager.GameOver();
+            
         }
         else if (collision.CompareTag("Enemy"))
         {
-            gamemanager.GameOver();
+           
+        }
+        else if (collision.CompareTag("Boss"))
+        {
+            
         }
     }
 }
