@@ -10,7 +10,12 @@ TagManager:
   - Trap
   - Item
   - Enemy
+<<<<<<< HEAD
   - lua
+=======
+  - Boss
+  - SpawnPoint
+>>>>>>> 90b65061b347e271fda8e22470f094647b52ebbb
   layers:
   - Default
   - TransparentFX
@@ -48,9 +53,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: BackGround
-    uniqueID: 3536490809
-    locked: 0
   - name: Item
     uniqueID: 1613012999
     locked: 0
@@ -62,6 +64,9 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 653830823
+    locked: 0
+  - name: BackGround
+    uniqueID: 3536490809
     locked: 0
   m_RenderingLayers:
   - Default
