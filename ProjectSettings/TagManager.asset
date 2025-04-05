@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Ground
+  - DungNham
+  - Item
+  - Trap
+  - Enemy
+  - Boss
+  - Coin
+  - Key
   layers:
   - Default
   - TransparentFX
