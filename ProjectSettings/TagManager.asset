@@ -10,8 +10,12 @@ TagManager:
   - Trap
   - Item
   - Enemy
+<<<<<<< HEAD
+  - lua
+=======
   - Boss
   - SpawnPoint
+>>>>>>> 90b65061b347e271fda8e22470f094647b52ebbb
   layers:
   - Default
   - TransparentFX
