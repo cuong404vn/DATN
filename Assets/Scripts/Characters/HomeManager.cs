@@ -45,7 +45,7 @@ public class HomeManager : MonoBehaviour
     void InitializeMapData()
     {
 
-        mapDataDict.Add("map1", new MapData { mapID = "map1", displayName = "Map 01", status = "locked", stars = 0, highScore = 0 });
+        mapDataDict.Add("MapBosss1", new MapData { mapID = "MapBosss1", displayName = "Map 01", status = "locked", stars = 0, highScore = 0 });
         mapDataDict.Add("map2", new MapData { mapID = "map2", displayName = "Map 02", status = "locked", stars = 0, highScore = 0 });
         mapDataDict.Add("map3", new MapData { mapID = "map3", displayName = "Map 03", status = "locked", stars = 0, highScore = 0 });
         mapDataDict.Add("map4", new MapData { mapID = "map4", displayName = "Map 04", status = "locked", stars = 0, highScore = 0 });
@@ -228,7 +228,7 @@ public class HomeManager : MonoBehaviour
         currentMapText.text = "Map: " + progress.currentMap;
         totalStarsText.text = "Total stars" + progress.totalStars ;
 
-        List<string> mapOrder = new List<string> { "map1", "map2", "map3", "map4" };
+        List<string> mapOrder = new List<string> { "MapBosss1", "map2", "map3", "map4" };
 
         int highestUnlockedIndex = -1;
 
