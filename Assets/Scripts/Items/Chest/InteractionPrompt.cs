@@ -4,7 +4,7 @@ using TMPro;
 public class InteractionPrompt : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI promptText;
-    [SerializeField] private string defaultText = "Nhấn E để mở";
+    [SerializeField] private string defaultText = "E";
 
     private void Awake()
     {

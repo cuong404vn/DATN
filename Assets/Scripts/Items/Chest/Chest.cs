@@ -47,7 +47,7 @@ public class Chest : MonoBehaviour
         else
         {
             // Not enough keys
-            string message = "Cần " + keysRequired + " chìa khóa để mở rương này!";
+            string message = "Can " + keysRequired + " chia khoa de mo ruong nay";
             Debug.Log(message);
 
             // Show message to player if MessageManager exists
@@ -67,30 +67,47 @@ public class Chest : MonoBehaviour
     {
         isOpen = true;
 
-        // Play sound
+        
         if (audioSource != null && openSound != null)
         {
             audioSource.PlayOneShot(openSound);
         }
 
-        // Play animation if available
+       
         if (animator != null)
         {
             animator.SetTrigger("Open");
+
+            
+            float animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
+            Invoke(nameof(RemoveChest), animationLength);
+        }
+        else
+        {
+            
+            RemoveChest();
         }
 
-        // Drop items
+       
         if (itemDrop != null)
         {
             itemDrop.DropItem();
         }
 
-        // Hide prompt
+        
         if (interactionPrompt != null)
         {
             interactionPrompt.SetActive(false);
         }
     }
+
+    void RemoveChest()
+    {
+        
+        gameObject.SetActive(false);
+        
+    }
+
 
     void OnTriggerEnter2D(Collider2D other)
     {

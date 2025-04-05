@@ -80,7 +80,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 653830823
-  m_SortingLayer: 4
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 2969268651618543795, guid: 12dae95e6c95fab429b3af80b01e7063, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -207,6 +207,8 @@ MonoBehaviour:
   deathEffect: {fileID: 0}
   itemDrop: {fileID: 0}
   exitGateSpawnPoint: {fileID: 0}
+  enemyName: Enemy
+  healthBarPrefab: {fileID: 0}
 --- !u!114 &1572482172050246766
 MonoBehaviour:
   m_ObjectHideFlags: 0
