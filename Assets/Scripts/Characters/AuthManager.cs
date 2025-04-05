@@ -163,6 +163,9 @@ public class LoginRequest
 public class LoginResponse
 {
     public string token;
+<<<<<<< HEAD
+    public string user_id; }
+=======
     public string user_id;
     public bool success;
     public string message;
@@ -175,3 +178,4 @@ public class UserData
     public string userID;
     public string username;
 }
+>>>>>>> 90b65061b347e271fda8e22470f094647b52ebbb
