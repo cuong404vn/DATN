@@ -4,29 +4,6 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
-<<<<<<< HEAD
-    path: Assets/Prefabs/Scenes/MAP BOSS.unity
-=======
-    path: Assets/Scenes/MapBosss1.unity
->>>>>>> 90b65061b347e271fda8e22470f094647b52ebbb
-    guid: 1df1adae1741a1345b292adff5ade76f
-  - enabled: 1
-    path: Assets/Prefabs/Scenes/MapDungNham01.unity
-    guid: a3a2f33143a12a743a6630cb048a6033
-  - enabled: 1
-    path: Assets/Prefabs/Scenes/Login.unity
-    guid: a4c862c4cb085734ab7605e0c5675259
-  - enabled: 1
-    path: Assets/Prefabs/Scenes/Register.unity
-    guid: 108cbac986e4a5b4688d31e6fc0cdb48
-  - enabled: 1
-    path: Assets/Prefabs/Scenes/Home.unity
-    guid: 0e9284e4409d7574e9cf552ee41b1c34
-  m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  m_Scenes: []
+  m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
