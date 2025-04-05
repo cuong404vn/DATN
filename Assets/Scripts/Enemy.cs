@@ -6,13 +6,13 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float distance = 5f;
     private Vector3 startPos;
     private bool movingRight = true;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         startPos = transform.position;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         float leftBound = startPos.x - distance;
