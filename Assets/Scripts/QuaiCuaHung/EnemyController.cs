@@ -10,24 +10,35 @@ public class EnemyController : MonoBehaviour
     public Transform player;
     public float detectionRange = 5f;
     public GameObject projectilePrefab;
-    public float projectileSpeed = 5f;
+    public float projectileSpeed = 4f;
     public float fireRate = 1f;
     private float nextFireTime;
 
-    public int health = 1;
+    public int health = 5;
 
     private Vector3 initialScale;
+    private Animator animator;
 
     void Start()
     {
         startPos = transform.position;
         player = GameObject.FindGameObjectWithTag("Player").transform;
         initialScale = transform.localScale;
+
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.bodyType = RigidbodyType2D.Kinematic;
+        }
+
+        animator = GetComponent<Animator>();
+        nextFireTime = Time.time; // Đảm bảo bắn được ngay từ đầu
     }
 
     void Update()
     {
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+        Debug.Log("Distance to Player: " + distanceToPlayer); // Debug khoảng cách
 
         if (distanceToPlayer < detectionRange)
         {
@@ -37,6 +48,7 @@ public class EnemyController : MonoBehaviour
         else
         {
             Patrol();
+            animator.SetBool("isAttacking", false);
         }
     }
 
@@ -73,9 +85,11 @@ public class EnemyController : MonoBehaviour
     {
         if (Time.time >= nextFireTime)
         {
+            Debug.Log("Shooting projectile!"); // Debug để kiểm tra
+            animator.SetBool("isAttacking", true);
+
             Vector2 direction = player.position.x < transform.position.x ? Vector2.left : Vector2.right;
-            // Tăng offset để chưởng không va chạm ngay với Vampire
-            Vector2 spawnPosition = (Vector2)transform.position + direction * 1f; // Offset 1 đơn vị
+            Vector2 spawnPosition = (Vector2)transform.position + direction * 1f;
             GameObject projectile = Instantiate(projectilePrefab, spawnPosition, Quaternion.identity);
 
             projectile.GetComponent<Rigidbody2D>().linearVelocity = direction * projectileSpeed;
@@ -108,7 +122,15 @@ public class EnemyController : MonoBehaviour
         Debug.Log("Enemy HP: " + health);
         if (health <= 0)
         {
-            Destroy(gameObject);
+            animator.SetBool("isDead", true);
+            GetComponent<Collider2D>().enabled = false;
+            enabled = false;
+            Destroy(gameObject, 1f);
         }
+    }
+
+    public void OnAttackAnimationEnd()
+    {
+        animator.SetBool("isAttacking", false);
     }
 }
