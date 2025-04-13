@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 6.657, y: -0.648, z: 0}
-  m_LocalScale: {x: 1.7778, y: 2.0222476, z: 1.7778}
+  m_LocalScale: {x: 4.970654, y: 5.6541195, z: 4.970654}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -151,7 +151,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.09263727, y: -0.21350324}
+  m_Offset: {x: -0.09795685, y: -0.2137111}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -161,7 +161,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.45472544, y: 0.10734236}
+  m_Size: {x: 0.44408628, y: 0.09332231}
   m_EdgeRadius: 0
 --- !u!114 &7402139602073591425
 MonoBehaviour:
@@ -175,3 +175,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14924d16df1548e4ca03410797defefc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionEffect: {fileID: 3421368873127950305, guid: ebb9754dd8210fc48864a048e781fc0a, type: 3}
