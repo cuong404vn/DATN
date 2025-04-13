@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour
     private Vector3 startPosition;
     public GameObject GameOver;
 
+    // Thêm thông số tấn công
+    public float attackRange = 1f;
+    public int attackDamage = 1;
+
     private static PlayerController instance;
 
     private void Awake()
@@ -35,7 +39,6 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         startPosition = transform.position;
-        
     }
 
     void Update()
@@ -81,6 +84,18 @@ public class PlayerController : MonoBehaviour
         {
             isAttacking = true;
             animator.SetTrigger("Attack");
+
+            // Gây sát thương cho quái
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attackRange);
+            foreach (Collider2D hit in hits)
+            {
+                if (hit.CompareTag("Enemy"))
+                {
+                    Debug.Log("Enemy hit! Damage: " + attackDamage);
+                    hit.GetComponent<EnemyHealth>().TakeDamage(attackDamage);
+                }
+            }
+
             Invoke("ResetAttack", 0.5f);
         }
     }
@@ -124,29 +139,29 @@ public class PlayerController : MonoBehaviour
 
     public void ResetState()
     {
-      
         rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0f;
 
-     
         isGrounded = true;
         jumpCount = 0;
         isAttacking = false;
 
-      
         animator.SetBool("isRunning", false);
         animator.SetBool("isGrounded", true);
         animator.SetBool("isIdle", true);
 
-       
         animator.ResetTrigger("Jump1");
         animator.ResetTrigger("Jump2");
         animator.ResetTrigger("Attack");
 
-        
         animator.Play("Player_Idle");
 
-        
         transform.position = startPosition;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
