@@ -75,6 +75,14 @@ public class GameManager : MonoBehaviour
         OnCoinsChanged?.Invoke(coins);
     }
 
+    public void RemoveCoins(int amount)
+    {
+        coins -= amount;
+        if (coins < 0)
+            coins = 0;
+        OnCoinsChanged?.Invoke(coins);
+    }
+
     public void AddKeys(int amount)
     {
         keys += amount;
