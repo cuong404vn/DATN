@@ -18,8 +18,7 @@ public class MeleeEnemyMovement : MonoBehaviour
     private Animator anim;
     private bool wasWalkingBeforeAttack;
 
-    // Thêm biến âm thanh
-    public AudioClip attackSound; // Âm thanh khi tấn công
+    public AudioClip attackSound;
     private AudioSource audioSource;
 
     void Start()
@@ -27,13 +26,12 @@ public class MeleeEnemyMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         startPosition = transform.position;
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
         if (player == null)
         {
             Debug.LogError("Player not found! Ensure the Player has the 'Player' tag.");
         }
 
-        // Lấy hoặc thêm AudioSource
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
@@ -43,6 +41,12 @@ public class MeleeEnemyMovement : MonoBehaviour
 
     void Update()
     {
+        if (player == null)
+        {
+            Patrol();
+            return;
+        }
+
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         Debug.Log("Distance to Player: " + distanceToPlayer);
 
@@ -62,6 +66,7 @@ public class MeleeEnemyMovement : MonoBehaviour
                 Vector2 direction = (player.position - transform.position).normalized;
                 rb.linearVelocity = new Vector2(direction.x * moveSpeed, rb.linearVelocity.y);
                 anim.SetBool("isWalking", true);
+                anim.ResetTrigger("attack");
             }
             else
             {
@@ -83,24 +88,30 @@ public class MeleeEnemyMovement : MonoBehaviour
         }
         else
         {
-            if (movingRight)
-            {
-                rb.linearVelocity = new Vector2(moveSpeed, rb.linearVelocity.y);
-                transform.localScale = new Vector3(2, 2, 2);
-            }
-            else
-            {
-                rb.linearVelocity = new Vector2(-moveSpeed, rb.linearVelocity.y);
-                transform.localScale = new Vector3(-2, 2, 2);
-            }
-
-            if (transform.position.x > startPosition.x + moveDistance)
-                movingRight = false;
-            else if (transform.position.x < startPosition.x - moveDistance)
-                movingRight = true;
-
-            anim.SetBool("isWalking", true);
+            Patrol();
+            anim.ResetTrigger("attack");
         }
+    }
+
+    void Patrol()
+    {
+        if (movingRight)
+        {
+            rb.linearVelocity = new Vector2(moveSpeed, rb.linearVelocity.y);
+            transform.localScale = new Vector3(2, 2, 2);
+        }
+        else
+        {
+            rb.linearVelocity = new Vector2(-moveSpeed, rb.linearVelocity.y);
+            transform.localScale = new Vector3(-2, 2, 2);
+        }
+
+        if (transform.position.x > startPosition.x + moveDistance)
+            movingRight = false;
+        else if (transform.position.x < startPosition.x - moveDistance)
+            movingRight = true;
+
+        anim.SetBool("isWalking", true);
     }
 
     void Attack()
@@ -108,7 +119,6 @@ public class MeleeEnemyMovement : MonoBehaviour
         Debug.Log("Attack triggered!");
         anim.SetTrigger("attack");
 
-        // Phát âm thanh khi tấn công
         if (attackSound != null && audioSource != null)
         {
             Debug.Log("Playing attack sound for " + gameObject.name);

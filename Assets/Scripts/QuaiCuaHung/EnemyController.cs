@@ -93,7 +93,7 @@ public class EnemyController : MonoBehaviour
             GameObject projectile = Instantiate(projectilePrefab, spawnPosition, Quaternion.identity);
 
             projectile.GetComponent<Rigidbody2D>().linearVelocity = direction * projectileSpeed;
-            projectile.transform.localScale = new Vector3(direction.x >= 0 ? 1 : -1, 1, 1);
+            projectile.transform.localScale = new Vector3(direction.x >= 0 ? 1 : -2, 2, 2);
 
             nextFireTime = Time.time + fireRate;
         }
