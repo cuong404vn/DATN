@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5370909624829554127}
   - component: {fileID: 7015480530523657754}
   - component: {fileID: 8570194641176880857}
+  - component: {fileID: 6816087920052517423}
   m_Layer: 0
   m_Name: BossBullet
   m_TagString: Untagged
@@ -169,6 +170,7 @@ MonoBehaviour:
   speed: 5
   lifetime: 3
   damage: 1
+  explosionEffectPrefab: {fileID: 3685490843553219329, guid: 493acd94bde90db4aa9c00cfb13af3b0, type: 3}
 --- !u!114 &8570194641176880857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,3 +194,25 @@ MonoBehaviour:
   healthBarPrefab: {fileID: 0}
   hitSound: {fileID: 0}
   deathSound: {fileID: 0}
+--- !u!95 &6816087920052517423
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5399315063779573891}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cb73d92e62bde2348b55c199f250d319, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
