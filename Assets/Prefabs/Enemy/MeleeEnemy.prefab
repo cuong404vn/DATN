@@ -180,8 +180,6 @@ MonoBehaviour:
   exitGateSpawnPoint: {fileID: 0}
   enemyName: Enemy
   healthBarPrefab: {fileID: 0}
-  hitSound: {fileID: 0}
-  deathSound: {fileID: 0}
 --- !u!114 &2091573486298165633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,9 +194,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackCooldown: 2
   range: 2.5
-  damage: 1
   colliderDistance: 0.26
+  damage: 1
   boxCollider: {fileID: 3292873473899986791}
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
