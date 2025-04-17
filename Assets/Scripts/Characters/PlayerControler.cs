@@ -13,11 +13,18 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private bool isAttacking;
     private Vector3 startPosition;
-    public GameObject GameOver;
 
-    // Thêm thông số tấn công
-    public float attackRange = 1f;
-    public int attackDamage = 1;
+    public float attackDuration = 0.5f;
+
+    public AudioClip idleSound;
+    public AudioClip runSound;
+    public AudioClip attackSound;
+    public AudioClip jump1Sound;
+    public AudioClip jump2Sound;
+    public AudioClip landingSound;
+
+    private AudioSource audioSource;
+    private bool isPlayingRunSound = false;
 
     private static PlayerController instance;
 
@@ -38,6 +45,11 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
         startPosition = transform.position;
     }
 
@@ -47,6 +59,7 @@ public class PlayerController : MonoBehaviour
         Jump();
         Attack();
         UpdateAnimation();
+        UpdateSounds();
     }
 
     void Move()
@@ -72,9 +85,15 @@ public class PlayerController : MonoBehaviour
             jumpCount++;
 
             if (jumpCount == 1)
+            {
                 animator.SetTrigger("Jump1");
+                PlaySound(jump1Sound);
+            }
             else if (jumpCount == 2)
+            {
                 animator.SetTrigger("Jump2");
+                PlaySound(jump2Sound);
+            }
         }
     }
 
@@ -83,26 +102,18 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !isAttacking)
         {
             isAttacking = true;
-            animator.SetTrigger("Attack");
+            animator.SetBool("isAttacking", true);
+            PlaySound(attackSound);
 
-            // Gây sát thương cho quái
-            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attackRange);
-            foreach (Collider2D hit in hits)
-            {
-                if (hit.CompareTag("Enemy"))
-                {
-                    Debug.Log("Enemy hit! Damage: " + attackDamage);
-                    hit.GetComponent<EnemyHealth>().TakeDamage(attackDamage);
-                }
-            }
-
-            Invoke("ResetAttack", 0.5f);
+            CancelInvoke("ResetAttack");
+            Invoke("ResetAttack", attackDuration);
         }
     }
 
     void ResetAttack()
     {
         isAttacking = false;
+        animator.SetBool("isAttacking", false);
     }
 
     void UpdateAnimation()
@@ -113,13 +124,78 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void UpdateSounds()
+    {
+        if (animator.GetBool("isRunning") && isGrounded && !isAttacking)
+        {
+            if (!isPlayingRunSound && runSound != null)
+            {
+                audioSource.clip = runSound;
+                audioSource.loop = true;
+                audioSource.Play();
+                isPlayingRunSound = true;
+            }
+        }
+        else
+        {
+            if (isPlayingRunSound)
+            {
+                audioSource.loop = false;
+                if (audioSource.clip == runSound)
+                {
+                    audioSource.Stop();
+                }
+                isPlayingRunSound = false;
+            }
+
+            if (animator.GetBool("isIdle") && isGrounded && !isAttacking && !audioSource.isPlaying)
+            {
+                PlayIdleSound();
+            }
+        }
+    }
+
+    void PlayIdleSound()
+    {
+        if (idleSound != null && !audioSource.isPlaying)
+        {
+            audioSource.clip = idleSound;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
+    }
+
+    void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.Stop();
+            audioSource.loop = false;
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            isGrounded = true;
-            jumpCount = 0;
-            animator.SetBool("isGrounded", true);
+            foreach (ContactPoint2D contact in collision.contacts)
+            {
+                if (contact.normal.y > 0.5f) // Chỉ tính là mặt đất khi va chạm từ phía dưới
+                {
+                    isGrounded = true;
+                    jumpCount = 0;
+                    animator.SetBool("isGrounded", true);
+
+                    if (landingSound != null)
+                    {
+                        audioSource.PlayOneShot(landingSound);
+                    }
+
+                    break;
+                }
+            }
         }
     }
 
@@ -149,19 +225,16 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isRunning", false);
         animator.SetBool("isGrounded", true);
         animator.SetBool("isIdle", true);
+        animator.SetBool("isAttacking", false);
 
         animator.ResetTrigger("Jump1");
         animator.ResetTrigger("Jump2");
-        animator.ResetTrigger("Attack");
 
         animator.Play("Player_Idle");
 
         transform.position = startPosition;
-    }
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        audioSource.Stop();
+        isPlayingRunSound = false;
     }
 }
