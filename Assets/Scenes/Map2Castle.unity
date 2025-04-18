@@ -17403,7 +17403,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2297830238715481301, guid: 1b579fa49671ef54baf9df20cd117d1e, type: 3}
       propertyPath: m_Name
-      value: Enemy
+      value: Enemy1
       objectReference: {fileID: 0}
     - target: {fileID: 7316254149894623738, guid: 1b579fa49671ef54baf9df20cd117d1e, type: 3}
       propertyPath: possibleItems.Array.data[1].dropChance
