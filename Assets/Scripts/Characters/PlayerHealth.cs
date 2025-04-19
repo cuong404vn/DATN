@@ -91,10 +91,8 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (isInvincible) return;
-
+        // if (isInvincible) return; // Bỏ dòng này tạm thời
         currentHealth -= damage;
-
         if (currentHealth <= 0)
         {
             Die();
@@ -103,7 +101,6 @@ public class PlayerHealth : MonoBehaviour
         {
             StartCoroutine(BecomeInvincible());
         }
-
         UpdateHealthUI();
     }
 
