@@ -5,7 +5,7 @@ public class BossBullet : MonoBehaviour
     public float speed = 5f;
     public float lifetime = 3f;
     public int damage = 1;
-    public GameObject explosionEffectPrefab; // Prefab hiệu ứng nổ (dùng sprite)
+    public GameObject explosionEffectPrefab; 
     private Vector2 direction;
     private Rigidbody2D rb;
 
@@ -29,10 +29,8 @@ public class BossBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Kiểm tra va chạm với Player hoặc Ground
         if (other.CompareTag("Player") || other.CompareTag("Ground"))
         {
-            // Tạo hiệu ứng nổ
             if (explosionEffectPrefab != null)
             {
                 Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
@@ -42,13 +40,11 @@ public class BossBullet : MonoBehaviour
                 Debug.LogWarning("Explosion Effect Prefab is not assigned in BossBullet!");
             }
 
-            // Gây sát thương nếu va chạm với Player
             if (other.CompareTag("Player"))
             {
                 other.GetComponent<PlayerHealth>().TakeDamage(damage);
             }
 
-            // Hủy đạn
             Destroy(gameObject);
         }
     }

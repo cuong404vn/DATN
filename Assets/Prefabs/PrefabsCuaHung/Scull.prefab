@@ -216,5 +216,5 @@ MonoBehaviour:
   exitGateSpawnPoint: {fileID: 0}
   enemyName: Enemy
   healthBarPrefab: {fileID: 0}
-  hitSound: {fileID: 0}
-  deathSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: a5ada45d2885d3b4cac7ae42f8d602bf, type: 3}
+  deathSound: {fileID: 8300000, guid: c27e339ad8c711043b64aa3b19e12530, type: 3}
