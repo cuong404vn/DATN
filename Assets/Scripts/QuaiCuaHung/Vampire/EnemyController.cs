@@ -23,15 +23,20 @@ public class EnemyController : MonoBehaviour
     // Animation
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    private bool isAttacking = false;
+    private bool isTriggeredWalk = false;
+
+    // Âm thanh
+    [Header("Sounds")]
+    public AudioClip attackSound; // Âm thanh khi tấn công
+    private AudioSource attackAudioSource;
 
     // Vật lý
     private Rigidbody2D rb;
 
     // Collider
     private BoxCollider2D boxCollider;
-    private Vector2 colliderOffsetRight = new Vector2(0.2f, 0f); // Offset khi hướng phải
-    private Vector2 colliderOffsetLeft; // Offset khi hướng trái
+    private Vector2 colliderOffsetRight = new Vector2(0.1f, 0f);
+    private Vector2 colliderOffsetLeft;
 
     // Trạng thái
     private bool isDead = false;
@@ -45,13 +50,18 @@ public class EnemyController : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
+        // Khởi tạo AudioSource
+        attackAudioSource = GetComponent<AudioSource>();
+        if (attackAudioSource == null) Debug.LogError("Không tìm thấy AudioSource trên quái!");
+        attackAudioSource.clip = attackSound;
+        attackAudioSource.loop = false; // Không lặp lại âm thanh Attack
+
         if (animator == null) Debug.LogError("Không tìm thấy Animator trên quái!");
         if (spriteRenderer == null) Debug.LogError("Không tìm thấy SpriteRenderer trên quái!");
         if (rb == null) Debug.LogError("Không tìm thấy Rigidbody2D trên quái!");
         if (boxCollider == null) Debug.LogError("Không tìm thấy BoxCollider2D trên quái!");
         if (player == null) Debug.LogError("Không tìm thấy Player!");
 
-        // Tính Offset cho hướng trái
         colliderOffsetLeft = new Vector2(-colliderOffsetRight.x, colliderOffsetRight.y);
         boxCollider.offset = colliderOffsetRight;
     }
@@ -64,20 +74,27 @@ public class EnemyController : MonoBehaviour
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        // Nếu animation Attack hoàn tất, đặt lại isAttacking và quay lại trạng thái tuần tra
-        if (isAttacking && !stateInfo.IsName("Attack"))
-        {
-            isAttacking = false;
-            animator.SetTrigger("Walk"); // Quay lại trạng thái Walk để tiếp tục tuần tra
-        }
+        string currentState = "Unknown";
+        if (stateInfo.IsName("Idle")) currentState = "Idle";
+        else if (stateInfo.IsName("Walk")) currentState = "Walk";
+        else if (stateInfo.IsName("Attack")) currentState = "Attack";
+        else if (stateInfo.IsName("Die")) currentState = "Die";
+        Debug.Log($"Current state: {currentState}");
 
         if (playerInRange)
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-            if (!isAttacking && !stateInfo.IsName("Attack"))
+            if (!stateInfo.IsName("Attack"))
             {
+                Debug.Log("Triggering Attack animation for vampireFire");
                 animator.SetTrigger("Attack");
-                isAttacking = true;
+                isTriggeredWalk = false;
+
+                // Phát âm thanh Attack
+                if (attackAudioSource != null && attackSound != null)
+                {
+                    attackAudioSource.Play();
+                }
             }
             FacePlayer();
             if (Time.time >= nextFireTime)
@@ -88,6 +105,12 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
+            if (!stateInfo.IsName("Walk") && !isTriggeredWalk)
+            {
+                Debug.Log("Triggering Walk animation for vampireFire");
+                animator.SetTrigger("Walk");
+                isTriggeredWalk = true;
+            }
             Patrol();
         }
     }
@@ -104,9 +127,6 @@ public class EnemyController : MonoBehaviour
         rb.linearVelocity = new Vector2(moveDirection * patrolSpeed, rb.linearVelocity.y);
 
         spriteRenderer.flipX = !movingRight;
-        animator.SetTrigger("Walk");
-
-        // Điều chỉnh Offset của Collider
         boxCollider.offset = spriteRenderer.flipX ? colliderOffsetLeft : colliderOffsetRight;
     }
 
@@ -114,6 +134,7 @@ public class EnemyController : MonoBehaviour
     {
         if (player == null) return false;
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+        Debug.Log($"Distance to Player: {distanceToPlayer}");
         return distanceToPlayer <= detectionRange;
     }
 
@@ -122,8 +143,6 @@ public class EnemyController : MonoBehaviour
         if (player == null) return;
         bool playerOnRight = player.position.x > transform.position.x;
         spriteRenderer.flipX = !playerOnRight;
-
-        // Điều chỉnh Offset của Collider
         boxCollider.offset = spriteRenderer.flipX ? colliderOffsetLeft : colliderOffsetRight;
     }
 
