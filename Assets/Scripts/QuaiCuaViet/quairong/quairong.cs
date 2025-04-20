@@ -340,7 +340,7 @@ public class quairong : MonoBehaviour
     }
 
 
-    public void AnimationEvent_ShootFire()
+    public void AnimationEvent_Shoot ()
     {
         if (isDead) return;
 
@@ -353,6 +353,7 @@ public class quairong : MonoBehaviour
 
         SpawnFireball();
     }
+    
 
     void SpawnFireball()
     {
