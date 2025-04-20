@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class BossController : MonoBehaviour
 {
-    // Stats của Boss
     [Header("Boss Stats")]
     public int maxHealth = 10;
     public int meleeDamage = 20;
@@ -15,17 +14,15 @@ public class BossController : MonoBehaviour
     public float specialAttackRange = 4f;
     public float specialAttackCooldown = 3f;
 
-    // References
     [Header("References")]
-    public GameObject bulletPrefab; // Prefab đạn
-    public GameObject exitGatePrefab; // Prefab cổng thoát
-    public Transform exitGateSpawnPoint; // Vị trí spawn cổng thoát
-    public GameObject healthBarPrefab; // Prefab thanh HP
+    public GameObject bulletPrefab; 
+    public GameObject exitGatePrefab; 
+    public Transform exitGateSpawnPoint; 
+    public GameObject healthBarPrefab; 
     public AudioClip meleeAttackSound;
     public AudioClip specialAttackSound;
     public AudioClip deathSound;
 
-    // Private variables
     private int currentHealth;
     private Transform player;
     private bool isPlayerInRange = false;
@@ -53,7 +50,6 @@ public class BossController : MonoBehaviour
             Debug.LogError("Player not found! Ensure the Player has the 'Player' tag.");
         }
 
-        // Tạo thanh HP
         if (healthBarPrefab != null)
         {
             healthBarInstance = Instantiate(healthBarPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
@@ -82,7 +78,6 @@ public class BossController : MonoBehaviour
             return;
         }
 
-        // Cập nhật vị trí thanh HP
         if (healthBarInstance != null)
         {
             healthBarInstance.transform.position = transform.position + new Vector3(0, 1, 0);
@@ -91,7 +86,6 @@ public class BossController : MonoBehaviour
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         Debug.Log("Distance to Player: " + distanceToPlayer);
 
-        // Kiểm tra Player có trong tầm phát hiện không
         if (distanceToPlayer <= detectionRange)
         {
             isPlayerInRange = true;
@@ -103,7 +97,6 @@ public class BossController : MonoBehaviour
 
         if (isPlayerInRange)
         {
-            // Tấn công cận chiến nếu Player trong meleeAttackRange
             if (distanceToPlayer <= meleeAttackRange)
             {
                 rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
@@ -115,7 +108,6 @@ public class BossController : MonoBehaviour
                     lastMeleeAttackTime = Time.time;
                 }
             }
-            // Kỹ năng đặc biệt: Bắn đạn nếu Player trong specialAttackRange
             else if (distanceToPlayer <= specialAttackRange && Time.time >= lastSpecialAttackTime + specialAttackCooldown)
             {
                 SpecialAttack();
@@ -123,7 +115,6 @@ public class BossController : MonoBehaviour
             }
             else
             {
-                // Di chuyển đến Player nếu ngoài meleeAttackRange và specialAttackRange
                 Vector2 direction = (player.position - transform.position).normalized;
                 rb.linearVelocity = new Vector2(direction.x * moveSpeed, rb.linearVelocity.y);
                 anim.SetBool("isWalking", true);
@@ -131,7 +122,6 @@ public class BossController : MonoBehaviour
                 anim.ResetTrigger("specialAttack");
             }
 
-            // Lật sprite theo hướng Player
             if (player.position.x < transform.position.x)
                 transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             else
@@ -234,24 +224,21 @@ public class BossController : MonoBehaviour
             audioSource.PlayOneShot(deathSound);
         }
 
-        // Spawn cổng thoát
         if (exitGatePrefab != null)
         {
             Vector3 spawnPosition = exitGateSpawnPoint != null ? exitGateSpawnPoint.position : transform.position;
             Instantiate(exitGatePrefab, spawnPosition, Quaternion.identity);
         }
 
-        // Hủy thanh HP
         if (healthBarInstance != null)
         {
             Destroy(healthBarInstance);
         }
 
-        // Vô hiệu hóa Boss
         rb.linearVelocity = Vector2.zero;
         GetComponent<Collider2D>().enabled = false;
-        enabled = false; // Tắt script
-        Destroy(gameObject, 1f); // Hủy Boss sau 1 giây
+        enabled = false; 
+        Destroy(gameObject, 1f);
     }
 
     void OnDrawGizmosSelected()
