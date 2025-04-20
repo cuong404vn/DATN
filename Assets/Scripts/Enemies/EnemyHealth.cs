@@ -17,12 +17,17 @@ public class EnemyHealth : MonoBehaviour
     public string enemyName = "Enemy";
     public GameObject healthBarPrefab;
 
+    [Header("Stun Settings")]
+    public float stunDuration = 0.5f;
+    public float knockbackForce = 3f;
+    private bool isStunned = false;
+
     private GameObject healthBarInstance;
     private EnemyHealthBar healthBarScript;
 
     private Animator anim;
     private MeleeEnemyMovement enemyMovement;
-
+    private Rigidbody2D rb;
 
     public AudioClip hitSound;
     public AudioClip deathSound;
@@ -39,12 +44,11 @@ public class EnemyHealth : MonoBehaviour
 
         anim = GetComponent<Animator>();
         enemyMovement = GetComponent<MeleeEnemyMovement>();
-
+        rb = GetComponent<Rigidbody2D>();
 
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
-
 
         if (healthBarPrefab != null)
         {
@@ -72,7 +76,6 @@ public class EnemyHealth : MonoBehaviour
 
         StartCoroutine(FlashEffect());
 
-
         if (healthBarScript != null)
             healthBarScript.SetHealth(currentHealth, maxHealth);
 
@@ -82,10 +85,200 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+
+    public void ApplyKnockback(Vector2 direction)
+    {
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+            if (rb == null) return;
+        }
+
+
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+
+        rb.linearVelocity = Vector2.zero;
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0;
+
+
+        Vector3 currentPos = transform.position;
+        Vector2 horizontalDirection = new Vector2(direction.x, 0).normalized;
+        float knockbackDistance = knockbackForce * 0.2f;
+
+
+        Collider2D collider = GetComponent<Collider2D>();
+        if (collider == null)
+        {
+
+            Vector2 boxSize = new Vector2(0.5f, 1f);
+            Vector2 boxCenter = new Vector2(currentPos.x, currentPos.y + 0.5f);
+
+
+            RaycastHit2D[] hits = Physics2D.BoxCastAll(
+                boxCenter,
+                boxSize,
+                0f,
+                horizontalDirection,
+                knockbackDistance,
+                LayerMask.GetMask("Ground")
+            );
+
+            float minDistance = knockbackDistance;
+            bool hitWall = false;
+
+            foreach (RaycastHit2D hit in hits)
+            {
+
+                if (hit.collider.gameObject == gameObject)
+                    continue;
+
+
+                float hitDistance = hit.distance;
+                if (hitDistance < minDistance)
+                {
+                    minDistance = hitDistance;
+                    hitWall = true;
+                }
+            }
+
+
+            Vector3 targetPos;
+            if (hitWall)
+            {
+
+                targetPos = currentPos + (Vector3)(horizontalDirection * (minDistance - 0.5f));
+            }
+            else
+            {
+
+                targetPos = currentPos + (Vector3)(horizontalDirection * knockbackDistance);
+            }
+
+
+            StartCoroutine(KnockbackMove(currentPos, targetPos, 0.2f));
+        }
+        else
+        {
+
+            Vector2 boxSize = Vector2.zero;
+            Vector2 boxCenter = Vector2.zero;
+
+
+            if (collider is BoxCollider2D boxCollider)
+            {
+                boxSize = boxCollider.size;
+                boxCenter = (Vector2)currentPos + boxCollider.offset;
+            }
+            else if (collider is CircleCollider2D circleCollider)
+            {
+                float radius = circleCollider.radius;
+                boxSize = new Vector2(radius * 2, radius * 2);
+                boxCenter = (Vector2)currentPos + circleCollider.offset;
+            }
+            else
+            {
+
+                boxSize = new Vector2(0.5f, 1f);
+                boxCenter = new Vector2(currentPos.x, currentPos.y + 0.5f);
+            }
+
+
+            RaycastHit2D[] hits = Physics2D.BoxCastAll(
+                boxCenter,
+                boxSize,
+                0f,
+                horizontalDirection,
+                knockbackDistance,
+                LayerMask.GetMask("Ground")
+            );
+
+            float minDistance = knockbackDistance;
+            bool hitWall = false;
+
+            foreach (RaycastHit2D hit in hits)
+            {
+
+                if (hit.collider.gameObject == gameObject)
+                    continue;
+
+
+                float hitDistance = hit.distance;
+                if (hitDistance < minDistance)
+                {
+                    minDistance = hitDistance;
+                    hitWall = true;
+                }
+            }
+
+
+            Vector3 targetPos;
+            if (hitWall)
+            {
+
+                targetPos = currentPos + (Vector3)(horizontalDirection * (minDistance - 0.5f));
+            }
+            else
+            {
+
+                targetPos = currentPos + (Vector3)(horizontalDirection * knockbackDistance);
+            }
+
+
+            StartCoroutine(KnockbackMove(currentPos, targetPos, 0.2f));
+        }
+
+
+        StartCoroutine(StunEffect(originalGravity));
+    }
+
+    IEnumerator KnockbackMove(Vector3 startPos, Vector3 endPos, float duration)
+    {
+        float elapsed = 0;
+        while (elapsed < duration && this != null && gameObject.activeInHierarchy)
+        {
+            transform.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        if (this != null && gameObject.activeInHierarchy)
+            transform.position = endPos;
+    }
+
+    IEnumerator StunEffect(float originalGravity)
+    {
+        isStunned = true;
+
+
+        if (anim != null)
+            anim.SetTrigger("Hurt");
+
+
+        if (enemyMovement != null)
+            enemyMovement.enabled = false;
+
+
+        yield return new WaitForSeconds(stunDuration);
+
+
+        if (rb != null && this != null && gameObject.activeInHierarchy)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.gravityScale = originalGravity;
+        }
+
+        if (enemyMovement != null && this != null && gameObject.activeInHierarchy)
+            enemyMovement.enabled = true;
+
+        isStunned = false;
+    }
+
     void Die()
     {
         if (anim != null)
-            anim.SetTrigger("die");
+            anim.SetTrigger("Die");
 
         if (deathSound != null && audioSource != null)
             audioSource.PlayOneShot(deathSound);
@@ -120,7 +313,8 @@ public class EnemyHealth : MonoBehaviour
         if (healthBarInstance != null)
             Destroy(healthBarInstance);
 
-        Destroy(gameObject, 0.5f);
+
+        Destroy(gameObject, 0.9f);
     }
 
     IEnumerator FlashEffect()
@@ -128,7 +322,7 @@ public class EnemyHealth : MonoBehaviour
         SpriteRenderer sprite = GetComponent<SpriteRenderer>();
         Color originalColor = sprite.color;
         sprite.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(2f);
         sprite.color = originalColor;
     }
 }

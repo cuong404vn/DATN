@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        CheckGroundedState();
         Move();
         Jump();
         Attack();
@@ -79,20 +80,28 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && jumpCount < maxJumps)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            jumpCount++;
-
-            if (jumpCount == 1)
+            if (isGrounded && jumpCount >= maxJumps)
             {
-                animator.SetTrigger("Jump1");
-                PlaySound(jump1Sound);
+                jumpCount = 0;
             }
-            else if (jumpCount == 2)
+
+            if (jumpCount < maxJumps)
             {
-                animator.SetTrigger("Jump2");
-                PlaySound(jump2Sound);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                jumpCount++;
+
+                if (jumpCount == 1)
+                {
+                    animator.SetTrigger("Jump1");
+                    PlaySound(jump1Sound);
+                }
+                else if (jumpCount == 2)
+                {
+                    animator.SetTrigger("Jump2");
+                    PlaySound(jump2Sound);
+                }
             }
         }
     }
@@ -180,9 +189,49 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            foreach (ContactPoint2D contact in collision.contacts)
+            CheckGroundContact(collision);
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            CheckGroundContact(collision);
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            Collider2D[] grounds = Physics2D.OverlapCircleAll(transform.position, 0.2f);
+            bool stillOnGround = false;
+
+            foreach (Collider2D ground in grounds)
             {
-                if (contact.normal.y > 0.5f) // Chỉ tính là mặt đất khi va chạm từ phía dưới
+                if (ground.CompareTag("Ground") && ground.gameObject != collision.gameObject)
+                {
+                    stillOnGround = true;
+                    break;
+                }
+            }
+
+            if (!stillOnGround)
+            {
+                isGrounded = false;
+                animator.SetBool("isGrounded", false);
+            }
+        }
+    }
+
+    void CheckGroundContact(Collision2D collision)
+    {
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            if (contact.normal.y > 0.3f)
+            {
+                if (!isGrounded)
                 {
                     isGrounded = true;
                     jumpCount = 0;
@@ -192,20 +241,69 @@ public class PlayerController : MonoBehaviour
                     {
                         audioSource.PlayOneShot(landingSound);
                     }
-
-                    break;
                 }
+                return;
             }
         }
     }
 
-    void OnCollisionExit2D(Collision2D collision)
+    void CheckGroundedState()
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        Vector2 center = transform.position - new Vector3(0, GetComponent<Collider2D>().bounds.extents.y - 0.05f, 0);
+        Vector2 left = center - new Vector2(GetComponent<Collider2D>().bounds.extents.x * 0.8f, 0);
+        Vector2 right = center + new Vector2(GetComponent<Collider2D>().bounds.extents.x * 0.8f, 0);
+
+        float rayLength = 0.15f;
+
+        RaycastHit2D hitCenter = Physics2D.Raycast(center, Vector2.down, rayLength, LayerMask.GetMask("Ground"));
+        RaycastHit2D hitLeft = Physics2D.Raycast(left, Vector2.down, rayLength, LayerMask.GetMask("Ground"));
+        RaycastHit2D hitRight = Physics2D.Raycast(right, Vector2.down, rayLength, LayerMask.GetMask("Ground"));
+
+        Debug.DrawRay(center, Vector2.down * rayLength, hitCenter ? Color.green : Color.red);
+        Debug.DrawRay(left, Vector2.down * rayLength, hitLeft ? Color.green : Color.red);
+        Debug.DrawRay(right, Vector2.down * rayLength, hitRight ? Color.green : Color.red);
+
+        if ((hitCenter && hitCenter.collider.CompareTag("Ground")) ||
+            (hitLeft && hitLeft.collider.CompareTag("Ground")) ||
+            (hitRight && hitRight.collider.CompareTag("Ground")))
         {
-            isGrounded = false;
-            animator.SetBool("isGrounded", false);
+            if (!isGrounded)
+            {
+                isGrounded = true;
+                jumpCount = 0;
+                animator.SetBool("isGrounded", true);
+            }
         }
+        else
+        {
+            if (rb.linearVelocity.y < -0.1f && isGrounded && !IsOnAnyGround())
+            {
+                isGrounded = false;
+                animator.SetBool("isGrounded", false);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+        }
+    }
+
+    bool IsOnAnyGround()
+    {
+        Bounds bounds = GetComponent<Collider2D>().bounds;
+        Vector2 boxCenter = new Vector2(bounds.center.x, bounds.min.y + 0.1f);
+        Vector2 boxSize = new Vector2(bounds.size.x * 0.9f, 0.1f);
+
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(boxCenter, boxSize, 0f);
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.CompareTag("Ground") && collider.gameObject != gameObject)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void ChangeScene(string sceneName)

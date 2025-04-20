@@ -100,6 +100,15 @@ public class CombatSystem : MonoBehaviour
             if (enemyHealth != null)
             {
                 enemyHealth.TakeDamage(attackDamage);
+
+                // Tính toán hướng đẩy lùi chính xác - từ người chơi đến kẻ địch
+                Vector2 knockbackDirection = (hit.transform.position - transform.position);
+                // Chỉ sử dụng hướng ngang và đảm bảo đẩy lùi theo hướng xa người chơi
+                knockbackDirection.y = 0;
+
+                // Áp dụng knockback
+                enemyHealth.ApplyKnockback(knockbackDirection.normalized);
+
                 hitAnyEnemy = true;
             }
         }
@@ -140,6 +149,13 @@ public class CombatSystem : MonoBehaviour
                 if (enemyHealth != null)
                 {
                     enemyHealth.TakeDamage(attackDamage);
+
+                    // Tính toán hướng đẩy lùi chính xác
+                    Vector2 knockbackDirection = (col.transform.position - transform.position);
+                    // Chỉ sử dụng hướng ngang
+                    knockbackDirection.y = 0;
+
+                    enemyHealth.ApplyKnockback(knockbackDirection.normalized);
                 }
                 else
                 {
@@ -156,6 +172,13 @@ public class CombatSystem : MonoBehaviour
                         if (health != null)
                         {
                             health.TakeDamage(attackDamage);
+
+                            // Tính toán hướng đẩy lùi chính xác
+                            Vector2 knockbackDirection = (col.transform.position - transform.position);
+                            // Chỉ sử dụng hướng ngang
+                            knockbackDirection.y = 0;
+
+                            health.ApplyKnockback(knockbackDirection.normalized);
                         }
                     }
                 }
@@ -174,6 +197,13 @@ public class CombatSystem : MonoBehaviour
             if (enemyHealth != null)
             {
                 enemyHealth.TakeDamage(attackDamage);
+
+                // Tính toán hướng đẩy lùi chính xác
+                Vector2 knockbackDirection = (enemy.transform.position - transform.position);
+                // Chỉ sử dụng hướng ngang
+                knockbackDirection.y = 0;
+
+                enemyHealth.ApplyKnockback(knockbackDirection.normalized);
             }
             else
             {
@@ -182,6 +212,13 @@ public class CombatSystem : MonoBehaviour
                 if (childHealth != null)
                 {
                     childHealth.TakeDamage(attackDamage);
+
+                    // Tính toán hướng đẩy lùi chính xác
+                    Vector2 knockbackDirection = (enemy.transform.position - transform.position);
+                    // Chỉ sử dụng hướng ngang
+                    knockbackDirection.y = 0;
+
+                    childHealth.ApplyKnockback(knockbackDirection.normalized);
                 }
             }
         }
