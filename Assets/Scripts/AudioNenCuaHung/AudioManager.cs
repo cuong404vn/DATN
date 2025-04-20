@@ -21,7 +21,6 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        // Kiểm tra và thêm AudioListener nếu cần
         if (FindObjectOfType<AudioListener>() == null)
         {
             Camera mainCamera = Camera.main;

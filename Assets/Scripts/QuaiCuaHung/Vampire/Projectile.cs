@@ -2,8 +2,8 @@
 
 public class Projectile : MonoBehaviour
 {
-    public int damage = 1; // Sát thương của chưởng
-    public GameObject explosionPrefab; // Prefab của hiệu ứng nổ
+    public int damage = 1; 
+    public GameObject explosionPrefab; 
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -11,14 +11,12 @@ public class Projectile : MonoBehaviour
 
         if (collision.CompareTag("Player") || collision.CompareTag("Ground"))
         {
-            // Tạo hiệu ứng nổ
             if (explosionPrefab != null)
             {
                 GameObject explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
                 Destroy(explosion, 2f);
             }
 
-            // Gây sát thương cho Player
             if (collision.CompareTag("Player"))
             {
                 PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
@@ -33,7 +31,6 @@ public class Projectile : MonoBehaviour
                 }
             }
 
-            // Hủy chưởng
             Destroy(gameObject);
         }
     }
