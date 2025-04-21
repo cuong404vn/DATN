@@ -874,6 +874,7 @@ GameObject:
   - component: {fileID: 239204598}
   - component: {fileID: 239204597}
   - component: {fileID: 239204603}
+  - component: {fileID: 239204604}
   m_Layer: 0
   m_Name: EnemyQuyLun
   m_TagString: Enemy
@@ -903,7 +904,7 @@ MonoBehaviour:
   jumpForce: 5
   detectionRange: 10
   patrolRange: 3
-  groundCheck: {fileID: 0}
+  groundCheck: {fileID: 1983471782}
   groundCheckDistance: 0.1
   groundLayer:
     serializedVersion: 2
@@ -913,13 +914,14 @@ MonoBehaviour:
   attackCooldown: 1
   attackPoint: {fileID: 441030251}
   attackRadius: 1
-  attackSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: fa078fa9f0ef12340921c4d959401ceb, type: 3}
   closeDistance: 2
   retreatDistance: 3
-  jumpBackDistance: 3
+  jumpBackDistance: 5
   jumpSpeed: 5
-  attackDelay: 0.7
-  attackDuration: 0.5
+  attackDelay: 1
+  attackDuration: 0.2
+  actionCooldown: 2
 --- !u!50 &239204598
 Rigidbody2D:
   serializedVersion: 5
@@ -935,7 +937,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 2
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -1110,7 +1112,34 @@ MonoBehaviour:
   stunDuration: 0.5
   knockbackForce: 5
   hitSound: {fileID: 0}
-  deathSound: {fileID: 0}
+  deathSound: {fileID: 8300000, guid: 0b7a70274f50684488bb3b54643515af, type: 3}
+--- !u!114 &239204604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239204596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07daf5ae19974f246854686e08d5f2b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  possibleItems:
+  - itemPrefab: {fileID: 9112966079961911929, guid: 9083e813728aec64eb6c35b4ef82c18b, type: 3}
+    dropChance: 100
+    minAmount: 4
+    maxAmount: 5
+  - itemPrefab: {fileID: 8372741642938986457, guid: 6389c73c04feba5418d0399ad6d22b52, type: 3}
+    dropChance: 30
+    minAmount: 1
+    maxAmount: 1
+  - itemPrefab: {fileID: 7227171931808800432, guid: bf3eb76457ab3f84ba3b88f966c05d6f, type: 3}
+    dropChance: 30
+    minAmount: 1
+    maxAmount: 1
+  dropRadius: 1
+  customDropPoint: {fileID: 0}
 --- !u!4 &275654146 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1057943624175572001, guid: e33c713d37f303c429c49cc6ecb8ebe9, type: 3}
@@ -7675,7 +7704,7 @@ GameObject:
   - component: {fileID: 1983471785}
   - component: {fileID: 1983471787}
   - component: {fileID: 1983471786}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MapBoss
   m_TagString: Ground
   m_Icon: {fileID: 0}
