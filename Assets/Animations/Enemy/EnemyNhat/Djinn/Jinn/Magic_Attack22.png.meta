@@ -1,0 +1,215 @@
+fileFormatVersion: 2
+guid: d45931815f2de0d4baedaa33bbcfeb27
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1250922245774005926
+    second: Magic_Attack22_0
+  - first:
+      213: 9129755579409117756
+    second: Magic_Attack22_1
+  - first:
+      213: -7519570215363387530
+    second: Magic_Attack22_2
+  - first:
+      213: -4750293806459756907
+    second: Magic_Attack22_3
+  - first:
+      213: -6208629792582404175
+    second: Magic_Attack22_4
+  - first:
+      213: 5527873196077560595
+    second: Magic_Attack22_5
+  - first:
+      213: 3642015937939437359
+    second: Magic_Attack22_6
+  - first:
+      213: 8669537274429165605
+    second: Magic_Attack22_7
+  - first:
+      213: -1713146103797575598
+    second: Magic_Attack22_8
+  - first:
+      213: -7763505599071221783
+    second: Magic_Attack22_9
+  - first:
+      213: 6529409359702458370
+    second: Magic_Attack22_10
+  - first:
+      213: 8000727380200700760
+    second: Magic_Attack22_11
+  - first:
+      213: -8602561098754096331
+    second: Magic_Attack22_12
+  - first:
+      213: -8053071043331759050
+    second: Magic_Attack22_13
+  - first:
+      213: 9047569998204217397
+    second: Magic_Attack22_14
+  - first:
+      213: 6147091411166654001
+    second: Magic_Attack22_15
+  - first:
+      213: 5935151360054437185
+    second: Magic_Attack22_16
+  - first:
+      213: 5357705138058449275
+    second: Magic_Attack22_17
+  - first:
+      213: 1690798511434007385
+    second: Magic_Attack22_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Magic_Attack22_18
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 54
+        width: 164
+        height: 151
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95388c4b94ce67710800000000000000
+      internalID: 1690798511434007385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: f6a947e41310fd343830fd1413e26d80
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Magic_Attack22_0: -1250922245774005926
+      Magic_Attack22_1: 9129755579409117756
+      Magic_Attack22_10: 6529409359702458370
+      Magic_Attack22_11: 8000727380200700760
+      Magic_Attack22_12: -8602561098754096331
+      Magic_Attack22_13: -8053071043331759050
+      Magic_Attack22_14: 9047569998204217397
+      Magic_Attack22_15: 6147091411166654001
+      Magic_Attack22_16: 5935151360054437185
+      Magic_Attack22_17: 5357705138058449275
+      Magic_Attack22_18: 1690798511434007385
+      Magic_Attack22_2: -7519570215363387530
+      Magic_Attack22_3: -4750293806459756907
+      Magic_Attack22_4: -6208629792582404175
+      Magic_Attack22_5: 5527873196077560595
+      Magic_Attack22_6: 3642015937939437359
+      Magic_Attack22_7: 8669537274429165605
+      Magic_Attack22_8: -1713146103797575598
+      Magic_Attack22_9: -7763505599071221783
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

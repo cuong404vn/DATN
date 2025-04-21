@@ -14,11 +14,19 @@ public class EnemyHealth : MonoBehaviour
     public ItemDrop itemDrop;
     public Transform exitGateSpawnPoint;
 
-    public string enemyName = "Enemy"; // Tên của quái, có thể được đặt từ Inspector
-    public GameObject healthBarPrefab; // Prefab thanh máu
+    public string enemyName = "Enemy";
+    public GameObject healthBarPrefab;
+
     private GameObject healthBarInstance;
-    private Slider healthBarSlider;
-    private Text enemyNameText;
+    private EnemyHealthBar healthBarScript;
+
+    private Animator anim;
+    private MeleeEnemyMovement enemyMovement;
+
+
+    public AudioClip hitSound;
+    public AudioClip deathSound;
+    private AudioSource audioSource;
 
     void Start()
     {
@@ -29,19 +37,26 @@ public class EnemyHealth : MonoBehaviour
         if (exitGateSpawnPoint == null && isBoss)
             exitGateSpawnPoint = transform;
 
-        // Tạo thanh máu
+        anim = GetComponent<Animator>();
+        enemyMovement = GetComponent<MeleeEnemyMovement>();
+
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+
+
         if (healthBarPrefab != null)
         {
-            healthBarInstance = Instantiate(healthBarPrefab, transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity, transform);
-            healthBarSlider = healthBarInstance.GetComponentInChildren<Slider>();
-            enemyNameText = healthBarInstance.GetComponentInChildren<Text>();
+            healthBarInstance = Instantiate(healthBarPrefab, transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
+            healthBarScript = healthBarInstance.GetComponent<EnemyHealthBar>();
 
-            if (healthBarSlider != null)
-                healthBarSlider.maxValue = maxHealth;
-            healthBarSlider.value = currentHealth;
-
-            if (enemyNameText != null)
-                enemyNameText.text = enemyName;
+            if (healthBarScript != null)
+            {
+                healthBarScript.target = transform;
+                healthBarScript.SetHealth(currentHealth, maxHealth);
+                healthBarScript.SetName(enemyName);
+            }
         }
     }
 
@@ -49,14 +64,17 @@ public class EnemyHealth : MonoBehaviour
     {
         currentHealth -= damage;
 
+        if (hitSound != null && audioSource != null)
+            audioSource.PlayOneShot(hitSound);
+
         if (hitEffect != null)
             Instantiate(hitEffect, transform.position, Quaternion.identity);
 
         StartCoroutine(FlashEffect());
 
-        // Cập nhật thanh máu
-        if (healthBarSlider != null)
-            healthBarSlider.value = currentHealth;
+
+        if (healthBarScript != null)
+            healthBarScript.SetHealth(currentHealth, maxHealth);
 
         if (currentHealth <= 0)
         {
@@ -66,13 +84,24 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
+        if (anim != null)
+            anim.SetTrigger("die");
+
+        if (deathSound != null && audioSource != null)
+            audioSource.PlayOneShot(deathSound);
+
+        if (enemyMovement != null)
+            enemyMovement.enabled = false;
+
+        Collider2D collider = GetComponent<Collider2D>();
+        if (collider != null)
+            collider.enabled = false;
+
         if (deathEffect != null)
             Instantiate(deathEffect, transform.position, Quaternion.identity);
 
         if (GameManager.Instance != null)
-        {
             GameManager.Instance.NotifyEnemyDefeated();
-        }
 
         if (isBoss)
         {
@@ -88,8 +117,10 @@ public class EnemyHealth : MonoBehaviour
         if (itemDrop != null)
             itemDrop.DropItem();
 
-        Destroy(healthBarInstance);
-        Destroy(gameObject);
+        if (healthBarInstance != null)
+            Destroy(healthBarInstance);
+
+        Destroy(gameObject, 0.5f);
     }
 
     IEnumerator FlashEffect()

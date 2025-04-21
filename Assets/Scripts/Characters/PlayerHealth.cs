@@ -83,7 +83,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !isShopOpen)
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !isShopOpen)
         {
             UseHealthPotion();
         }
