@@ -73,7 +73,7 @@ public class EnemyMedusa : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"Enemy '{gameObject.name}': Cannot find GameObject with Tag 'Player'. Disabling script.", this);
+            
             enabled = false;
             return;
         }
