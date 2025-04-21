@@ -109,12 +109,12 @@ public class PlayerHealth : MonoBehaviour
             damageSource = $"{callerClassName}.{damageSource}";
         }
 
-        Debug.Log($"<color=red>Player took {damage} damage from: {damageSource}</color>");
+     
 
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
-            Debug.Log("<color=red>Player died! Last damage from: " + damageSource + "</color>");
+           
             Die();
         }
         else
@@ -247,12 +247,12 @@ public class PlayerHealth : MonoBehaviour
     {
         if (other.CompareTag("Trap"))
         {
-            Debug.Log($"<color=yellow>Player hit a trap: {other.name}</color>");
+           
             TakeDamage(1);
         }
         else if (other.CompareTag("DungNham"))
         {
-            Debug.Log($"<color=red>Player fell into lava (DungNham): {other.name}</color>");
+           
             currentHealth = 0;
             Die();
         }
@@ -265,13 +265,13 @@ public class PlayerHealth : MonoBehaviour
             collision.gameObject.layer == LayerMask.NameToLayer("Enemy") ||
             collision.gameObject.name.Contains("Enemy"))
         {
-            Debug.Log($"<color=orange>Player collided with enemy: {collision.gameObject.name}</color>");
+ 
         }
     }
 
     public void TakeDamageFromBoss(int damage)
     {
-        Debug.Log($"<color=orange>Boss is attacking player with {damage} damage</color>");
+       
         TakeDamage(damage);
     }
 
