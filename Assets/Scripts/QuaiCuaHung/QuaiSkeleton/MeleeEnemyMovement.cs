@@ -18,8 +18,7 @@ public class MeleeEnemyMovement : MonoBehaviour
     private Animator anim;
     private bool wasWalkingBeforeAttack;
 
-    // Thêm biến âm thanh
-    public AudioClip attackSound; // Âm thanh khi tấn công
+    public AudioClip attackSound; 
     private AudioSource audioSource;
 
     void Start()
@@ -33,7 +32,6 @@ public class MeleeEnemyMovement : MonoBehaviour
             Debug.LogError("Player not found! Ensure the Player has the 'Player' tag.");
         }
 
-        // Lấy hoặc thêm AudioSource
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
@@ -108,7 +106,6 @@ public class MeleeEnemyMovement : MonoBehaviour
         Debug.Log("Attack triggered!");
         anim.SetTrigger("attack");
 
-        // Phát âm thanh khi tấn công
         if (attackSound != null && audioSource != null)
         {
             Debug.Log("Playing attack sound for " + gameObject.name);
