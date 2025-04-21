@@ -9,7 +9,7 @@ using SimpleJSON;
 
 public class LevelManager : MonoBehaviour
 {
-    [Header("Thông số màn chơi")]
+    [Header("Game parameters")]
     public float timeFor3Stars = 300f; 
     public float timeFor2Stars = 600f; 
     public float timeFor1Star = 900f; 
@@ -55,7 +55,7 @@ public class LevelManager : MonoBehaviour
 
       
         currentMapID = SceneManager.GetActiveScene().name;
-        Debug.Log("Bắt đầu màn chơi: " + currentMapID);
+        Debug.Log("Start Game " + currentMapID);
 
       
         UpdateUI();
@@ -141,19 +141,19 @@ public class LevelManager : MonoBehaviour
             int seconds = Mathf.FloorToInt(gameTime % 60);
 
             if (finalTimeText != null)
-                finalTimeText.text = string.Format("Thời gian: {0:00}:{1:00}", minutes, seconds);
+                finalTimeText.text = string.Format("Time Done: {0:00}:{1:00}", minutes, seconds);
 
             if (finalScoreText != null)
-                finalScoreText.text = "Điểm: " + totalScore;
+                finalScoreText.text = "Poin: " + totalScore;
 
             if (finalStarsText != null)
-                finalStarsText.text = "Sao: " + earnedStars;
+                finalStarsText.text = "Star: " + earnedStars;
 
             if (enemiesDefeatedText != null)
-                enemiesDefeatedText.text = "Quái vật đã đánh bại: " + enemiesDefeated;
+                enemiesDefeatedText.text = "Monsters kill: " + enemiesDefeated;
 
             if (coinsCollectedText != null)
-                coinsCollectedText.text = "Xu đã thu thập: " + GameManager.Instance.coins;
+                coinsCollectedText.text = "Coin:  " + GameManager.Instance.coins;
 
             
             if (starIcons != null && starIcons.Length >= 3)
@@ -170,7 +170,7 @@ public class LevelManager : MonoBehaviour
     private void UpdateUI()
     {
         if (scoreText != null)
-            scoreText.text = "Điểm: " + totalScore;
+            scoreText.text = "Score: " + totalScore;
     }
 
         private IEnumerator UpdateProgressToServer()

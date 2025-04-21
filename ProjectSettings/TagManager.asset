@@ -6,22 +6,23 @@ TagManager:
   tags:
   - Ground
   - DungNham
-  - Coin
-  - Trap
   - Item
+  - Trap
   - Enemy
   - Boss
-  - SpawnPoint
+  - Coin
+  - Key
+  - Fireball
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Enemy
+  - Ground
   - Water
   - UI
-  - Ground
-  - Item
   - Player
+  - 
+  - 
   - 
   - 
   - 
@@ -49,22 +50,8 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Item
-    uniqueID: 1613012999
-    locked: 0
-  - name: Ground
-    uniqueID: 529683187
-    locked: 0
-  - name: Ui
-    uniqueID: 686076197
-    locked: 0
-  - name: Enemy
-    uniqueID: 653830823
-    locked: 0
-  - name: BackGround
-    uniqueID: 3536490809
+  - name: New Layer 1
+    uniqueID: 780185423
     locked: 0
   m_RenderingLayers:
   - Default
-  - 1
-  - Layer 2

@@ -12,9 +12,10 @@ public class EnemyBehavior : MonoBehaviour
     public float attackRange = 1.5f;
     public int attackDamage = 1;
     public float attackCooldown = 1f;
+    public float attackDelayBeforeFirstHit = 0.5f; 
 
     public Transform patrolCenter;
-    public int patrolRange = 4; 
+    public int patrolRange = 4;
 
     private Transform player;
     private Rigidbody2D rb;
@@ -22,8 +23,9 @@ public class EnemyBehavior : MonoBehaviour
     private Animator animator;
 
     private float lastAttackTime;
+    private float enteredAttackRangeTime = -Mathf.Infinity; 
     private Vector3 patrolTarget;
-    private bool movingRight = true; 
+    private bool movingRight = true;
 
     void Start()
     {
@@ -33,7 +35,6 @@ public class EnemyBehavior : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        
         if (patrolCenter == null)
         {
             GameObject center = new GameObject("PatrolCenter");
@@ -41,7 +42,6 @@ public class EnemyBehavior : MonoBehaviour
             patrolCenter = center.transform;
         }
 
-        
         patrolTarget = patrolCenter.position + Vector3.right * patrolRange;
     }
 
@@ -74,6 +74,10 @@ public class EnemyBehavior : MonoBehaviour
     {
         if (distanceToPlayer <= attackRange)
         {
+            if (currentState != EnemyState.Attack)
+            {
+                enteredAttackRangeTime = Time.time; 
+            }
             currentState = EnemyState.Attack;
         }
         else if (distanceToPlayer <= detectionRange)
@@ -99,10 +103,8 @@ public class EnemyBehavior : MonoBehaviour
         Vector2 direction = (patrolTarget - transform.position).normalized;
         rb.linearVelocity = direction * moveSpeed;
 
-        
         sprite.flipX = direction.x < 0;
 
-        
         if (Vector2.Distance(transform.position, patrolTarget) < 0.1f)
         {
             if (movingRight)
@@ -124,7 +126,6 @@ public class EnemyBehavior : MonoBehaviour
 
         sprite.flipX = direction.x < 0;
 
-        
         if (Vector2.Distance(player.position, patrolCenter.position) > detectionRange * 1.5f)
         {
             currentState = EnemyState.Patrol;
@@ -136,16 +137,20 @@ public class EnemyBehavior : MonoBehaviour
     {
         rb.linearVelocity = Vector2.zero;
 
-        if (Time.time - lastAttackTime >= attackCooldown)
+        
+        if (Time.time - enteredAttackRangeTime >= attackDelayBeforeFirstHit)
         {
-            lastAttackTime = Time.time;
+            if (Time.time - lastAttackTime >= attackCooldown)
+            {
+                lastAttackTime = Time.time;
 
-            if (animator != null)
-                animator.SetTrigger("Attack");
+                if (animator != null)
+                    animator.SetTrigger("Attack");
 
-            PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
-                playerHealth.TakeDamage(attackDamage);
+                PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+                if (playerHealth != null)
+                    playerHealth.TakeDamage(attackDamage);
+            }
         }
     }
 
