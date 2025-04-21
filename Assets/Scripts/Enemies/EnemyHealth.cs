@@ -322,7 +322,7 @@ public class EnemyHealth : MonoBehaviour
         SpriteRenderer sprite = GetComponent<SpriteRenderer>();
         Color originalColor = sprite.color;
         sprite.color = Color.red;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         sprite.color = originalColor;
     }
 }
