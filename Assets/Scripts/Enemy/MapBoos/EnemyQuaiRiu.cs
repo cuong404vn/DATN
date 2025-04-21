@@ -79,7 +79,7 @@ public class EnemyQuaiRiu : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"Enemy '{gameObject.name}': Cannot find GameObject with Tag 'Player'. Disabling script.", this);
+          
             enabled = false;
             return;
         }
@@ -273,7 +273,7 @@ public class EnemyQuaiRiu : MonoBehaviour
             PlayerHealth playerHealth = playerCollider.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                Debug.Log($"Enemy '{gameObject.name}' attacking Player with axe hit.");
+               
                 playerHealth.TakeDamage(attackDamage);
             }
         }
