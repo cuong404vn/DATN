@@ -259,9 +259,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hitLeft = Physics2D.Raycast(left, Vector2.down, rayLength, LayerMask.GetMask("Ground"));
         RaycastHit2D hitRight = Physics2D.Raycast(right, Vector2.down, rayLength, LayerMask.GetMask("Ground"));
 
-        Debug.DrawRay(center, Vector2.down * rayLength, hitCenter ? Color.green : Color.red);
-        Debug.DrawRay(left, Vector2.down * rayLength, hitLeft ? Color.green : Color.red);
-        Debug.DrawRay(right, Vector2.down * rayLength, hitRight ? Color.green : Color.red);
+
 
         if ((hitCenter && hitCenter.collider.CompareTag("Ground")) ||
             (hitLeft && hitLeft.collider.CompareTag("Ground")) ||

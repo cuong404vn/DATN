@@ -36,14 +36,15 @@ public class EnemyQuyLun : MonoBehaviour
 
     [Header("Special Behavior")]
     [SerializeField] private float closeDistance = 1f;
-    [SerializeField] private float retreatDistance = 3f;
-    [SerializeField] private float jumpBackDistance = 3f;
+    [SerializeField] private float retreatDistance = 2f;
+    [SerializeField] private float jumpBackDistance = 5f;
     [SerializeField] private float jumpSpeed = 5f;
     [SerializeField] private float attackDelay = 1f;
     [SerializeField] private float attackDuration = 1f;
 
     private Transform player;
     private float lastAttackTime = -Mathf.Infinity;
+    private float lastActionTime = -Mathf.Infinity;
     private bool isHurt = false;
     private bool isDead = false;
     private bool facingRight = true;
@@ -53,6 +54,9 @@ public class EnemyQuyLun : MonoBehaviour
     private bool patrollingRight = true;
     private bool isGrounded = true;
     private Coroutine currentActionCoroutine;
+
+    [Header("Cooldown")]
+    [SerializeField] private float actionCooldown = 2.5f;
 
 
     private readonly int hashIsWalking = Animator.StringToHash("IsWalking");
@@ -81,7 +85,7 @@ public class EnemyQuyLun : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"Enemy '{gameObject.name}': Cannot find GameObject with Tag 'Player'. Disabling script.", this);
+
             enabled = false;
             return;
         }
@@ -99,7 +103,7 @@ public class EnemyQuyLun : MonoBehaviour
 
     void Update()
     {
-        if (isDead || player == null || isHurt)
+        if (isDead || player == null)
         {
             return;
         }
@@ -108,17 +112,25 @@ public class EnemyQuyLun : MonoBehaviour
         CheckGrounded();
 
 
-        if (isGrounded)
+        if (isHurt)
+        {
+            UpdateAnimator();
+            return;
+        }
+
+
+        if (isGrounded ||
+            currentState == EnemyState.JumpTowardsPlayer ||
+            currentState == EnemyState.RetreatAfterAttack ||
+            currentState == EnemyState.JumpBackFurther)
         {
             float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-
 
             if (currentState == EnemyState.Idle || currentState == EnemyState.Walk)
             {
                 UpdateCurrentState(distanceToPlayer);
             }
         }
-
 
         switch (currentState)
         {
@@ -143,9 +155,53 @@ public class EnemyQuyLun : MonoBehaviour
 
     void CheckGrounded()
     {
+
+        bool wasGrounded = isGrounded;
+
+
         if (groundCheck != null)
         {
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckDistance, groundLayer);
+        }
+
+
+        if (!isGrounded && GetComponent<Collider2D>() != null)
+        {
+            Vector2 center = transform.position - new Vector3(0, GetComponent<Collider2D>().bounds.extents.y - 0.05f, 0);
+            Vector2 left = center - new Vector2(GetComponent<Collider2D>().bounds.extents.x * 0.8f, 0);
+            Vector2 right = center + new Vector2(GetComponent<Collider2D>().bounds.extents.x * 0.8f, 0);
+
+            float rayLength = 0.15f;
+
+            RaycastHit2D hitCenter = Physics2D.Raycast(center, Vector2.down, rayLength, groundLayer);
+            RaycastHit2D hitLeft = Physics2D.Raycast(left, Vector2.down, rayLength, groundLayer);
+            RaycastHit2D hitRight = Physics2D.Raycast(right, Vector2.down, rayLength, groundLayer);
+
+
+
+
+            if (hitCenter || hitLeft || hitRight)
+            {
+                isGrounded = true;
+            }
+        }
+
+
+        if (!isGrounded && GetComponent<Collider2D>() != null)
+        {
+            Bounds bounds = GetComponent<Collider2D>().bounds;
+            Vector2 boxCenter = new Vector2(bounds.center.x, bounds.min.y + 0.1f);
+            Vector2 boxSize = new Vector2(bounds.size.x * 0.9f, 0.1f);
+
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(boxCenter, boxSize, 0f, groundLayer);
+            foreach (Collider2D collider in colliders)
+            {
+                if (collider.gameObject != gameObject)
+                {
+                    isGrounded = true;
+                    break;
+                }
+            }
         }
     }
 
@@ -153,9 +209,14 @@ public class EnemyQuyLun : MonoBehaviour
     {
         if (isHurt || isDead) return;
 
+
+        if (Time.time - lastActionTime < actionCooldown)
+        {
+            return;
+        }
+
         if (distanceToPlayer <= detectionRange)
         {
-
             if (currentActionCoroutine != null)
             {
                 StopCoroutine(currentActionCoroutine);
@@ -164,7 +225,6 @@ public class EnemyQuyLun : MonoBehaviour
         }
         else
         {
-
             SetState(EnemyState.Walk);
         }
     }
@@ -215,20 +275,31 @@ public class EnemyQuyLun : MonoBehaviour
         currentPatrolTarget = new Vector3(targetX, transform.position.y);
     }
 
+    IEnumerator SwitchToWalkAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (!isHurt && !isDead && currentState == EnemyState.Idle)
+        {
+            SetState(EnemyState.Walk);
+        }
+    }
+
     IEnumerator JumpTowardsPlayerCoroutine()
     {
-
         SetState(EnemyState.JumpTowardsPlayer);
 
-
         UpdateFacingDirection(player.position);
-
 
         Vector2 playerPosition = player.position;
         float directionToPlayer = Mathf.Sign(playerPosition.x - transform.position.x);
 
         Vector2 targetPosition = new Vector2(playerPosition.x - directionToPlayer * 4f, transform.position.y);
 
+
+        if (isHurt || isDead)
+        {
+            yield break;
+        }
 
         yield return StartCoroutine(JumpToPosition(targetPosition));
 
@@ -279,32 +350,119 @@ public class EnemyQuyLun : MonoBehaviour
         }
 
 
-        SetState(EnemyState.Walk);
+
+        lastActionTime = Time.time;
+
+
+        SetState(EnemyState.Idle);
+
+
+        StartCoroutine(SwitchToWalkAfterDelay(1.0f));
+
         currentActionCoroutine = null;
     }
 
     IEnumerator JumpToPosition(Vector2 targetPosition)
     {
 
+        if (isHurt || isDead)
+        {
+            yield break;
+        }
+
+        float waitStartTime = Time.time;
+        float maxWaitTime = 1.5f;
+
+
+        while (!isGrounded && Time.time - waitStartTime < maxWaitTime)
+        {
+
+            if (isHurt || isDead)
+            {
+                yield break;
+            }
+
+            CheckGrounded();
+            yield return null;
+        }
+
+
+        rb.linearVelocity = Vector2.zero;
+        yield return new WaitForSeconds(0.1f);
+
+
         Vector2 direction = (targetPosition - (Vector2)transform.position).normalized;
         float distance = Vector2.Distance(transform.position, targetPosition);
 
 
-        rb.linearVelocity = new Vector2(direction.x * jumpSpeed, jumpForce);
+        float maxJumpDistance = 5.0f;
+        if (distance > maxJumpDistance)
+        {
+            targetPosition = (Vector2)transform.position + direction * maxJumpDistance;
+            distance = maxJumpDistance;
+        }
+
+
+        float horizontalForce = direction.x * jumpSpeed;
+
+
+        float verticalForce = Mathf.Min(jumpForce, 4f);
+
+
+        if (distance < 3.0f)
+        {
+            horizontalForce *= 1f;
+            verticalForce *= 0.5f;
+        }
+
+
+        rb.linearVelocity = new Vector2(horizontalForce, verticalForce);
 
 
         float startTime = Time.time;
-        while (Vector2.Distance(transform.position, targetPosition) > 0.5f)
+        float maxJumpTime = 0.8f;
+        bool hasJumped = false;
+
+        while (Vector2.Distance(new Vector2(transform.position.x, 0), new Vector2(targetPosition.x, 0)) > 0.5f)
         {
 
-            if (Time.time - startTime > 0.5f && isGrounded)
+            if (Time.time - startTime > maxJumpTime)
             {
                 break;
             }
 
 
+            if (!hasJumped && rb.linearVelocity.y > 0)
+            {
+                hasJumped = true;
+            }
+
+
+            if (hasJumped && isGrounded && rb.linearVelocity.y <= 0)
+            {
+                break;
+            }
+
+
+            if (rb.linearVelocity.y < -8f)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -8f);
+            }
+
+
+            CheckGrounded();
+
+
             UpdateFacingDirection(targetPosition);
 
+            yield return null;
+        }
+
+
+        float groundWaitStart = Time.time;
+        while (!isGrounded && Time.time - groundWaitStart < 0.5f)
+        {
+            CheckGrounded();
             yield return null;
         }
 
@@ -345,7 +503,7 @@ public class EnemyQuyLun : MonoBehaviour
             PlayerHealth playerHealth = playerCollider.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                Debug.Log($"Enemy '{gameObject.name}' attacking Player with damage {attackDamage}.");
+
                 playerHealth.TakeDamage(attackDamage);
             }
         }
@@ -353,23 +511,69 @@ public class EnemyQuyLun : MonoBehaviour
 
     IEnumerator RetreatAfterAttack()
     {
-
         SetState(EnemyState.RetreatAfterAttack);
 
+        yield return new WaitForSeconds(0.2f);
+
+
+        if (isHurt || isDead)
+        {
+            yield break;
+        }
+
+        CheckGrounded();
+        if (!isGrounded)
+        {
+            float waitStartTime = Time.time;
+            while (!isGrounded && Time.time - waitStartTime < 1.0f)
+            {
+
+                if (isHurt || isDead)
+                {
+                    yield break;
+                }
+
+                CheckGrounded();
+                yield return null;
+            }
+        }
 
         Vector2 playerPosition = player.position;
         float directionToPlayer = Mathf.Sign(playerPosition.x - transform.position.x);
         Vector2 retreatPosition = new Vector2(playerPosition.x - directionToPlayer * retreatDistance, transform.position.y);
-
 
         yield return StartCoroutine(JumpToPosition(retreatPosition));
     }
 
     IEnumerator JumpBackFurther()
     {
-
         SetState(EnemyState.JumpBackFurther);
 
+        yield return new WaitForSeconds(0.3f);
+
+
+        if (isHurt || isDead)
+        {
+            yield break;
+        }
+
+        CheckGrounded();
+        float waitStartTime = Time.time;
+        while (!isGrounded && Time.time - waitStartTime < 1.5f)
+        {
+
+            if (isHurt || isDead)
+            {
+                yield break;
+            }
+
+            CheckGrounded();
+            yield return null;
+        }
+
+
+        rb.linearVelocity = Vector2.zero;
+        yield return new WaitForSeconds(0.1f);
 
         Vector2 playerPosition = player.position;
         float directionToPlayer = Mathf.Sign(playerPosition.x - transform.position.x);
@@ -377,7 +581,6 @@ public class EnemyQuyLun : MonoBehaviour
             transform.position.x - directionToPlayer * jumpBackDistance,
             transform.position.y
         );
-
 
         yield return StartCoroutine(JumpToPosition(jumpBackPosition));
     }
@@ -431,18 +634,21 @@ public class EnemyQuyLun : MonoBehaviour
     IEnumerator HurtCoroutine()
     {
 
+        if (currentActionCoroutine != null)
+        {
+            StopCoroutine(currentActionCoroutine);
+            currentActionCoroutine = null;
+        }
+
         isHurt = true;
         SetState(EnemyState.Hurt);
-
 
         animator.SetTrigger(hashHurt);
 
 
         rb.linearVelocity = Vector2.zero;
 
-
         yield return new WaitForSeconds(0.5f);
-
 
         isHurt = false;
         SetState(EnemyState.Idle);
