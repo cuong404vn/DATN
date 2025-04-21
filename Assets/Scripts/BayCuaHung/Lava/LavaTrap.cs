@@ -2,8 +2,8 @@
 
 public class LavaTrap : MonoBehaviour
 {
-    public GameObject lavaDropPrefab; // Prefab giọt dung nham
-    public float spawnInterval = 2f; // Thời gian giữa các lần spawn
+    public GameObject lavaDropPrefab; 
+    public float spawnInterval = 2f; 
 
     void Start()
     {

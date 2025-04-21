@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
@@ -20,7 +21,6 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        // Kiểm tra và thêm AudioListener nếu cần
         if (FindObjectOfType<AudioListener>() == null)
         {
             Camera mainCamera = Camera.main;
@@ -65,4 +65,6 @@ public class AudioManager : MonoBehaviour
     {
         audioSource.Stop();
     }
+
+   
 }
