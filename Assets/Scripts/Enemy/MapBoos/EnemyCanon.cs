@@ -59,7 +59,6 @@ public class EnemyCanon : MonoBehaviour
 
         if (projectilePrefab != null && projectilePrefab.GetComponent<CanonProjectile>() == null)
         {
-            Debug.LogWarning("ProjectilePrefab không có component CanonProjectile. Tạo mới khi bắn.");
         }
     }
 
@@ -103,7 +102,6 @@ public class EnemyCanon : MonoBehaviour
 
         transform.Rotate(0f, 180f, 0f);
 
-        Debug.Log($"Canon flipped, now facing {(facingRight ? "right" : "left")}");
     }
 
     private IEnumerator FireProjectile()
@@ -197,7 +195,6 @@ public class EnemyCanon : MonoBehaviour
         bool isLeftShot = displacementX < 0;
 
 
-        Debug.Log($"Fire data - startPos: {startPos}, targetPos: {targetPosition}, displacementX: {displacementX}, displacementY: {displacementY}, isLeftShot: {isLeftShot}");
 
 
         float absDisplacementX = Mathf.Abs(displacementX);
@@ -218,7 +215,6 @@ public class EnemyCanon : MonoBehaviour
         float angleInRadians = adjustedAngleInDegrees * Mathf.Deg2Rad;
 
 
-        Debug.Log($"Angle - base: {baseAngleInDegrees}, adjusted: {adjustedAngleInDegrees}, radians: {angleInRadians}");
 
 
         float distanceToTarget = Vector2.Distance(startPos, targetPosition);
@@ -227,7 +223,6 @@ public class EnemyCanon : MonoBehaviour
 
         if (distanceToTarget < 1.0f)
         {
-            Debug.Log("Target too close, using default velocity");
             initialVelocity = projectileSpeed;
         }
         else
@@ -243,12 +238,10 @@ public class EnemyCanon : MonoBehaviour
 
                 float denominator = 2.0f * cos * cos * (displacementY + absDisplacementX * tan);
 
-                Debug.Log($"Physics params - cos: {cos}, sin: {sin}, tan: {tan}, denominator: {denominator}");
 
 
                 if (Mathf.Abs(denominator) < 0.001f || float.IsNaN(denominator) || float.IsInfinity(denominator))
                 {
-                    Debug.LogWarning("Invalid denominator in trajectory calculation. Using default velocity.");
                     initialVelocity = projectileSpeed;
                 }
                 else
@@ -259,7 +252,6 @@ public class EnemyCanon : MonoBehaviour
 
                     if (numerator < 0 || float.IsNaN(numerator) || float.IsInfinity(numerator))
                     {
-                        Debug.LogWarning("Invalid numerator in trajectory calculation. Using default velocity.");
                         initialVelocity = projectileSpeed;
                     }
                     else
@@ -270,17 +262,14 @@ public class EnemyCanon : MonoBehaviour
 
                         if (float.IsNaN(initialVelocity) || float.IsInfinity(initialVelocity))
                         {
-                            Debug.LogWarning("Invalid velocity calculated. Using default velocity.");
                             initialVelocity = projectileSpeed;
                         }
 
-                        Debug.Log($"Velocity calculation - numerator: {numerator}, denominator: {denominator}, result: {initialVelocity}");
                     }
                 }
             }
             catch (System.Exception e)
             {
-                Debug.LogError("Error in trajectory calculation: " + e.Message);
                 initialVelocity = projectileSpeed;
             }
         }
@@ -306,7 +295,6 @@ public class EnemyCanon : MonoBehaviour
         if (float.IsNaN(direction.x) || float.IsNaN(direction.y) ||
             float.IsInfinity(direction.x) || float.IsInfinity(direction.y))
         {
-            Debug.LogWarning("Invalid direction vector. Using default direction.");
             direction = isLeftShot ? Vector2.left : Vector2.right;
             direction.y = 0.5f;
         }
@@ -323,7 +311,6 @@ public class EnemyCanon : MonoBehaviour
         projectile.transform.rotation = Quaternion.Euler(0, 0, angle);
 
 
-        Debug.Log($"Final launch params - velocity: {initialVelocity}, direction: {direction}, resultSpeed: {rb.linearVelocity}, angle: {angle}");
 
 
         StartCoroutine(UpdateProjectileRotation(projectile));

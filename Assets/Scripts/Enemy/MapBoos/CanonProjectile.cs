@@ -69,7 +69,6 @@ public class CanonProjectile : MonoBehaviour
         StartCoroutine(ExplodeAfterDelay(maxRollingTime));
 
 
-        Debug.Log("Canon projectile started rolling with velocity: " + rb.linearVelocity);
     }
 
     private void Update()
@@ -116,7 +115,6 @@ public class CanonProjectile : MonoBehaviour
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(damage);
-                Debug.Log($"Canon projectile hit Player directly with damage {damage}.");
             }
 
             Explode();
@@ -145,7 +143,6 @@ public class CanonProjectile : MonoBehaviour
 
                 rb.angularVelocity = rollingDirection.x * 360f;
 
-                Debug.Log("Canon projectile hit ground and started rolling with direction: " + rollingDirection);
             }
 
             else
@@ -200,7 +197,6 @@ public class CanonProjectile : MonoBehaviour
             PlayerHealth playerHealth = hitCollider.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                Debug.Log($"Canon projectile explosion hit Player with damage {damage}.");
                 playerHealth.TakeDamage(damage);
             }
         }

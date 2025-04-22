@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DragonEnemy : MonoBehaviour
+public class EnemyNhen : MonoBehaviour
 {
-    public enum DragonState { Idle, Walk, Attack, Hurt, Die }
+    public enum NhenState { Idle, Walk, Attack, Hurt, Die }
 
     [Header("State Machine")]
-    [SerializeField] private DragonState currentState = DragonState.Idle;
+    [SerializeField] private NhenState currentState = NhenState.Idle;
 
     [Header("Components")]
     [SerializeField] private Animator animator;
@@ -24,15 +24,16 @@ public class DragonEnemy : MonoBehaviour
     [SerializeField] private float detectionRange = 8f;
     [SerializeField] private float attackRange = 6f;
     [SerializeField] private float attackCooldown = 2.5f;
-    [SerializeField] private Transform firePoint;
-    [SerializeField] private GameObject fireballPrefab;
-    [SerializeField] private float fireballSpeed = 7f;
+    [SerializeField] private Transform webShootPoint;
+    [SerializeField] private GameObject webPrefab;
+    [SerializeField] private float webSpeed = 7f;
+    [SerializeField] private int webDamage = 5;
+    [SerializeField] private float webArcHeight = 2f; // Độ cao của quỹ đạo tơ
 
     [Header("Audio")]
-    [SerializeField] private AudioClip fireSound;
+    [SerializeField] private AudioClip webShootSound;
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip deathSound;
-
 
     private Transform player;
     private Vector3 startPosition;
@@ -43,11 +44,9 @@ public class DragonEnemy : MonoBehaviour
     private AudioSource audioSource;
     private bool isAttacking = false;
 
-
     private Vector3 leftPatrolPoint;
     private Vector3 rightPatrolPoint;
     private bool movingRight = true;
-
 
     private readonly int hashIsWalking = Animator.StringToHash("IsWalking");
     private readonly int hashAttack = Animator.StringToHash("Attack");
@@ -56,7 +55,6 @@ public class DragonEnemy : MonoBehaviour
 
     void Awake()
     {
-
         if (animator == null) animator = GetComponent<Animator>();
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (enemyCollider == null) enemyCollider = GetComponent<Collider2D>();
@@ -65,11 +63,10 @@ public class DragonEnemy : MonoBehaviour
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
 
-
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-        if (playerObject != null)
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
         {
-            player = playerObject.transform;
+            player = playerObj.transform;
         }
         else
         {
@@ -80,7 +77,6 @@ public class DragonEnemy : MonoBehaviour
 
     void Start()
     {
-
         startPosition = transform.position;
         leftPatrolPoint = startPosition - Vector3.right * patrolRange;
         rightPatrolPoint = startPosition + Vector3.right * patrolRange;
@@ -90,66 +86,55 @@ public class DragonEnemy : MonoBehaviour
     {
         if (isDead || isHurt) return;
 
-
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
         UpdateFacingDirection();
 
-
         UpdateState(distanceToPlayer);
-
 
         switch (currentState)
         {
-            case DragonState.Idle:
+            case NhenState.Idle:
                 Idle();
                 break;
-            case DragonState.Walk:
+            case NhenState.Walk:
                 Walk();
                 break;
-            case DragonState.Attack:
+            case NhenState.Attack:
                 Attack();
                 break;
         }
-
 
         UpdateAnimator();
     }
 
     void UpdateState(float distanceToPlayer)
     {
-
         if (isDead || isHurt) return;
-
 
         if (isAttacking)
         {
             return;
         }
 
-        DragonState previousState = currentState;
-
+        NhenState previousState = currentState;
 
         if (distanceToPlayer <= attackRange)
         {
-
             if (Time.time >= lastAttackTime + attackCooldown)
             {
-                currentState = DragonState.Attack;
+                currentState = NhenState.Attack;
             }
         }
-
         else if (distanceToPlayer <= detectionRange)
         {
-            currentState = DragonState.Walk;
+            currentState = NhenState.Walk;
         }
-
         else
         {
-
-            if (currentState != DragonState.Walk && currentState != DragonState.Idle)
+            if (currentState != NhenState.Walk && currentState != NhenState.Idle)
             {
-                currentState = DragonState.Walk;
+                currentState = NhenState.Walk;
             }
         }
     }
@@ -161,12 +146,10 @@ public class DragonEnemy : MonoBehaviour
 
     void Walk()
     {
-
         if (Vector2.Distance(transform.position, player.position) <= detectionRange)
         {
             MoveTowardsPlayer();
         }
-
         else
         {
             Patrol();
@@ -175,10 +158,8 @@ public class DragonEnemy : MonoBehaviour
 
     void MoveTowardsPlayer()
     {
-
         float distanceToPlayer = player.position.x - transform.position.x;
         float direction = Mathf.Sign(distanceToPlayer);
-
 
         if (CanMoveInDirection(direction))
         {
@@ -196,14 +177,11 @@ public class DragonEnemy : MonoBehaviour
         Vector3 targetPoint = movingRight ? rightPatrolPoint : leftPatrolPoint;
         float direction = movingRight ? 1 : -1;
 
-
         if (!CanMoveInDirection(direction))
         {
-
             movingRight = !movingRight;
             direction = -direction;
         }
-
 
         float distanceToTarget = Mathf.Abs(transform.position.x - targetPoint.x);
         if (distanceToTarget < 0.1f)
@@ -211,22 +189,16 @@ public class DragonEnemy : MonoBehaviour
             movingRight = !movingRight;
         }
 
-
         rb.linearVelocity = new Vector2(direction * walkSpeed, rb.linearVelocity.y);
-
 
         UpdateFacingDirection(direction);
     }
 
     bool CanMoveInDirection(float direction)
     {
-
         float groundCheckDepth = 2f;
 
-
         Vector2 checkPosition = (Vector2)transform.position + new Vector2(direction * edgeCheckDistance, 0);
-
-
 
 
         RaycastHit2D groundInfo = Physics2D.BoxCast(
@@ -237,20 +209,16 @@ public class DragonEnemy : MonoBehaviour
             groundCheckDepth
         );
 
-
         bool hasGroundAhead = false;
-
 
         if (groundInfo.collider != null && groundInfo.collider.CompareTag("Ground"))
         {
             hasGroundAhead = true;
         }
-
         else if (groundInfo.collider != null)
         {
             hasGroundAhead = true;
         }
-
         else
         {
             RaycastHit2D backupGroundInfo = Physics2D.Raycast(checkPosition, Vector2.down, groundCheckDepth);
@@ -260,9 +228,7 @@ public class DragonEnemy : MonoBehaviour
             }
         }
 
-
         Vector2 wallCheckPosition = (Vector2)transform.position + new Vector2(0, 0.5f);
-
 
 
         RaycastHit2D wallInfo = Physics2D.BoxCast(
@@ -276,111 +242,94 @@ public class DragonEnemy : MonoBehaviour
         bool hasWallAhead = false;
         if (wallInfo.collider != null)
         {
-
             if (!wallInfo.collider.CompareTag("Player") && !wallInfo.collider.isTrigger)
             {
                 hasWallAhead = true;
             }
         }
 
-
         bool isOnGround = Physics2D.Raycast(transform.position, Vector2.down, 0.3f).collider != null;
-
 
         return (hasGroundAhead && !hasWallAhead) || isOnGround;
     }
 
     void Attack()
     {
-
         if (isDead || isHurt) return;
 
-
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-
 
         float directionToPlayer = Mathf.Sign(player.position.x - transform.position.x);
         UpdateFacingDirection(directionToPlayer);
 
-
-
-
-
         if (!isAttacking && Time.time >= lastAttackTime + attackCooldown)
         {
-
             lastAttackTime = Time.time;
-
-
             StartCoroutine(AttackSequence());
         }
     }
 
-
     IEnumerator AttackSequence()
     {
-
         isAttacking = true;
 
 
         animator.SetTrigger(hashAttack);
 
 
-        float attackAnimDuration = 1.5f;
-
-
+        float attackAnimDuration = 1.0f;
 
         yield return new WaitForSeconds(attackAnimDuration);
 
+        AnimationEvent_ShootWeb();
 
         isAttacking = false;
     }
 
-
-    public void AnimationEvent_ShootFire()
+    public void AnimationEvent_ShootWeb()
     {
         if (isDead) return;
 
-
-        if (fireSound != null && audioSource != null)
+        if (webShootSound != null && audioSource != null)
         {
-            audioSource.PlayOneShot(fireSound);
+            audioSource.PlayOneShot(webShootSound);
         }
 
-
-        SpawnFireball();
+        SpawnWeb();
     }
 
-    void SpawnFireball()
+    void SpawnWeb()
     {
-        if (fireballPrefab != null && firePoint != null)
+        if (webPrefab != null && webShootPoint != null)
         {
 
-            GameObject fireball = Instantiate(fireballPrefab, firePoint.position, Quaternion.identity);
+            GameObject web = Instantiate(webPrefab, webShootPoint.position, Quaternion.identity);
 
 
-            FireballProjectile fireballScript = fireball.GetComponent<FireballProjectile>();
+            FireballProjectile fireballScript = web.GetComponent<FireballProjectile>();
             if (fireballScript != null)
             {
-
-                float direction = facingRight ? 1 : -1;
-                fireballScript.Initialize(direction, fireballSpeed, gameObject);
+                Destroy(fireballScript); // Xóa FireballProjectile để tránh trùng lặp sát thương
             }
-            else
+
+            WebProjectile webScript = web.GetComponent<WebProjectile>();
+            if (webScript == null)
             {
+                webScript = web.AddComponent<WebProjectile>();
+            }
 
-                Rigidbody2D fireballRb = fireball.GetComponent<Rigidbody2D>();
-                if (fireballRb != null)
-                {
-                    float direction = facingRight ? 1 : -1;
-                    fireballRb.linearVelocity = new Vector2(direction * fireballSpeed, 0);
+            float direction = facingRight ? 1 : -1;
+            webScript.Initialize(direction, webSpeed, webDamage, gameObject);
 
+            Collider2D webCollider = web.GetComponent<Collider2D>();
+            if (webCollider != null && enemyCollider != null)
+            {
+                Physics2D.IgnoreCollision(webCollider, enemyCollider, true);
+            }
 
-                    if (!facingRight)
-                    {
-                        fireball.transform.localScale = new Vector3(-1, 1, 1);
-                    }
-                }
+            if (!facingRight)
+            {
+                web.transform.localScale = new Vector3(-1, 1, 1);
             }
         }
         else
@@ -424,8 +373,6 @@ public class DragonEnemy : MonoBehaviour
     {
         if (isDead) return;
 
-
-
         StartCoroutine(HurtSequence());
     }
 
@@ -434,9 +381,7 @@ public class DragonEnemy : MonoBehaviour
         isHurt = true;
         rb.linearVelocity = Vector2.zero;
 
-
         animator.SetTrigger(hashHurt);
-
 
         if (hurtSound != null && audioSource != null)
         {
@@ -453,35 +398,27 @@ public class DragonEnemy : MonoBehaviour
 
         isDead = true;
 
-
         rb.linearVelocity = Vector2.zero;
 
-
         animator.SetTrigger(hashDie);
-
 
         if (deathSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(deathSound);
         }
 
-
         enemyCollider.enabled = false;
-
 
         Destroy(gameObject, 2f);
     }
 
     void OnDrawGizmosSelected()
     {
-
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
 
-
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
-
 
         if (Application.isPlaying)
         {
@@ -492,7 +429,6 @@ public class DragonEnemy : MonoBehaviour
         }
         else
         {
-
             Vector3 leftPoint = transform.position - Vector3.right * patrolRange;
             Vector3 rightPoint = transform.position + Vector3.right * patrolRange;
 
@@ -502,21 +438,34 @@ public class DragonEnemy : MonoBehaviour
             Gizmos.DrawSphere(rightPoint, 0.2f);
         }
 
-
         if (groundCheck != null)
         {
             Gizmos.color = Color.green;
             Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * groundCheckDistance);
         }
 
-
-        if (firePoint != null)
+        if (webShootPoint != null)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(firePoint.position, 0.1f);
+            Gizmos.color = Color.white;
+            Gizmos.DrawSphere(webShootPoint.position, 0.1f);
 
+            Vector3 direction = (facingRight ? Vector3.right : Vector3.left);
+            Gizmos.DrawRay(webShootPoint.position, direction * 2f);
 
-            Gizmos.DrawRay(firePoint.position, (facingRight ? Vector3.right : Vector3.left) * 2f);
+            Vector3 arcDirection = direction + Vector3.up;
+            Gizmos.DrawRay(webShootPoint.position, arcDirection.normalized * 2f);
+        }
+    }
+
+    private void OnValidate()
+    {
+
+        if (webPrefab == null)
+        {
+        }
+
+        if (webShootPoint == null)
+        {
         }
     }
 }
