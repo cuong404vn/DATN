@@ -191,7 +191,7 @@ MonoBehaviour:
   damage: 1
   speed: 7
   lifetime: 5
-  explosionDuration: 1
+  explosionDuration: 3
   explosionPrefab: {fileID: 1269011457522630886}
   explosionSound: {fileID: 0}
   trailEffect: {fileID: 0}

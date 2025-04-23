@@ -69,6 +69,7 @@ public class FireballProjectile : MonoBehaviour
             return;
         }
 
+        Debug.Log($"Fireball hit: {other.gameObject.name} with tag: {other.tag}");
 
 
         if (other.CompareTag("Player") || other.CompareTag("Ground"))
@@ -80,6 +81,7 @@ public class FireballProjectile : MonoBehaviour
                 if (playerHealth != null)
                 {
                     playerHealth.TakeDamage(damage);
+                    Debug.Log($"Dealt {damage} damage to player");
                 }
             }
 
@@ -99,6 +101,7 @@ public class FireballProjectile : MonoBehaviour
             return;
         }
 
+        Debug.Log($"Fireball collision with: {collision.gameObject.name} with tag: {collision.gameObject.tag}");
 
 
         if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Ground"))
@@ -110,6 +113,7 @@ public class FireballProjectile : MonoBehaviour
                 if (playerHealth != null)
                 {
                     playerHealth.TakeDamage(damage);
+                    Debug.Log($"Dealt {damage} damage to player (collision)");
                 }
             }
 
@@ -123,6 +127,7 @@ public class FireballProjectile : MonoBehaviour
         if (hasExploded) return;
 
         hasExploded = true;
+        Debug.Log("Fireball exploding!");
 
 
         rb.linearVelocity = Vector2.zero;
@@ -136,6 +141,7 @@ public class FireballProjectile : MonoBehaviour
         {
 
             animator.SetTrigger("Explode");
+            Debug.Log("Playing explosion animation");
 
 
             Destroy(gameObject, explosionDuration);
@@ -146,10 +152,12 @@ public class FireballProjectile : MonoBehaviour
             if (explosionPrefab != null)
             {
                 GameObject explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+                Debug.Log($"Spawned explosion prefab: {explosionPrefab.name}");
                 Destroy(explosion, explosionDuration);
             }
             else
             {
+                Debug.LogWarning("No explosion prefab assigned and no animation available!");
             }
 
 
@@ -160,6 +168,7 @@ public class FireballProjectile : MonoBehaviour
         if (explosionSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(explosionSound);
+            Debug.Log("Playing explosion sound");
         }
 
 
@@ -172,6 +181,7 @@ public class FireballProjectile : MonoBehaviour
 
     public void OnExplosionAnimationFinished()
     {
+        Debug.Log("Explosion animation finished");
         Destroy(gameObject);
     }
 }
