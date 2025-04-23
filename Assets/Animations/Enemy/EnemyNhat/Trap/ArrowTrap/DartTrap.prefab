@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5196215115256127992}
   - component: {fileID: 1247041431766537562}
-  - component: {fileID: 1567987217502333936}
+  - component: {fileID: 313408507966871949}
   m_Layer: 0
   m_Name: DartTrap
   m_TagString: Untagged
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1567987217502333936
+--- !u!114 &313408507966871949
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
