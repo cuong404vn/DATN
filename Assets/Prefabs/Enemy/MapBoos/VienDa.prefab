@@ -168,5 +168,5 @@ MonoBehaviour:
   damage: 1
   fallSpeed: 10
   destroyOnImpactDelay: 0.5
-  impactEffectPrefab: {fileID: 0}
+  impactEffectPrefab: {fileID: 1823824009459576990, guid: 5647a71082a46a14f896f8630327fd47, type: 3}
   impactSound: {fileID: 8300000, guid: 4ad443557bec6794aa95cc884dd496c4, type: 3}
