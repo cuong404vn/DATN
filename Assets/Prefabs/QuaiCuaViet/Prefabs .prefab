@@ -3965,6 +3965,7 @@ MonoBehaviour:
   jumpForce: 6
   maxJumps: 2
   attackDuration: 0.5
+  attackCooldown: 0.4
   idleSound: {fileID: 0}
   runSound: {fileID: 0}
   attackSound: {fileID: 0}
@@ -4125,6 +4126,9 @@ MonoBehaviour:
   potionCountText: {fileID: 7148855271487250335}
   potionUseEffect: {fileID: 0}
   potionUseSound: {fileID: 0}
+  deathSound: {fileID: 0}
+  deathEffectPrefab: {fileID: 0}
+  delayBeforeGameOver: 1.5
 --- !u!114 &8780612195203779827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4144,6 +4148,9 @@ MonoBehaviour:
     m_Bits: 0
   useRaycastAttack: 1
   raycastWidth: 2
+  attackPoint: {fileID: 0}
+  attackPointDistance: 1.2
+  attackCooldown: 0.5
 --- !u!1 &4593071918041836473
 GameObject:
   m_ObjectHideFlags: 0
