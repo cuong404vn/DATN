@@ -116,9 +116,16 @@ public class EnemyQuaiBay : MonoBehaviour
 
         if (isHurt) return;
 
+        if (player != null && !player.gameObject.activeInHierarchy)
+        {
+            if (currentState != QuaiBayState.Patrol && currentState != QuaiBayState.Idle)
+            {
+                ResetPlayerReference();
+                return;
+            }
+        }
 
         CheckGrounded();
-
 
         if (isGrounded && isStayingOnGround)
         {
@@ -131,8 +138,15 @@ public class EnemyQuaiBay : MonoBehaviour
 
         if (currentState != QuaiBayState.Die)
         {
-            float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-            UpdateCurrentState(distanceToPlayer);
+            if (player != null && player.gameObject.activeInHierarchy)
+            {
+                float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+                UpdateCurrentState(distanceToPlayer);
+            }
+            else if (currentState != QuaiBayState.Patrol && currentState != QuaiBayState.Idle)
+            {
+                currentState = QuaiBayState.Patrol;
+            }
 
             switch (currentState)
             {
@@ -258,16 +272,19 @@ public class EnemyQuaiBay : MonoBehaviour
 
     void Chase()
     {
+        if (player == null || !player.gameObject.activeInHierarchy)
+        {
+            currentState = QuaiBayState.Patrol;
+            return;
+        }
 
         if (transform.position.y < patrolHeight)
         {
             MoveToHeight(patrolHeight);
         }
 
-
         Vector2 direction = new Vector2(player.position.x - transform.position.x, 0).normalized;
         rb.linearVelocity = new Vector2(direction.x * chaseSpeed, rb.linearVelocity.y);
-
 
         UpdateSpriteDirection(direction.x);
     }
@@ -286,9 +303,13 @@ public class EnemyQuaiBay : MonoBehaviour
     {
         lastAttackTime = Time.time;
 
+        if (player == null || !player.gameObject.activeInHierarchy)
+        {
+            currentState = QuaiBayState.Patrol;
+            yield break;
+        }
 
         float targetSide = Random.Range(0f, 1f) > 0.5f ? 1f : -1f;
-
 
         diveTargetPosition = new Vector3(
             player.position.x + (attackLateralDistance * targetSide),
@@ -389,12 +410,15 @@ public class EnemyQuaiBay : MonoBehaviour
     {
         if (isDead) return;
 
+        if (player == null || !player.gameObject.activeInHierarchy)
+        {
+            return;
+        }
 
         if (attackSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(attackSound);
         }
-
 
         Collider2D[] hitPlayers = Physics2D.OverlapCircleAll(
             attackPoint != null ? attackPoint.position : transform.position,
@@ -595,5 +619,30 @@ public class EnemyQuaiBay : MonoBehaviour
 
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
+    }
+
+    public void ResetPlayerReference()
+    {
+        StopAllCoroutines();
+
+        currentState = QuaiBayState.Patrol;
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        if (transform.position.y != startPosition.y + patrolHeight)
+        {
+            rb.gravityScale = 0;
+            transform.position = new Vector3(transform.position.x, startPosition.y + patrolHeight, transform.position.z);
+        }
+
+        isStayingOnGround = false;
+        isGrounded = false;
+
+        lastAttackTime = -Mathf.Infinity;
+
+        UpdateAnimator();
     }
 }

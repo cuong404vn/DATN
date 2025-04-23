@@ -3,525 +3,183 @@ using System.Collections;
 
 public class quairong : MonoBehaviour
 {
-    public enum DragonState { Idle, Walk, Attack, Hurt, Die }
-
-    [Header("State Machine")]
-    [SerializeField] private DragonState currentState = DragonState.Idle;
-
-    [Header("Components")]
-    [SerializeField] private Animator animator;
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Collider2D enemyCollider;
-    [SerializeField] private Transform groundCheck;
-
-    [Header("Movement")]
-    [SerializeField] private float walkSpeed = 1.5f;
-    [SerializeField] private float patrolRange = 5f;
-    [SerializeField] private float groundCheckDistance = 0.2f;
-    [SerializeField] private float edgeCheckDistance = 1f;
-
-    [Header("Detection & Attack")]
-    [SerializeField] private float detectionRange = 8f;
-    [SerializeField] private float attackRange = 6f;
-    [SerializeField] private float attackCooldown = 2.5f;
-    [SerializeField] private Transform firePoint;
-    [SerializeField] private GameObject fireballPrefab;
-    [SerializeField] private float fireballSpeed = 7f;
-
-    [Header("Audio")]
-    [SerializeField] private AudioClip fireSound;
-    [SerializeField] private AudioClip hurtSound;
-    [SerializeField] private AudioClip deathSound;
-
-
-    private Transform player;
-    private Vector3 startPosition;
-    private bool facingRight = true;
-    private float lastAttackTime = -999f;
-    private bool isHurt = false;
-    private bool isDead = false;
-    private AudioSource audioSource;
-    private bool isAttacking = false;
-
-
-    private Vector3 leftPatrolPoint;
-    private Vector3 rightPatrolPoint;
+    // Tuần tra
+    public float patrolSpeed = 2f;
+    public float patrolDistance = 5f;
+    private Vector2 startPos;
     private bool movingRight = true;
 
+    // Phát hiện Player
+    public float detectionRange = 4f;
+    public LayerMask playerLayer;
+    private Transform player;
 
-    private readonly int hashIsWalking = Animator.StringToHash("IsWalking");
-    private readonly int hashAttack = Animator.StringToHash("Attack");
-    private readonly int hashHurt = Animator.StringToHash("Hurt");
-    private readonly int hashDie = Animator.StringToHash("Death");
+    // Bắn chưởng
+    public GameObject projectilePrefab;
+    public Transform firePoint;
+    public float projectileSpeed = 10f;
+    public float fireRate = 2f;
+    private float nextFireTime;
 
-    void Awake()
-    {
+    // Animation
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
+    private bool isTriggeredWalk = false;
 
-        if (animator == null) animator = GetComponent<Animator>();
-        if (rb == null) rb = GetComponent<Rigidbody2D>();
-        if (enemyCollider == null) enemyCollider = GetComponent<Collider2D>();
+    // Âm thanh
+    [Header("Sounds")]
+    public AudioClip attackSound; // Âm thanh khi tấn công
+    private AudioSource attackAudioSource;
 
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-            audioSource = gameObject.AddComponent<AudioSource>();
+    // Vật lý
+    private Rigidbody2D rb;
 
+    // Collider
+    private BoxCollider2D boxCollider;
+    private Vector2 colliderOffsetRight = new Vector2(0.1f, 0f);
+    private Vector2 colliderOffsetLeft;
 
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-        if (playerObject != null)
-        {
-            player = playerObject.transform;
-        }
-        else
-        {
-            Debug.LogError($"Dragon '{gameObject.name}': Cannot find GameObject with Tag 'Player'");
-            enabled = false;
-            return;
-        }
-    }
+    // Trạng thái
+    private bool isDead = false;
 
     void Start()
     {
+        startPos = transform.position;
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
-        startPosition = transform.position;
-        leftPatrolPoint = startPosition - Vector3.right * patrolRange;
-        rightPatrolPoint = startPosition + Vector3.right * patrolRange;
+        // Khởi tạo AudioSource
+        attackAudioSource = GetComponent<AudioSource>();
+        if (attackAudioSource == null) Debug.LogError("Không tìm thấy AudioSource trên quái!");
+        attackAudioSource.clip = attackSound;
+        attackAudioSource.loop = false; // Không lặp lại âm thanh Attack
+
+        if (animator == null) Debug.LogError("Không tìm thấy Animator trên quái!");
+        if (spriteRenderer == null) Debug.LogError("Không tìm thấy SpriteRenderer trên quái!");
+        if (rb == null) Debug.LogError("Không tìm thấy Rigidbody2D trên quái!");
+        if (boxCollider == null) Debug.LogError("Không tìm thấy BoxCollider2D trên quái!");
+        if (player == null) Debug.LogError("Không tìm thấy Player!");
+
+        colliderOffsetLeft = new Vector2(-colliderOffsetRight.x, colliderOffsetRight.y);
+        boxCollider.offset = colliderOffsetRight;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (isDead || isHurt) return;
+        if (isDead) return;
 
+        bool playerInRange = IsPlayerInRange();
 
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        UpdateFacingDirection();
+        string currentState = "Unknown";
+        if (stateInfo.IsName("Idle")) currentState = "Idle";
+        else if (stateInfo.IsName("Walk")) currentState = "Walk";
+        else if (stateInfo.IsName("Attack")) currentState = "Attack";
+        else if (stateInfo.IsName("Die")) currentState = "Die";
+        Debug.Log($"Current state: {currentState}");
 
-
-        UpdateState(distanceToPlayer);
-
-
-        switch (currentState)
-        {
-            case DragonState.Idle:
-                Idle();
-                break;
-            case DragonState.Walk:
-                Walk();
-                break;
-            case DragonState.Attack:
-                Attack();
-                break;
-        }
-
-
-        UpdateAnimator();
-    }
-
-    void UpdateState(float distanceToPlayer)
-    {
-
-        if (isDead || isHurt) return;
-
-
-        if (isAttacking)
-        {
-            return;
-        }
-
-        DragonState previousState = currentState;
-
-
-        if (distanceToPlayer <= attackRange)
-        {
-
-            if (Time.time >= lastAttackTime + attackCooldown)
-            {
-                currentState = DragonState.Attack;
-            }
-        }
-
-        else if (distanceToPlayer <= detectionRange)
-        {
-            currentState = DragonState.Walk;
-        }
-
-        else
-        {
-
-            if (currentState != DragonState.Walk && currentState != DragonState.Idle)
-            {
-                currentState = DragonState.Walk;
-            }
-        }
-    }
-
-    void Idle()
-    {
-        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-    }
-
-    void Walk()
-    {
-
-        if (Vector2.Distance(transform.position, player.position) <= detectionRange)
-        {
-            MoveTowardsPlayer();
-        }
-
-        else
-        {
-            Patrol();
-        }
-    }
-
-    void MoveTowardsPlayer()
-    {
-
-        float distanceToPlayer = player.position.x - transform.position.x;
-        float direction = Mathf.Sign(distanceToPlayer);
-
-
-        if (CanMoveInDirection(direction))
-        {
-            rb.linearVelocity = new Vector2(direction * walkSpeed, rb.linearVelocity.y);
-            UpdateFacingDirection(direction);
-        }
-        else
+        if (playerInRange)
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            if (!stateInfo.IsName("Attack"))
+            {
+                Debug.Log("Triggering Attack animation for vampireFire");
+                animator.SetTrigger("Attack");
+                isTriggeredWalk = false;
+
+                // Phát âm thanh Attack
+                if (attackAudioSource != null && attackSound != null)
+                {
+                    attackAudioSource.Play();
+                }
+            }
+            FacePlayer();
+            if (Time.time >= nextFireTime)
+            {
+                Shoot();
+                nextFireTime = Time.time + fireRate;
+            }
+        }
+        else
+        {
+            if (!stateInfo.IsName("Walk") && !isTriggeredWalk)
+            {
+                Debug.Log("Triggering Walk animation for vampireFire");
+                animator.SetTrigger("Walk");
+                isTriggeredWalk = true;
+            }
+            Patrol();
         }
     }
 
     void Patrol()
     {
-        Vector3 targetPoint = movingRight ? rightPatrolPoint : leftPatrolPoint;
-        float direction = movingRight ? 1 : -1;
-
-
-        if (!CanMoveInDirection(direction))
-        {
-
-            movingRight = !movingRight;
-            direction = -direction;
-        }
-
-
-        float distanceToTarget = Mathf.Abs(transform.position.x - targetPoint.x);
-        if (distanceToTarget < 0.1f)
+        float distanceFromStart = Mathf.Abs(transform.position.x - startPos.x);
+        if (distanceFromStart >= patrolDistance)
         {
             movingRight = !movingRight;
         }
 
+        float moveDirection = movingRight ? 1f : -1f;
+        rb.linearVelocity = new Vector2(moveDirection * patrolSpeed, rb.linearVelocity.y);
 
-        rb.linearVelocity = new Vector2(direction * walkSpeed, rb.linearVelocity.y);
-
-
-        UpdateFacingDirection(direction);
+        spriteRenderer.flipX = !movingRight;
+        boxCollider.offset = spriteRenderer.flipX ? colliderOffsetLeft : colliderOffsetRight;
     }
 
-    bool CanMoveInDirection(float direction)
+    bool IsPlayerInRange()
     {
-
-        float groundCheckDepth = 2f;
-
-
-        Vector2 checkPosition = (Vector2)transform.position + new Vector2(direction * edgeCheckDistance, 0);
-
-
-        Debug.DrawRay(checkPosition, Vector2.down * groundCheckDepth, Color.green, 0.1f);
-
-
-        RaycastHit2D groundInfo = Physics2D.BoxCast(
-            checkPosition,
-            new Vector2(0.3f, 0.1f),
-            0f,
-            Vector2.down,
-            groundCheckDepth
-        );
-
-
-        bool hasGroundAhead = false;
-
-
-        if (groundInfo.collider != null && groundInfo.collider.CompareTag("Ground"))
-        {
-            hasGroundAhead = true;
-        }
-
-        else if (groundInfo.collider != null)
-        {
-            hasGroundAhead = true;
-        }
-
-        else
-        {
-            RaycastHit2D backupGroundInfo = Physics2D.Raycast(checkPosition, Vector2.down, groundCheckDepth);
-            if (backupGroundInfo.collider != null)
-            {
-                hasGroundAhead = true;
-            }
-        }
-
-
-        Vector2 wallCheckPosition = (Vector2)transform.position + new Vector2(0, 0.5f);
-
-
-        Debug.DrawRay(wallCheckPosition, new Vector2(direction, 0) * 0.7f, Color.red, 0.1f);
-
-        RaycastHit2D wallInfo = Physics2D.BoxCast(
-            wallCheckPosition,
-            new Vector2(0.1f, 0.5f),
-            0f,
-            new Vector2(direction, 0),
-            0.7f
-        );
-
-        bool hasWallAhead = false;
-        if (wallInfo.collider != null)
-        {
-
-            if (!wallInfo.collider.CompareTag("Player") && !wallInfo.collider.isTrigger)
-            {
-                hasWallAhead = true;
-            }
-        }
-
-
-        bool isOnGround = Physics2D.Raycast(transform.position, Vector2.down, 0.3f).collider != null;
-
-
-        return (hasGroundAhead && !hasWallAhead) || isOnGround;
+        if (player == null) return false;
+        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+        Debug.Log($"Distance to Player: {distanceToPlayer}");
+        return distanceToPlayer <= detectionRange;
     }
 
-    void Attack()
+    void FacePlayer()
     {
-
-        if (isDead || isHurt) return;
-
-
-        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-
-
-        float directionToPlayer = Mathf.Sign(player.position.x - transform.position.x);
-        UpdateFacingDirection(directionToPlayer);
-
-
-
-
-
-        if (!isAttacking && Time.time >= lastAttackTime + attackCooldown)
-        {
-
-            lastAttackTime = Time.time;
-
-
-            StartCoroutine(AttackSequence());
-        }
+        if (player == null) return;
+        bool playerOnRight = player.position.x > transform.position.x;
+        spriteRenderer.flipX = !playerOnRight;
+        boxCollider.offset = spriteRenderer.flipX ? colliderOffsetLeft : colliderOffsetRight;
     }
 
-
-    IEnumerator AttackSequence()
+    void Shoot()
     {
+        if (projectilePrefab == null || firePoint == null) return;
 
-        isAttacking = true;
+        GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+        Rigidbody2D rbProj = projectile.GetComponent<Rigidbody2D>();
 
+        Vector2 direction = spriteRenderer.flipX ? Vector2.left : Vector2.right;
+        rbProj.linearVelocity = direction * projectileSpeed;
 
-        animator.SetTrigger(hashAttack);
-
-
-        float attackAnimDuration = 1.5f;
-
-
-
-        yield return new WaitForSeconds(attackAnimDuration);
-
-
-        isAttacking = false;
-    }
-
-
-    public void AnimationEvent_Shoot ()
-    {
-        if (isDead) return;
-
-
-        if (fireSound != null && audioSource != null)
+        SpriteRenderer projSprite = projectile.GetComponent<SpriteRenderer>();
+        if (projSprite != null)
         {
-            audioSource.PlayOneShot(fireSound);
+            projSprite.flipX = spriteRenderer.flipX;
         }
 
-
-        SpawnFireball();
-    }
-    
-
-    void SpawnFireball()
-    {
-        if (fireballPrefab != null && firePoint != null)
-        {
-
-            GameObject fireball = Instantiate(fireballPrefab, firePoint.position, Quaternion.identity);
-
-
-            FireballProjectile fireballScript = fireball.GetComponent<FireballProjectile>();
-            if (fireballScript != null)
-            {
-
-                float direction = facingRight ? 1 : -1;
-                fireballScript.Initialize(direction, fireballSpeed, gameObject);
-            }
-            else
-            {
-
-                Rigidbody2D fireballRb = fireball.GetComponent<Rigidbody2D>();
-                if (fireballRb != null)
-                {
-                    float direction = facingRight ? 1 : -1;
-                    fireballRb.linearVelocity = new Vector2(direction * fireballSpeed, 0);
-
-
-                    if (!facingRight)
-                    {
-                        fireball.transform.localScale = new Vector3(-1, 1, 1);
-                    }
-                }
-            }
-        }
-        else
-        {
-            Debug.LogError("Missing fireballPrefab or firePoint! Cannot spawn fireball.");
-        }
-    }
-
-    void UpdateFacingDirection()
-    {
-        if (player != null)
-        {
-            float direction = player.position.x - transform.position.x;
-            if (direction != 0)
-            {
-                UpdateFacingDirection(Mathf.Sign(direction));
-            }
-        }
-    }
-
-    void UpdateFacingDirection(float direction)
-    {
-        if ((direction > 0 && !facingRight) || (direction < 0 && facingRight))
-        {
-            Flip();
-        }
-    }
-
-    void Flip()
-    {
-        facingRight = !facingRight;
-        transform.Rotate(0f, 180f, 0f);
-    }
-
-    void UpdateAnimator()
-    {
-        bool isMoving = Mathf.Abs(rb.linearVelocity.x) > 0.1f;
-        animator.SetBool(hashIsWalking, isMoving);
+        Destroy(projectile, 5f);
     }
 
     public void TakeDamage(int damage)
     {
         if (isDead) return;
-
-
-
-        StartCoroutine(HurtSequence());
-    }
-
-    IEnumerator HurtSequence()
-    {
-        isHurt = true;
-        rb.linearVelocity = Vector2.zero;
-
-
-        animator.SetTrigger(hashHurt);
-
-
-        if (hurtSound != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(hurtSound);
-        }
-
-        yield return new WaitForSeconds(0.5f);
-        isHurt = false;
-    }
-
-    public void Die()
-    {
-        if (isDead) return;
-
         isDead = true;
-
-
-        rb.linearVelocity = Vector2.zero;
-
-
-        animator.SetTrigger(hashDie);
-
-
-        if (deathSound != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(deathSound);
-        }
-
-
-        enemyCollider.enabled = false;
-
-
-        Destroy(gameObject, 2f);
+        animator.SetTrigger("Die");
+        GetComponent<Collider2D>().enabled = false;
+        Destroy(gameObject, 1f);
     }
 
-    void OnDrawGizmosSelected()
+    void OnDrawGizmos()
     {
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-
-
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-
-
-        if (Application.isPlaying)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(leftPatrolPoint, rightPatrolPoint);
-            Gizmos.DrawSphere(leftPatrolPoint, 0.2f);
-            Gizmos.DrawSphere(rightPatrolPoint, 0.2f);
-        }
-        else
-        {
-
-            Vector3 leftPoint = transform.position - Vector3.right * patrolRange;
-            Vector3 rightPoint = transform.position + Vector3.right * patrolRange;
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(leftPoint, rightPoint);
-            Gizmos.DrawSphere(leftPoint, 0.2f);
-            Gizmos.DrawSphere(rightPoint, 0.2f);
-        }
-
-
-        if (groundCheck != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * groundCheckDistance);
-        }
-
-
-        if (firePoint != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(firePoint.position, 0.1f);
-
-
-            Gizmos.DrawRay(firePoint.position, (facingRight ? Vector3.right : Vector3.left) * 2f);
-        }
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(startPos - Vector2.right * patrolDistance, startPos + Vector2.right * patrolDistance);
     }
 }
