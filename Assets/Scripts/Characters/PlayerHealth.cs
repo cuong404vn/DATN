@@ -388,30 +388,30 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Trap"))
-        {
-
-            TakeDamage(1);
-        }
-        else if (other.CompareTag("DungNham"))
-        {
-
-            currentHealth = 0;
-            Die();
-        }
-    }
-
     void OnCollisionEnter2D(Collision2D collision)
     {
-
         if (collision.gameObject.CompareTag("Enemy") ||
             collision.gameObject.layer == LayerMask.NameToLayer("Enemy") ||
             collision.gameObject.name.Contains("Enemy"))
         {
+            TakeDamage(1); 
+        }
+        else if (collision.gameObject.CompareTag("Trap") || collision.gameObject.CompareTag("Dripstone"))
+        {
+            TakeDamage(1); 
+        }
+    }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Trap") || other.CompareTag("Dripstone"))
+        {
+            TakeDamage(1); 
+        }
+        else if (other.CompareTag("DungNham"))
+        {
+            currentHealth = 0;
+            Die();
         }
     }
 
