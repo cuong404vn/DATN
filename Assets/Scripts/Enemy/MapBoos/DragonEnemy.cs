@@ -73,7 +73,6 @@ public class DragonEnemy : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"Dragon '{gameObject.name}': Cannot find GameObject with Tag 'Player'");
             enabled = false;
             return;
         }
@@ -228,7 +227,6 @@ public class DragonEnemy : MonoBehaviour
         Vector2 checkPosition = (Vector2)transform.position + new Vector2(direction * edgeCheckDistance, 0);
 
 
-        Debug.DrawRay(checkPosition, Vector2.down * groundCheckDepth, Color.green, 0.1f);
 
 
         RaycastHit2D groundInfo = Physics2D.BoxCast(
@@ -266,7 +264,6 @@ public class DragonEnemy : MonoBehaviour
         Vector2 wallCheckPosition = (Vector2)transform.position + new Vector2(0, 0.5f);
 
 
-        Debug.DrawRay(wallCheckPosition, new Vector2(direction, 0) * 0.7f, Color.red, 0.1f);
 
         RaycastHit2D wallInfo = Physics2D.BoxCast(
             wallCheckPosition,
@@ -388,7 +385,6 @@ public class DragonEnemy : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Missing fireballPrefab or firePoint! Cannot spawn fireball.");
         }
     }
 
