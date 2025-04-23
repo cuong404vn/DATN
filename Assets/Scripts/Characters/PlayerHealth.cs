@@ -26,11 +26,20 @@ public class PlayerHealth : MonoBehaviour
     public GameObject potionUseEffect;
     public AudioClip potionUseSound;
 
+
+    [Header("Death Effect")]
+    public AudioClip deathSound;
+    public GameObject deathEffectPrefab;
+    public float delayBeforeGameOver = 1.5f;
+
+    private Animator animator;
+    private bool isDead = false;
     private bool isShopOpen = false;
 
     void Start()
     {
         SetupInitialState();
+        animator = GetComponent<Animator>();
     }
 
 
@@ -109,12 +118,14 @@ public class PlayerHealth : MonoBehaviour
             damageSource = $"{callerClassName}.{damageSource}";
         }
 
-     
+
+
+        if (isDead) return;
 
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
-           
+
             Die();
         }
         else
@@ -146,6 +157,51 @@ public class PlayerHealth : MonoBehaviour
     void Die()
     {
 
+        if (isDead) return;
+        isDead = true;
+
+
+        StopAllCoroutines();
+
+
+        if (deathSound != null)
+        {
+            AudioSource.PlayClipAtPoint(deathSound, transform.position);
+        }
+
+
+        if (deathEffectPrefab != null)
+        {
+            Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
+        }
+
+
+        if (animator != null)
+        {
+
+            animator.SetTrigger("Death");
+
+
+        }
+
+
+        GetComponent<PlayerController>().enabled = false;
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.gravityScale = 0; // Tùy chọn: có thể tắt trọng lực để nhân vật không rơi xuống
+        }
+
+
+        StartCoroutine(ShowGameOverAfterDelay());
+    }
+
+    private IEnumerator ShowGameOverAfterDelay()
+    {
+        yield return new WaitForSeconds(delayBeforeGameOver);
+
+
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
@@ -159,9 +215,21 @@ public class PlayerHealth : MonoBehaviour
         }
 
 
-        GetComponent<PlayerController>().enabled = false;
+
+        gameObject.SetActive(false);
 
 
+        EnemyQuaiBay[] allFlyingEnemies = FindObjectsOfType<EnemyQuaiBay>();
+        if (allFlyingEnemies != null && allFlyingEnemies.Length > 0)
+        {
+            foreach (EnemyQuaiBay enemy in allFlyingEnemies)
+            {
+                if (enemy != null)
+                {
+                    enemy.SendMessage("ResetPlayerReference", SendMessageOptions.DontRequireReceiver);
+                }
+            }
+        }
     }
 
     IEnumerator BecomeInvincible()
@@ -247,12 +315,12 @@ public class PlayerHealth : MonoBehaviour
     {
         if (other.CompareTag("Trap"))
         {
-           
+
             TakeDamage(1);
         }
         else if (other.CompareTag("DungNham"))
         {
-           
+
             currentHealth = 0;
             Die();
         }
@@ -265,13 +333,13 @@ public class PlayerHealth : MonoBehaviour
             collision.gameObject.layer == LayerMask.NameToLayer("Enemy") ||
             collision.gameObject.name.Contains("Enemy"))
         {
- 
+
         }
     }
 
     public void TakeDamageFromBoss(int damage)
     {
-       
+
         TakeDamage(damage);
     }
 

@@ -278,13 +278,26 @@ public class EnemyHealth : MonoBehaviour
     void Die()
     {
         if (anim != null)
+        {
+            anim.ResetTrigger("Attack");
+            anim.ResetTrigger("Hurt");
+            anim.SetBool("IsWalking", false);
+            anim.SetBool("IsRunning", false);
+
             anim.SetTrigger("Die");
+        }
+
+        MonoBehaviour[] allScripts = GetComponents<MonoBehaviour>();
+        foreach (MonoBehaviour script in allScripts)
+        {
+            if (script != this && !(script is AudioSource))
+            {
+                script.enabled = false;
+            }
+        }
 
         if (deathSound != null && audioSource != null)
             audioSource.PlayOneShot(deathSound);
-
-        if (enemyMovement != null)
-            enemyMovement.enabled = false;
 
         Collider2D collider = GetComponent<Collider2D>();
         if (collider != null)

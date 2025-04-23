@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 startPosition;
 
     public float attackDuration = 0.5f;
+    public float attackCooldown = 0.4f;
+    private float lastAttackTime = 0f;
 
     public AudioClip idleSound;
     public AudioClip runSound;
@@ -108,11 +110,13 @@ public class PlayerController : MonoBehaviour
 
     void Attack()
     {
-        if (Input.GetMouseButtonDown(0) && !isAttacking)
+        if (Input.GetMouseButtonDown(0) && !isAttacking && Time.time >= lastAttackTime + attackCooldown)
         {
             isAttacking = true;
             animator.SetBool("isAttacking", true);
             PlaySound(attackSound);
+
+            lastAttackTime = Time.time;
 
             CancelInvoke("ResetAttack");
             Invoke("ResetAttack", attackDuration);
