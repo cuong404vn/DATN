@@ -9,10 +9,15 @@ public class GameManager : MonoBehaviour
     public int coins = 0;
     public int keys = 0;
 
+
+    [HideInInspector] public int savedPlayerHealth = 5;
+    [HideInInspector] public int savedPlayerPotions = 0;
+    [HideInInspector] public bool isTransitioningScene = false;
+
     public string mainMenuScene = "MainMenu";
     private string currentSceneName;
 
-    // Danh sách các scene không phải là màn chơi (để không reset coins và keys)
+
     private readonly string[] nonGameplayScenes = { "Login", "Register", "Home", "MainMenu" };
 
 
@@ -22,14 +27,19 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
+
+        bool isFirstInstance = Instance == null;
+
+        if (isFirstInstance)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
+
         }
         else
         {
+
             Destroy(gameObject);
             return;
         }
@@ -37,14 +47,31 @@ public class GameManager : MonoBehaviour
 
     void OnDestroy()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        if (Instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         string sceneName = scene.name;
+        bool isTransitioning = PlayerPrefs.GetInt("IsTransitioningScene", 0) == 1;
+        bool isRestarting = PlayerPrefs.GetInt("IsRestarting", 0) == 1;
 
-        // Kiểm tra nếu scene mới là màn chơi thì reset stats
+
+
+
+        if (isRestarting)
+        {
+
+            PlayerPrefs.DeleteKey("IsRestarting");
+            PlayerPrefs.Save();
+
+            return; // Không xử lý tiếp, để PlayerHealth quản lý logic restart
+        }
+
+
         bool isGameplayScene = true;
         foreach (string nonGameplayScene in nonGameplayScenes)
         {
@@ -55,9 +82,24 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (isGameplayScene)
+        if (isGameplayScene && !isTransitioning && !isRestarting)
         {
+
             ResetLevelStats();
+        }
+        else if (isTransitioning)
+        {
+
+            coins = PlayerPrefs.GetInt("PlayerCoins", 0);
+            keys = PlayerPrefs.GetInt("PlayerKeys", 0);
+
+            int savedHealth = PlayerPrefs.GetInt("PlayerCurrentHealth", 5);
+
+        
+
+
+            OnCoinsChanged?.Invoke(coins);
+            OnKeysChanged?.Invoke(keys);
         }
 
         OnCoinsChanged?.Invoke(coins);
@@ -67,11 +109,13 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         currentSceneName = SceneManager.GetActiveScene().name;
+
     }
 
     public void AddCoins(int amount)
     {
         coins += amount;
+
         OnCoinsChanged?.Invoke(coins);
     }
 
@@ -80,12 +124,14 @@ public class GameManager : MonoBehaviour
         coins -= amount;
         if (coins < 0)
             coins = 0;
+
         OnCoinsChanged?.Invoke(coins);
     }
 
     public void AddKeys(int amount)
     {
         keys += amount;
+
         OnKeysChanged?.Invoke(keys);
     }
 
@@ -97,7 +143,7 @@ public class GameManager : MonoBehaviour
 
     public void ResetLevelStats()
     {
-        Debug.Log("Resetting coins and keys to 0");
+
         coins = 0;
         keys = 0;
 
