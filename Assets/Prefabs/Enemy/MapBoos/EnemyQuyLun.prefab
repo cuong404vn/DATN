@@ -209,7 +209,7 @@ MonoBehaviour:
   maxHealth: 3
   walkSpeed: 1.5
   jumpForce: 5
-  detectionRange: 10
+  detectionRange: 6
   patrolRange: 3
   groundCheck: {fileID: 0}
   groundCheckDistance: 0.1
