@@ -216,7 +216,7 @@ public class PlayerHealth : MonoBehaviour
 
 
 
-        gameObject.SetActive(false);
+        gameObject.SetActive(true);
 
 
         EnemyQuaiBay[] allFlyingEnemies = FindObjectsOfType<EnemyQuaiBay>();
@@ -253,7 +253,7 @@ public class PlayerHealth : MonoBehaviour
         Time.timeScale = 1f;
 
         if (gameOverPanel != null)
-            gameOverPanel.SetActive(false);
+            gameOverPanel.SetActive(true);
 
         GameManager.Instance.ResetLevelStats();
 
@@ -418,7 +418,7 @@ public class PlayerHealth : MonoBehaviour
 
         effectImage.color = originalColor;
         effectTransform.localScale = originalScale;
-        potionUseEffect.SetActive(false);
+        potionUseEffect.SetActive(true);
     }
 
     public void SetShopOpen(bool isOpen)
