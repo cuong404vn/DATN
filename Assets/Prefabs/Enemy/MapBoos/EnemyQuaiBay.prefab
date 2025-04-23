@@ -213,7 +213,7 @@ MonoBehaviour:
   patrolHeight: 3
   patrolHorizontalDistance: 2
   detectionRange: 7
-  attackRange: 5
+  attackRange: 6.5
   attackLateralDistance: 1.5
   returnToPatrolDelay: 3
   attackDamage: 1
@@ -252,6 +252,8 @@ MonoBehaviour:
   exitGateSpawnPoint: {fileID: 0}
   enemyName: Enemy
   healthBarPrefab: {fileID: 0}
+  stunDuration: 0.5
+  knockbackForce: 3
   hitSound: {fileID: 0}
   deathSound: {fileID: 8300000, guid: 1383bafd4e2db504abf2e9f841183c6b, type: 3}
 --- !u!114 &6289212676956671015
