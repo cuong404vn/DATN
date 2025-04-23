@@ -35,9 +35,34 @@ public class PlayerHealth : MonoBehaviour
     private Animator animator;
     private bool isDead = false;
     private bool isShopOpen = false;
+    private bool isFromPortal = false;
 
     void Start()
     {
+
+        bool isTransitioning = PlayerPrefs.GetInt("IsTransitioningScene", 0) == 1;
+
+        if (isTransitioning)
+        {
+
+            int savedHealth = PlayerPrefs.GetInt("PlayerCurrentHealth", maxHealth);
+            int savedPotions = PlayerPrefs.GetInt("PlayerCurrentPotions", 0);
+
+
+            isFromPortal = true;
+            currentHealth = savedHealth;
+            currentPotions = savedPotions;
+
+
+            PlayerPrefs.SetInt("IsTransitioningScene", 0);
+            PlayerPrefs.Save();
+        }
+        else
+        {
+
+            currentHealth = maxHealth;
+        }
+
         SetupInitialState();
         animator = GetComponent<Animator>();
     }
@@ -45,7 +70,15 @@ public class PlayerHealth : MonoBehaviour
 
     private void SetupInitialState()
     {
-        currentHealth = maxHealth;
+        if (!isFromPortal)
+        {
+
+            currentHealth = maxHealth;
+        }
+        else
+        {
+
+        }
 
 
         if (gameOverPanel == null)
@@ -54,6 +87,7 @@ public class PlayerHealth : MonoBehaviour
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(false);
+
 
             if (retryButton == null)
                 retryButton = gameOverPanel.transform.Find("RetryButton")?.GetComponent<Button>();
@@ -74,6 +108,7 @@ public class PlayerHealth : MonoBehaviour
                 mainMenuButton.onClick.AddListener(() => GameManager.Instance.GoToMainMenu());
             }
         }
+
 
 
         if (healthImages == null || healthImages.Length == 0)
@@ -219,7 +254,7 @@ public class PlayerHealth : MonoBehaviour
         gameObject.SetActive(true);
 
 
-        EnemyQuaiBay[] allFlyingEnemies = FindObjectsOfType<EnemyQuaiBay>();
+        EnemyQuaiBay[] allFlyingEnemies = FindObjectsByType<EnemyQuaiBay>(FindObjectsSortMode.None);
         if (allFlyingEnemies != null && allFlyingEnemies.Length > 0)
         {
             foreach (EnemyQuaiBay enemy in allFlyingEnemies)
@@ -252,32 +287,76 @@ public class PlayerHealth : MonoBehaviour
     {
         Time.timeScale = 1f;
 
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(true);
 
-        GameManager.Instance.ResetLevelStats();
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
 
 
         GetComponent<PlayerController>().enabled = false;
         GetComponent<Rigidbody2D>().simulated = false;
 
 
-        StartCoroutine(LoadLevelWithReset());
+        string currentMapID = SceneManager.GetActiveScene().name;
+        string originalMapID = PlayerPrefs.GetString("OriginalMapID", "");
+
+
+
+
+        if (string.IsNullOrEmpty(originalMapID))
+        {
+            originalMapID = currentMapID;
+
+        }
+
+
+        GameManager.Instance.ResetLevelStats();
+
+
+        PlayerPrefs.DeleteKey("IsTransitioningScene");
+        PlayerPrefs.DeleteKey("PlayerCurrentHealth");
+        PlayerPrefs.DeleteKey("PlayerCurrentPotions");
+        PlayerPrefs.DeleteKey("GameTime");
+        PlayerPrefs.DeleteKey("TotalScore");
+        PlayerPrefs.DeleteKey("EnemiesDefeated");
+        PlayerPrefs.DeleteKey("PlayerCoins");
+        PlayerPrefs.DeleteKey("PlayerKeys");
+
+
+        PlayerPrefs.SetInt("IsRestarting", 1);
+        PlayerPrefs.Save();
+
+
+        SceneManager.LoadScene(originalMapID);
     }
 
     private IEnumerator LoadLevelWithReset()
     {
 
+        if (PlayerPrefs.GetInt("IsRestarting", 0) == 1)
+        {
+
+            string firstMap = PlayerPrefs.GetString("FirstMap", "");
+            if (!string.IsNullOrEmpty(firstMap))
+            {
+
+                PlayerPrefs.DeleteKey("FirstMap");
+                PlayerPrefs.DeleteKey("IsRestarting");
+                PlayerPrefs.Save();
+                SceneManager.LoadScene(firstMap);
+                yield break;
+            }
+
+            PlayerPrefs.DeleteKey("IsRestarting");
+            PlayerPrefs.Save();
+        }
+
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
-
         yield return null;
-
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
-
             PlayerController controller = player.GetComponent<PlayerController>();
             Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
             Animator animator = player.GetComponent<Animator>();
@@ -300,7 +379,6 @@ public class PlayerHealth : MonoBehaviour
                 animator.Rebind();
                 animator.Update(0f);
             }
-
 
             Transform spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint")?.transform;
             if (spawnPoint != null)
@@ -424,5 +502,17 @@ public class PlayerHealth : MonoBehaviour
     public void SetShopOpen(bool isOpen)
     {
         isShopOpen = isOpen;
+    }
+
+
+    public void SaveHealthState()
+    {
+
+        PlayerPrefs.SetInt("PlayerCurrentHealth", currentHealth);
+        PlayerPrefs.SetInt("PlayerCurrentPotions", currentPotions);
+        PlayerPrefs.SetInt("IsTransitioningScene", 1);
+        PlayerPrefs.Save();
+
+
     }
 }

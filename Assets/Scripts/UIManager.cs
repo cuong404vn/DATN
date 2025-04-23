@@ -8,20 +8,20 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        
+
         if (coinsText == null)
             coinsText = GameObject.Find("CoinsText")?.GetComponent<TextMeshProUGUI>();
 
         if (keysText == null)
             keysText = GameObject.Find("KeysText")?.GetComponent<TextMeshProUGUI>();
 
-        
+
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnCoinsChanged += UpdateCoinsUI;
             GameManager.Instance.OnKeysChanged += UpdateKeysUI;
 
-            
+
             UpdateCoinsUI(GameManager.Instance.coins);
             UpdateKeysUI(GameManager.Instance.keys);
         }
@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
 
     void OnDestroy()
     {
-        
+
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnCoinsChanged -= UpdateCoinsUI;
@@ -41,15 +41,14 @@ public class UIManager : MonoBehaviour
     {
         if (coinsText != null)
             coinsText.text = value.ToString();
-        else
-            Debug.LogWarning("CoinsText is null!");
+       
+          
     }
 
     void UpdateKeysUI(int value)
     {
         if (keysText != null)
             keysText.text = value.ToString();
-        else
-            Debug.LogWarning("KeysText is null!");
+       
     }
 }
