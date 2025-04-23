@@ -73,15 +73,15 @@ public class BossBehavior : MonoBehaviour
     private bool facingRight = true;
     private AudioSource audioSource;
     private Coroutine currentActionCoroutine;
-    private bool useFireAttack = true; // Để xen kẽ giữa tấn công cận chiến và tấn công lửa
+    private bool useFireAttack = true;
     private bool isAttacking = false;
-    private int rangedAttackType = 0; // 0 là FireAttack, 1 là RockAttack
+    private int rangedAttackType = 0;
 
     private Vector3 patrolCenter;
     private Vector3 currentPatrolTarget;
     private bool patrollingRight = true;
 
-    private bool rockSpawning = false; // Thêm biến cờ để theo dõi khi nào đã bắt đầu tạo đá
+    private bool rockSpawning = false;
 
     private readonly int hashIsWalking = Animator.StringToHash("IsWalking");
     private readonly int hashIsRunning = Animator.StringToHash("IsRunning");
@@ -202,7 +202,7 @@ public class BossBehavior : MonoBehaviour
             {
                 StopCoroutine(currentActionCoroutine);
             }
-            useFireAttack = false; // Đảm bảo lần sau sẽ là tấn công tầm xa
+            useFireAttack = false;
             currentActionCoroutine = StartCoroutine(PerformFullAttackSequence());
             return;
         }
@@ -226,7 +226,7 @@ public class BossBehavior : MonoBehaviour
             {
                 StopCoroutine(currentActionCoroutine);
             }
-            useFireAttack = false; // Đảm bảo lần sau sẽ là tấn công tầm xa
+            useFireAttack = false;
             currentActionCoroutine = StartCoroutine(PerformFullAttackSequence());
         }
         else if (distanceToPlayer <= fireAttackRange && distanceToPlayer > attackRange && isWithinPatrolArea && useFireAttack)
@@ -234,7 +234,7 @@ public class BossBehavior : MonoBehaviour
 
 
             {
-             
+
 
             }
 
@@ -350,7 +350,7 @@ public class BossBehavior : MonoBehaviour
 
 
             {
-            
+
 
             }
 
@@ -500,7 +500,7 @@ public class BossBehavior : MonoBehaviour
         Vector2 startPosition = transform.position;
 
 
-        bool shouldFaceRight = directionToPlayer < 0; // Nếu player bên trái, boss sẽ nhảy về bên phải
+        bool shouldFaceRight = directionToPlayer < 0;
         if (shouldFaceRight != facingRight)
         {
             Flip();
@@ -509,7 +509,7 @@ public class BossBehavior : MonoBehaviour
 
 
 
-        float jumpHeight = 3f; // Độ cao tối đa của nhảy
+        float jumpHeight = 3f;
         float gravity = Physics2D.gravity.magnitude * rb.gravityScale;
         float jumplinearVelocityY = Mathf.Sqrt(2 * gravity * jumpHeight);
 
@@ -525,7 +525,7 @@ public class BossBehavior : MonoBehaviour
 
 
         float elapsedTime = 0f;
-        float maxJumpTime = jumpTime * 2f; // Đặt thời gian tối đa để tránh vòng lặp vô hạn
+        float maxJumpTime = jumpTime * 2f;
 
         while (elapsedTime < maxJumpTime)
         {
@@ -665,7 +665,7 @@ public class BossBehavior : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
 
 
-        Gizmos.color = new Color(1f, 0.5f, 0f, 0.7f); // Màu cam
+        Gizmos.color = new Color(1f, 0.5f, 0f, 0.7f);
         Gizmos.DrawWireSphere(transform.position, fireAttackRange);
 
         if (attackPoint != null)
@@ -861,7 +861,7 @@ public class BossBehavior : MonoBehaviour
 
         SetState(EnemyState.RockAttack);
         isAttacking = true;
-        rockSpawning = false; // Đặt lại biến cờ khi bắt đầu tấn công mới
+        rockSpawning = false;
 
 
 
@@ -931,7 +931,7 @@ public class BossBehavior : MonoBehaviour
 
     public void AnimationEvent_SpawnRock()
     {
-        if (isDead || rockSpawning) return; // Kiểm tra nếu đá đã được tạo thì không tạo nữa
+        if (isDead || rockSpawning) return;
 
 
         if (rockAttackSound != null && audioSource != null)
@@ -1041,7 +1041,7 @@ public class BossBehavior : MonoBehaviour
 
 
         SpriteRenderer warningSprite = warningObj.AddComponent<SpriteRenderer>();
-        warningSprite.color = new Color(1f, 0f, 0f, 0.5f); // Màu đỏ với độ trong suốt
+        warningSprite.color = new Color(1f, 0f, 0f, 0.5f);
 
 
         warningSprite.sprite = CreateCircleSprite();
