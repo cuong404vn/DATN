@@ -45,10 +45,10 @@ public class HomeManager : MonoBehaviour
     void InitializeMapData()
     {
 
-        mapDataDict.Add("MapBosss1", new MapData { mapID = "MapBosss1", displayName = "Map 01", status = "locked", stars = 0, highScore = 0 });
-        mapDataDict.Add("map2", new MapData { mapID = "map2", displayName = "Map 02", status = "locked", stars = 0, highScore = 0 });
-        mapDataDict.Add("map3", new MapData { mapID = "map3", displayName = "Map 03", status = "locked", stars = 0, highScore = 0 });
-        mapDataDict.Add("map4", new MapData { mapID = "map4", displayName = "Map 04", status = "locked", stars = 0, highScore = 0 });
+        mapDataDict.Add("ToaThanh", new MapData { mapID = "ToaThanh", displayName = "Map 01", status = "locked", stars = 0, highScore = 0 });
+        mapDataDict.Add("KhuRung", new MapData { mapID = "KhuRung", displayName = "Map 02", status = "locked", stars = 0, highScore = 0 });
+        mapDataDict.Add("LongDat", new MapData { mapID = "LongDat", displayName = "Map 03", status = "locked", stars = 0, highScore = 0 });
+        mapDataDict.Add("CamThanh", new MapData { mapID = "CamThanh", displayName = "Map 04", status = "locked", stars = 0, highScore = 0 });
     }
 
     IEnumerator LoadGameProgress()
@@ -228,7 +228,7 @@ public class HomeManager : MonoBehaviour
         currentMapText.text = "Map: " + progress.currentMap;
         totalStarsText.text = "Total stars" + progress.totalStars ;
 
-        List<string> mapOrder = new List<string> { "MapBosss1", "map2", "map3", "map4" };
+        List<string> mapOrder = new List<string> { "ToaThanh", "KhuRung", "LongDat", "CamThanh" };
 
         int highestUnlockedIndex = -1;
 

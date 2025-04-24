@@ -9,6 +9,9 @@ using SimpleJSON;
 
 public class LevelManager : MonoBehaviour
 {
+
+    public static bool IsComingFromPortal = false;
+
     [Header("Game parameters")]
     public float timeFor3Stars = 300f;
     public float timeFor2Stars = 600f;
@@ -38,17 +41,41 @@ public class LevelManager : MonoBehaviour
     private bool isGameCompleted = false;
     private string currentMapID;
     private bool isFromPortal = false;
-    private string originalMapID; // Lưu ID của màn đầu tiên
+    private string originalMapID; 
 
     private string updateProgressURL = "https://shopnickgame.online/api/progress/save";
+
+
+    private void Awake()
+    {
+
+        int isTransitioning = PlayerPrefs.GetInt("IsTransitioningScene", 0);
+      
+
+        if (isTransitioning == 1)
+        {
+
+            IsComingFromPortal = true;
+
+
+            originalMapID = PlayerPrefs.GetString("OriginalMapID", "");
+           
+        }
+    }
 
     void Start()
     {
 
         bool isRestarting = PlayerPrefs.GetInt("IsRestarting", 0) == 1;
+
+
+        int isTransitioning = PlayerPrefs.GetInt("IsTransitioningScene", 0);
+
+
+
         if (isRestarting)
         {
-           
+         
             gameTime = 0f;
             enemiesDefeated = 0;
             totalScore = 0;
@@ -57,33 +84,42 @@ public class LevelManager : MonoBehaviour
             PlayerPrefs.SetString("OriginalMapID", originalMapID);
             PlayerPrefs.Save();
 
-           
+          
+        }
+        else if (IsComingFromPortal || isTransitioning == 1)
+        {
+
+            isFromPortal = true;
+
+
+            gameTime = PlayerPrefs.GetFloat("GameTime", 0f);
+            totalScore = PlayerPrefs.GetInt("TotalScore", 0);
+            enemiesDefeated = PlayerPrefs.GetInt("EnemiesDefeated", 0);
+
+
+            if (string.IsNullOrEmpty(originalMapID))
+            {
+                originalMapID = PlayerPrefs.GetString("OriginalMapID", "");
+              
+            }
+
+
+
+            PlayerPrefs.SetInt("IsTransitioningScene", 0);
+            PlayerPrefs.Save();
+            IsComingFromPortal = false;
+            
         }
         else
         {
+            gameTime = 0f;
+            enemiesDefeated = 0;
+            totalScore = 0;
 
-            bool isTransitioning = PlayerPrefs.GetInt("IsTransitioningScene", 0) == 1;
-            if (isTransitioning)
-            {
-                isFromPortal = true;
-                gameTime = PlayerPrefs.GetFloat("GameTime", 0f);
-                totalScore = PlayerPrefs.GetInt("TotalScore", 0);
-                enemiesDefeated = PlayerPrefs.GetInt("EnemiesDefeated", 0);
-                originalMapID = PlayerPrefs.GetString("OriginalMapID", "");
-
-             
-            }
-            else
-            {
-                gameTime = 0f;
-                enemiesDefeated = 0;
-                totalScore = 0;
-
-                originalMapID = SceneManager.GetActiveScene().name;
-                PlayerPrefs.SetString("OriginalMapID", originalMapID);
-                PlayerPrefs.Save();
-               
-            }
+            originalMapID = SceneManager.GetActiveScene().name;
+            PlayerPrefs.SetString("OriginalMapID", originalMapID);
+            PlayerPrefs.Save();
+            
         }
 
         if (exitGate != null) exitGate.SetActive(false);
@@ -111,12 +147,30 @@ public class LevelManager : MonoBehaviour
 
     public void SaveLevelState()
     {
+      
+
         PlayerPrefs.SetFloat("GameTime", gameTime);
         PlayerPrefs.SetInt("TotalScore", totalScore);
         PlayerPrefs.SetInt("EnemiesDefeated", enemiesDefeated);
+
+
+
+
+        if (string.IsNullOrEmpty(originalMapID))
+        {
+            originalMapID = SceneManager.GetActiveScene().name;
+           
+        }
+
+
+        PlayerPrefs.SetInt("IsTransitioningScene", 1);
         PlayerPrefs.SetString("OriginalMapID", originalMapID);
+        PlayerPrefs.Save();
 
 
+        IsComingFromPortal = true;
+
+     
     }
 
     public void EnemyDefeated()
@@ -161,6 +215,20 @@ public class LevelManager : MonoBehaviour
 
         ShowSummary();
 
+
+        if (string.IsNullOrEmpty(originalMapID))
+        {
+            originalMapID = PlayerPrefs.GetString("OriginalMapID", "");
+            if (string.IsNullOrEmpty(originalMapID))
+            {
+                originalMapID = SceneManager.GetActiveScene().name;
+               
+            }
+            else
+            {
+                
+            }
+        }
 
        
         StartCoroutine(UpdateProgressToServer());
@@ -218,9 +286,15 @@ public class LevelManager : MonoBehaviour
         }
 
 
+        if (string.IsNullOrEmpty(originalMapID))
+        {
+            originalMapID = PlayerPrefs.GetString("OriginalMapID", SceneManager.GetActiveScene().name);
+          
+        }
+
+
         string mapToUpdate = originalMapID;
-      
-               
+       
 
         string jsonData = "{\"userID\":\"" + userId + "\",\"mapID\":\"" + mapToUpdate +
                           "\",\"status\":\"completed\",\"stars\":" + earnedStars +
@@ -244,7 +318,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            
+         
         }
     }
 
@@ -262,7 +336,7 @@ public class LevelManager : MonoBehaviour
         if (string.IsNullOrEmpty(originalMapID))
         {
             originalMapID = SceneManager.GetActiveScene().name;
-           
+            
         }
 
 

@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Home.unity
     guid: 0e9284e4409d7574e9cf552ee41b1c34
   - enabled: 1
-    path: Assets/Scenes/MapDungNham02.unity
+    path: Assets/Scenes/LongDat2.unity
     guid: 58972e4c8d48db04abf0cec678bcae34
   - enabled: 1
     path: Assets/Scenes/Login.unity
@@ -18,23 +18,29 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene 1.unity
     guid: c813344bd3f8cb948ab84fff71d7919a
   - enabled: 1
-    path: Assets/Scenes/Map1Castle.unity
+    path: Assets/Scenes/CamThanh.unity
     guid: a8f23562130f50049bd16cea5c65bfa7
   - enabled: 1
-    path: Assets/Scenes/Map2Castle.unity
+    path: Assets/Scenes/CamThanh2.unity
     guid: ac70c2eca23b9954a8679514e92b045e
   - enabled: 1
-    path: Assets/Scenes/MapBosss1.unity
+    path: Assets/Scenes/ToaThanh.unity
     guid: 1df1adae1741a1345b292adff5ade76f
   - enabled: 1
-    path: Assets/Scenes/MapBosss2.unity
+    path: Assets/Scenes/ToaThanh2.unity
     guid: 1d3d8e80fe3360f498e35d0e96b4b570
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MapCastleBoss.unity
     guid: 7e76ac2396688bd4f8b5ad3176f3e65c
   - enabled: 1
-    path: Assets/Scenes/MapDungNham01.unity
+    path: Assets/Scenes/LongDat.unity
     guid: a3a2f33143a12a743a6630cb048a6033
+  - enabled: 1
+    path: Assets/Scenes/KhuRung.unity
+    guid: aa03fbc894eeff049ba1b798cf2da78d
+  - enabled: 1
+    path: Assets/Scenes/KhuRung2.unity
+    guid: 8fff0607780bb25488637a27a0232e9f
   - enabled: 1
     path: Assets/Scenes/Register.unity
     guid: 108cbac986e4a5b4688d31e6fc0cdb48

@@ -23,9 +23,14 @@ public class Portal : MonoBehaviour
 
 
 
+                PlayerPrefs.SetInt("IsTransitioningScene", 1);
+
+                LevelManager.IsComingFromPortal = true;
+
+
+
                 PlayerPrefs.SetInt("PlayerCurrentHealth", playerHealth.currentHealth);
                 PlayerPrefs.SetInt("PlayerCurrentPotions", playerHealth.currentPotions);
-                PlayerPrefs.SetInt("IsTransitioningScene", 1);
 
 
                 if (GameManager.Instance != null)
@@ -50,7 +55,15 @@ public class Portal : MonoBehaviour
 
                 }
 
+
+                PlayerPrefs.SetInt("IsTransitioningScene", 1);
+                LevelManager.IsComingFromPortal = true;
                 PlayerPrefs.Save();
+
+
+                int checkTransitioning = PlayerPrefs.GetInt("IsTransitioningScene", 0);
+
+        
 
 
             }
@@ -59,9 +72,8 @@ public class Portal : MonoBehaviour
 
             }
 
-
-
-
+            PlayerPrefs.SetInt("IsTransitioningScene", 1);
+            PlayerPrefs.Save();
             SceneManager.LoadScene(map2boos);
         }
     }
