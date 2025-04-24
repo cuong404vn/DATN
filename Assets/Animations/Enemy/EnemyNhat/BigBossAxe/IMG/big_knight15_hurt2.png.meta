@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      big_knight15_hurt2_0: 5945746197778868219
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

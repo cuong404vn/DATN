@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      big_knight09_walk6_0: 8616147924676234028
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

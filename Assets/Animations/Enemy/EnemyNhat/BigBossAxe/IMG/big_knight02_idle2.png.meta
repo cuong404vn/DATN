@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      big_knight02_idle2_0: -2021093831174258414
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
