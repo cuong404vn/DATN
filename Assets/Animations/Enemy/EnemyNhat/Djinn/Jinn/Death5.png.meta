@@ -1,0 +1,195 @@
+fileFormatVersion: 2
+guid: 9f7c7554360d39141ace5a9015a63ddc
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5261752026457258283
+    second: Death5_0
+  - first:
+      213: 6559200305669530986
+    second: Death5_1
+  - first:
+      213: -4086984495621107317
+    second: Death5_2
+  - first:
+      213: 4268315478366155975
+    second: Death5_3
+  - first:
+      213: 3097125908939679793
+    second: Death5_4
+  - first:
+      213: 5968241947350143645
+    second: Death5_5
+  - first:
+      213: 6723841873844701371
+    second: Death5_6
+  - first:
+      213: 9188325631910625082
+    second: Death5_7
+  - first:
+      213: 6238481836797892315
+    second: Death5_8
+  - first:
+      213: 8379695159102202698
+    second: Death5_9
+  - first:
+      213: 8863857378998379617
+    second: Death5_10
+  - first:
+      213: -3467377729496359028
+    second: Death5_11
+  - first:
+      213: 8395442409485086277
+    second: Death5_12
+  - first:
+      213: 8364301380119116633
+    second: Death5_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Death5_9
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 15
+        width: 55
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a43e8548958aa4470800000000000000
+      internalID: 8379695159102202698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: cfeb8e17f1343714eb1e12c37edd4354
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Death5_0: 5261752026457258283
+      Death5_1: 6559200305669530986
+      Death5_10: 8863857378998379617
+      Death5_11: -3467377729496359028
+      Death5_12: 8395442409485086277
+      Death5_13: 8364301380119116633
+      Death5_2: -4086984495621107317
+      Death5_3: 4268315478366155975
+      Death5_4: 3097125908939679793
+      Death5_5: 5968241947350143645
+      Death5_6: 6723841873844701371
+      Death5_7: 9188325631910625082
+      Death5_8: 6238481836797892315
+      Death5_9: 8379695159102202698
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
