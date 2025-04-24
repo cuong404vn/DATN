@@ -396,7 +396,7 @@ public class PlayerHealth : MonoBehaviour
         {
             TakeDamage(1); 
         }
-        else if (collision.gameObject.CompareTag("Trap") || collision.gameObject.CompareTag("Dripstone"))
+        else if (collision.gameObject.CompareTag("Trap"))
         {
             TakeDamage(1); 
         }
@@ -404,7 +404,7 @@ public class PlayerHealth : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Trap") || other.CompareTag("Dripstone"))
+        if (other.CompareTag("Trap"))
         {
             TakeDamage(1); 
         }
