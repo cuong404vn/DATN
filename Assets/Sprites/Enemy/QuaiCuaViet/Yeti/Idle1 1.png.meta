@@ -161,7 +161,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      begie_border2_0: -363885419136353960
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
