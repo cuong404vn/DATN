@@ -40,7 +40,7 @@ public class AuthManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
-            ShowError("Vui lòng nhập tài khoản và mật khẩu!");
+            ShowError("Please enter your account and password!");
             return;
         }
 
@@ -54,7 +54,7 @@ public class AuthManager : MonoBehaviour
         {
             try
             {
-                Debug.Log("Đăng nhập thành công với token: " + token);
+               
 
 
                 await Task.Delay(500);
@@ -63,7 +63,7 @@ public class AuthManager : MonoBehaviour
             }
             catch
             {
-                ShowError("Lỗi khi xử lý dữ liệu từ máy chủ");
+                ShowError("Error processing data from server");
             }
         }
     }
@@ -85,11 +85,11 @@ public class AuthManager : MonoBehaviour
             }
 
             string jsonResponse = request.downloadHandler.text;
-            Debug.Log("Server response: " + jsonResponse);
+           
 
             if (request.result != UnityWebRequest.Result.Success)
             {
-                ShowError("Lỗi kết nối: " + request.error);
+                ShowError("Connection error: " + request.error);
                 return null;
             }
 
@@ -119,14 +119,14 @@ public class AuthManager : MonoBehaviour
                 }
                 else
                 {
-                    ShowError("Tài khoản hoặc mật khẩu không chính xác");
+                    ShowError("Incorrect account or password");
                     return null;
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError("Parse response error: " + e.Message);
-                ShowError("Lỗi xử lý dữ liệu từ máy chủ");
+             
+                ShowError("Error processing data from server");
                 return null;
             }
         }
