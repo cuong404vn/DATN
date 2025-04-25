@@ -45,10 +45,10 @@ public class HomeManager : MonoBehaviour
     void InitializeMapData()
     {
 
-        mapDataDict.Add("ToaThanh", new MapData { mapID = "ToaThanh", displayName = "Map 01", status = "locked", stars = 0, highScore = 0 });
-        mapDataDict.Add("KhuRung", new MapData { mapID = "KhuRung", displayName = "Map 02", status = "locked", stars = 0, highScore = 0 });
-        mapDataDict.Add("LongDat", new MapData { mapID = "LongDat", displayName = "Map 03", status = "locked", stars = 0, highScore = 0 });
-        mapDataDict.Add("CamThanh", new MapData { mapID = "CamThanh", displayName = "Map 04", status = "locked", stars = 0, highScore = 0 });
+        mapDataDict.Add("ToaThanh", new MapData { mapID = "ToaThanh", displayName = "The Citadel", status = "locked", stars = 0, highScore = 0 });
+        mapDataDict.Add("KhuRung", new MapData { mapID = "KhuRung", displayName = "The forest", status = "locked", stars = 0, highScore = 0 });
+        mapDataDict.Add("LongDat", new MapData { mapID = "LongDat", displayName = "The Underground ", status = "locked", stars = 0, highScore = 0 });
+        mapDataDict.Add("CamThanh", new MapData { mapID = "CamThanh", displayName = "The Sealed Citadel", status = "locked", stars = 0, highScore = 0 });
     }
 
     IEnumerator LoadGameProgress()
@@ -334,13 +334,13 @@ public class HomeManager : MonoBehaviour
                 if (texts.Length > 1)
                 {
                     string oldText = texts[1].text;
-                    texts[1].text = "STAR " + mapData.stars;
+                    texts[1].text = "" + mapData.stars;
                 }
 
                 if (texts.Length > 2)
                 {
                     string oldText = texts[2].text;
-                    texts[2].text = "SCORE " + mapData.highScore;
+                    texts[2].text = "SCORE: " + mapData.highScore;
                 }
 
                 if (images.Length > 1 && lockIcon != null && unlockIcon != null)
