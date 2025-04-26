@@ -30,7 +30,8 @@ public class PlayerHealth : MonoBehaviour
     [Header("Death Effect")]
     public AudioClip deathSound;
     public GameObject deathEffectPrefab;
-    public float delayBeforeGameOver = 1.5f;
+    public float delayBeforeGameOver = 3f;
+    public float deathAnimationSpeed = 0.1f;
 
     private Animator animator;
     private bool isDead = false;
@@ -209,6 +210,13 @@ public class PlayerHealth : MonoBehaviour
             animator.SetTrigger("Death");
 
 
+            animator.speed = deathAnimationSpeed;
+
+
+            animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+
+
+
         }
 
 
@@ -221,12 +229,35 @@ public class PlayerHealth : MonoBehaviour
         }
 
 
-        StartCoroutine(ShowGameOverAfterDelay());
+
+
+
     }
 
     private IEnumerator ShowGameOverAfterDelay()
     {
-        yield return new WaitForSeconds(delayBeforeGameOver);
+
+        yield return new WaitForSeconds(3f);
+
+
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        if (sprite != null)
+        {
+            Color originalColor = sprite.color;
+            float fadeTime = 1.0f;
+
+            for (float t = 0; t < fadeTime; t += Time.deltaTime)
+            {
+                float normalizedTime = t / fadeTime;
+                sprite.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1 - normalizedTime);
+                yield return null;
+            }
+
+            sprite.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
+        }
+
+
+        yield return new WaitForSeconds(1f);
 
 
         Time.timeScale = 0f;
@@ -234,7 +265,6 @@ public class PlayerHealth : MonoBehaviour
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
-
 
             if (retryButton != null && retryButton.onClick.GetPersistentEventCount() == 0)
                 retryButton.onClick.AddListener(RestartLevel);
@@ -404,6 +434,10 @@ public class PlayerHealth : MonoBehaviour
         }
         else if (other.CompareTag("DungNham"))
         {
+
+            if (isDead) return;
+
+
             currentHealth = 0;
             Die();
         }
@@ -508,5 +542,50 @@ public class PlayerHealth : MonoBehaviour
         PlayerPrefs.Save();
 
 
+    }
+
+
+    public void OnDeathAnimationComplete()
+    {
+
+        StartCoroutine(FadeOutAndShowGameOver());
+    }
+
+
+    private IEnumerator FadeOutAndShowGameOver()
+    {
+
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        if (sprite != null)
+        {
+            Color originalColor = sprite.color;
+            float fadeTime = 1.0f;
+
+            for (float t = 0; t < fadeTime; t += Time.deltaTime)
+            {
+                float normalizedTime = t / fadeTime;
+                sprite.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1 - normalizedTime);
+                yield return null;
+            }
+
+            sprite.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
+        }
+
+
+        yield return new WaitForSeconds(1f);
+
+
+        Time.timeScale = 0f;
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+
+            if (retryButton != null && retryButton.onClick.GetPersistentEventCount() == 0)
+                retryButton.onClick.AddListener(RestartLevel);
+
+            if (mainMenuButton != null && mainMenuButton.onClick.GetPersistentEventCount() == 0)
+                mainMenuButton.onClick.AddListener(() => GameManager.Instance.GoToMainMenu());
+        }
     }
 }

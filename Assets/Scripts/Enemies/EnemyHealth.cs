@@ -338,4 +338,15 @@ public class EnemyHealth : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         sprite.color = originalColor;
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (other.CompareTag("DungNham"))
+        {
+
+            currentHealth = 0;
+            Die();
+        }
+    }
 }

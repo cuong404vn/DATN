@@ -41,7 +41,7 @@ public class LevelManager : MonoBehaviour
     private bool isGameCompleted = false;
     private string currentMapID;
     private bool isFromPortal = false;
-    private string originalMapID; 
+    private string originalMapID;
 
     private string updateProgressURL = "https://shopnickgame.online/api/progress/save";
 
@@ -50,7 +50,7 @@ public class LevelManager : MonoBehaviour
     {
 
         int isTransitioning = PlayerPrefs.GetInt("IsTransitioningScene", 0);
-      
+
 
         if (isTransitioning == 1)
         {
@@ -59,7 +59,7 @@ public class LevelManager : MonoBehaviour
 
 
             originalMapID = PlayerPrefs.GetString("OriginalMapID", "");
-           
+
         }
     }
 
@@ -75,7 +75,7 @@ public class LevelManager : MonoBehaviour
 
         if (isRestarting)
         {
-         
+
             gameTime = 0f;
             enemiesDefeated = 0;
             totalScore = 0;
@@ -84,7 +84,7 @@ public class LevelManager : MonoBehaviour
             PlayerPrefs.SetString("OriginalMapID", originalMapID);
             PlayerPrefs.Save();
 
-          
+
         }
         else if (IsComingFromPortal || isTransitioning == 1)
         {
@@ -100,7 +100,7 @@ public class LevelManager : MonoBehaviour
             if (string.IsNullOrEmpty(originalMapID))
             {
                 originalMapID = PlayerPrefs.GetString("OriginalMapID", "");
-              
+
             }
 
 
@@ -108,7 +108,7 @@ public class LevelManager : MonoBehaviour
             PlayerPrefs.SetInt("IsTransitioningScene", 0);
             PlayerPrefs.Save();
             IsComingFromPortal = false;
-            
+
         }
         else
         {
@@ -119,14 +119,14 @@ public class LevelManager : MonoBehaviour
             originalMapID = SceneManager.GetActiveScene().name;
             PlayerPrefs.SetString("OriginalMapID", originalMapID);
             PlayerPrefs.Save();
-            
+
         }
 
         if (exitGate != null) exitGate.SetActive(false);
         if (summaryScreen != null) summaryScreen.SetActive(false);
 
         currentMapID = SceneManager.GetActiveScene().name;
-       
+
 
         UpdateUI();
     }
@@ -147,7 +147,7 @@ public class LevelManager : MonoBehaviour
 
     public void SaveLevelState()
     {
-      
+
 
         PlayerPrefs.SetFloat("GameTime", gameTime);
         PlayerPrefs.SetInt("TotalScore", totalScore);
@@ -159,7 +159,7 @@ public class LevelManager : MonoBehaviour
         if (string.IsNullOrEmpty(originalMapID))
         {
             originalMapID = SceneManager.GetActiveScene().name;
-           
+
         }
 
 
@@ -170,7 +170,7 @@ public class LevelManager : MonoBehaviour
 
         IsComingFromPortal = true;
 
-     
+
     }
 
     public void EnemyDefeated()
@@ -222,15 +222,15 @@ public class LevelManager : MonoBehaviour
             if (string.IsNullOrEmpty(originalMapID))
             {
                 originalMapID = SceneManager.GetActiveScene().name;
-               
+
             }
             else
             {
-                
+
             }
         }
 
-       
+
         StartCoroutine(UpdateProgressToServer());
     }
 
@@ -238,6 +238,9 @@ public class LevelManager : MonoBehaviour
     {
         if (summaryScreen != null)
         {
+
+            Time.timeScale = 0f;
+
             summaryScreen.SetActive(true);
 
             int minutes = Mathf.FloorToInt(gameTime / 60);
@@ -271,7 +274,7 @@ public class LevelManager : MonoBehaviour
     private void UpdateUI()
     {
         if (scoreText != null)
-            scoreText.text = "" + totalScore;
+            scoreText.text = "Score: " + totalScore;
     }
 
     private IEnumerator UpdateProgressToServer()
@@ -281,7 +284,7 @@ public class LevelManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
         {
-           
+
             yield break;
         }
 
@@ -289,12 +292,12 @@ public class LevelManager : MonoBehaviour
         if (string.IsNullOrEmpty(originalMapID))
         {
             originalMapID = PlayerPrefs.GetString("OriginalMapID", SceneManager.GetActiveScene().name);
-          
+
         }
 
 
         string mapToUpdate = originalMapID;
-       
+
 
         string jsonData = "{\"userID\":\"" + userId + "\",\"mapID\":\"" + mapToUpdate +
                           "\",\"status\":\"completed\",\"stars\":" + earnedStars +
@@ -310,25 +313,29 @@ public class LevelManager : MonoBehaviour
         yield return request.SendWebRequest();
 
         string responseText = request.downloadHandler.text;
-       
+
 
         if (responseText.Contains("\"status\":\"success\""))
         {
-            
+
         }
         else
         {
-         
+
         }
     }
 
     public void ReturnToHome()
     {
+
+        Time.timeScale = 1f;
         SceneManager.LoadScene("Home");
     }
 
     public void RestartLevel()
     {
+
+        Time.timeScale = 1f;
 
         string originalMapID = PlayerPrefs.GetString("OriginalMapID", "");
 
@@ -336,7 +343,7 @@ public class LevelManager : MonoBehaviour
         if (string.IsNullOrEmpty(originalMapID))
         {
             originalMapID = SceneManager.GetActiveScene().name;
-            
+
         }
 
 
@@ -356,7 +363,7 @@ public class LevelManager : MonoBehaviour
         PlayerPrefs.SetInt("IsRestarting", 1);
         PlayerPrefs.Save();
 
-       
+
         SceneManager.LoadScene(originalMapID);
     }
 }
