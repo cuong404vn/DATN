@@ -14,6 +14,7 @@ public class HomeManager : MonoBehaviour
     public Transform mapsGrid;
     public GameObject mapPanelPrefab;
     public Button logoutButton;
+    public Button watchVideoButton;
     public GameObject loadingIndicator;
 
     [Header("Map Images")]
@@ -40,6 +41,12 @@ public class HomeManager : MonoBehaviour
         InitializeMapData();
         StartCoroutine(LoadGameProgress());
         logoutButton.onClick.AddListener(Logout);
+
+        // Add click listener for the watch video button
+        if (watchVideoButton != null)
+        {
+            watchVideoButton.onClick.AddListener(WatchStoryVideo);
+        }
     }
 
     void InitializeMapData()
@@ -226,7 +233,7 @@ public class HomeManager : MonoBehaviour
     void UpdateMapData(GameProgress progress)
     {
         currentMapText.text = "Map: " + progress.currentMap;
-        totalStarsText.text = "Total stars" + progress.totalStars ;
+        totalStarsText.text = "Total stars" + progress.totalStars;
 
         List<string> mapOrder = new List<string> { "ToaThanh", "KhuRung", "LongDat", "CamThanh" };
 
@@ -389,6 +396,13 @@ public class HomeManager : MonoBehaviour
         yield return null;
 
         SceneManager.LoadScene("Login");
+    }
+
+
+    public void WatchStoryVideo()
+    {
+
+        SceneManager.LoadScene("StoryVideo");
     }
 }
 

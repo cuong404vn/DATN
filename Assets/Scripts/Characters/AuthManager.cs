@@ -54,7 +54,7 @@ public class AuthManager : MonoBehaviour
         {
             try
             {
-               
+
 
 
                 await Task.Delay(500);
@@ -85,7 +85,7 @@ public class AuthManager : MonoBehaviour
             }
 
             string jsonResponse = request.downloadHandler.text;
-           
+
 
             if (request.result != UnityWebRequest.Result.Success)
             {
@@ -101,17 +101,15 @@ public class AuthManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("auth_token", response.token);
 
-                    if (response.userData != null && !string.IsNullOrEmpty(response.userData.userID))
+
+                    string userId = response.userData != null && !string.IsNullOrEmpty(response.userData.userID) ? response.userData.userID : username;
+                    PlayerPrefs.SetString("user_id", userId);
+
+                  
+                    string watchedKey = userId + "_WatchedStory";
+                    if (!PlayerPrefs.HasKey(watchedKey))
                     {
-                        PlayerPrefs.SetString("user_id", response.userData.userID);
-                    }
-                    else if (!string.IsNullOrEmpty(response.user_id))
-                    {
-                        PlayerPrefs.SetString("user_id", response.user_id);
-                    }
-                    else
-                    {
-                        PlayerPrefs.SetString("user_id", username);
+                        PlayerPrefs.SetInt(watchedKey, 0);
                     }
 
                     PlayerPrefs.Save();
@@ -125,7 +123,7 @@ public class AuthManager : MonoBehaviour
             }
             catch (Exception e)
             {
-             
+
                 ShowError("Error processing data from server");
                 return null;
             }
@@ -142,7 +140,18 @@ public class AuthManager : MonoBehaviour
     private void LoadMapBossScene()
     {
 
-        SceneManager.LoadScene("Home");
+        string userId = PlayerPrefs.GetString("user_id");
+
+
+        string watchedKey = userId + "_WatchedStory";
+        if (PlayerPrefs.GetInt(watchedKey, 0) == 1)
+        {
+            SceneManager.LoadScene("Home");
+        }
+        else
+        {
+            SceneManager.LoadScene("StoryVideo");
+        }
     }
 
     private void GoToRegisterScene()
