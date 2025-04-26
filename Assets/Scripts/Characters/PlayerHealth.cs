@@ -136,31 +136,23 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
 
-
+        if (isInvincible || isDead) return;
 
         string damageSource = "Unknown";
-
 
         System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace(true);
         if (stackTrace.FrameCount > 1)
         {
-
             System.Diagnostics.StackFrame callerFrame = stackTrace.GetFrame(1);
             damageSource = callerFrame.GetMethod().Name;
-
 
             string callerClassName = callerFrame.GetMethod().DeclaringType.Name;
             damageSource = $"{callerClassName}.{damageSource}";
         }
 
-
-
-        if (isDead) return;
-
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
-
             Die();
         }
         else
@@ -225,7 +217,7 @@ public class PlayerHealth : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.gravityScale = 0; // Tùy chọn: có thể tắt trọng lực để nhân vật không rơi xuống
+            rb.gravityScale = 0;
         }
 
 
@@ -236,6 +228,8 @@ public class PlayerHealth : MonoBehaviour
     {
         yield return new WaitForSeconds(delayBeforeGameOver);
 
+
+        Time.timeScale = 0f;
 
         if (gameOverPanel != null)
         {
@@ -394,11 +388,11 @@ public class PlayerHealth : MonoBehaviour
             collision.gameObject.layer == LayerMask.NameToLayer("Enemy") ||
             collision.gameObject.name.Contains("Enemy"))
         {
-            TakeDamage(1); 
+            TakeDamage(1);
         }
         else if (collision.gameObject.CompareTag("Trap"))
         {
-            TakeDamage(1); 
+            TakeDamage(1);
         }
     }
 
@@ -406,7 +400,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (other.CompareTag("Trap"))
         {
-            TakeDamage(1); 
+            TakeDamage(1);
         }
         else if (other.CompareTag("DungNham"))
         {
