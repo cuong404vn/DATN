@@ -827,7 +827,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3582633302143852562, guid: 70c883d68baf2ed44981cff9be2cf19c, type: 3}
+  m_Sprite: {fileID: 6162186070414731466, guid: 274fbf089419342418c8247a89c4983d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1384,7 +1384,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -2396,7 +2396,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7525760108376251246, guid: 51915f941b81491458e22f870692e292, type: 3}
       propertyPath: m_margin.x
-      value: 0.58392334
+      value: 6.744995
       objectReference: {fileID: 0}
     - target: {fileID: 7525760108376251246, guid: 51915f941b81491458e22f870692e292, type: 3}
       propertyPath: m_margin.z
