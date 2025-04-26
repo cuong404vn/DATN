@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.DeleteKey("IsRestarting");
             PlayerPrefs.Save();
 
-            return; // Không xử lý tiếp, để PlayerHealth quản lý logic restart
+            return; 
         }
 
 

@@ -271,7 +271,7 @@ public class LevelManager : MonoBehaviour
     private void UpdateUI()
     {
         if (scoreText != null)
-            scoreText.text = "Score: " + totalScore;
+            scoreText.text = "" + totalScore;
     }
 
     private IEnumerator UpdateProgressToServer()
