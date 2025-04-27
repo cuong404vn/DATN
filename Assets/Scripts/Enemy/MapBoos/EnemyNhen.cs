@@ -21,14 +21,15 @@ public class EnemyNhen : MonoBehaviour
     [SerializeField] private float edgeCheckDistance = 1f;
 
     [Header("Detection & Attack")]
-    [SerializeField] private float detectionRange = 8f;
+    [SerializeField] private float detectionRangeX = 8f;
     [SerializeField] private float attackRange = 6f;
     [SerializeField] private float attackCooldown = 2.5f;
+    [SerializeField] private float allowedYDifference = 1.5f;
     [SerializeField] private Transform webShootPoint;
     [SerializeField] private GameObject webPrefab;
     [SerializeField] private float webSpeed = 7f;
     [SerializeField] private int webDamage = 5;
-    [SerializeField] private float webArcHeight = 2f; // Độ cao của quỹ đạo tơ
+    [SerializeField] private float webArcHeight = 2f;
 
     [Header("Audio")]
     [SerializeField] private AudioClip webShootSound;
@@ -86,11 +87,12 @@ public class EnemyNhen : MonoBehaviour
     {
         if (isDead || isHurt) return;
 
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+        float xDistance = Mathf.Abs(player.position.x - transform.position.x);
+        float yDifference = Mathf.Abs(player.position.y - transform.position.y);
 
         UpdateFacingDirection();
 
-        UpdateState(distanceToPlayer);
+        UpdateState(xDistance, yDifference);
 
         switch (currentState)
         {
@@ -108,7 +110,7 @@ public class EnemyNhen : MonoBehaviour
         UpdateAnimator();
     }
 
-    void UpdateState(float distanceToPlayer)
+    void UpdateState(float xDistance, float yDifference)
     {
         if (isDead || isHurt) return;
 
@@ -119,19 +121,31 @@ public class EnemyNhen : MonoBehaviour
 
         NhenState previousState = currentState;
 
-        if (distanceToPlayer <= attackRange)
+        // Chỉ phát hiện và tấn công khi người chơi ở gần cùng độ cao
+        if (yDifference <= allowedYDifference)
         {
-            if (Time.time >= lastAttackTime + attackCooldown)
+            if (xDistance <= attackRange)
             {
-                currentState = NhenState.Attack;
+                if (Time.time >= lastAttackTime + attackCooldown)
+                {
+                    currentState = NhenState.Attack;
+                }
             }
-        }
-        else if (distanceToPlayer <= detectionRange)
-        {
-            currentState = NhenState.Walk;
+            else if (xDistance <= detectionRangeX)
+            {
+                currentState = NhenState.Walk;
+            }
+            else
+            {
+                if (currentState != NhenState.Walk && currentState != NhenState.Idle)
+                {
+                    currentState = NhenState.Walk;
+                }
+            }
         }
         else
         {
+            // Người chơi không ở cùng độ cao, quay lại tuần tra
             if (currentState != NhenState.Walk && currentState != NhenState.Idle)
             {
                 currentState = NhenState.Walk;
@@ -146,7 +160,10 @@ public class EnemyNhen : MonoBehaviour
 
     void Walk()
     {
-        if (Vector2.Distance(transform.position, player.position) <= detectionRange)
+        float xDistance = Mathf.Abs(player.position.x - transform.position.x);
+        float yDifference = Mathf.Abs(player.position.y - transform.position.y);
+
+        if (xDistance <= detectionRangeX && yDifference <= allowedYDifference)
         {
             MoveTowardsPlayer();
         }
@@ -200,7 +217,6 @@ public class EnemyNhen : MonoBehaviour
 
         Vector2 checkPosition = (Vector2)transform.position + new Vector2(direction * edgeCheckDistance, 0);
 
-
         RaycastHit2D groundInfo = Physics2D.BoxCast(
             checkPosition,
             new Vector2(0.3f, 0.1f),
@@ -229,7 +245,6 @@ public class EnemyNhen : MonoBehaviour
         }
 
         Vector2 wallCheckPosition = (Vector2)transform.position + new Vector2(0, 0.5f);
-
 
         RaycastHit2D wallInfo = Physics2D.BoxCast(
             wallCheckPosition,
@@ -273,9 +288,7 @@ public class EnemyNhen : MonoBehaviour
     {
         isAttacking = true;
 
-
         animator.SetTrigger(hashAttack);
-
 
         float attackAnimDuration = 1.0f;
 
@@ -304,7 +317,6 @@ public class EnemyNhen : MonoBehaviour
         {
 
             GameObject web = Instantiate(webPrefab, webShootPoint.position, Quaternion.identity);
-
 
             FireballProjectile fireballScript = web.GetComponent<FireballProjectile>();
             if (fireballScript != null)
@@ -414,11 +426,19 @@ public class EnemyNhen : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
+        // Hiển thị vùng phát hiện dướidạng hình chữ nhật
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        Gizmos.DrawWireCube(
+            transform.position,
+            new Vector3(detectionRangeX * 2, allowedYDifference * 2, 0.1f)
+        );
 
+        // Hiển thị vùng tấn công dướidạng hình chữ nhật
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.DrawWireCube(
+            transform.position,
+            new Vector3(attackRange * 2, allowedYDifference * 2, 0.1f)
+        );
 
         if (Application.isPlaying)
         {

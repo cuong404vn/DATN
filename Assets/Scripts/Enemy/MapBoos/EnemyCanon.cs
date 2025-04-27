@@ -9,7 +9,8 @@ public class EnemyCanon : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
 
     [Header("Detection")]
-    [SerializeField] private float detectionRange = 10f;
+    [SerializeField] private float detectionRangeX = 10f;
+    [SerializeField] private float allowedYDifference = 1.5f;
     [SerializeField] private LayerMask playerLayer;
 
     [Header("Attack")]
@@ -66,14 +67,14 @@ public class EnemyCanon : MonoBehaviour
     {
         if (player == null) return;
 
-
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-
+        float xDistance = Mathf.Abs(player.position.x - transform.position.x);
+        float yDifference = player.position.y - transform.position.y;
 
         UpdateFacingDirection();
 
 
-        if (distanceToPlayer <= detectionRange && canFire)
+
+        if (xDistance <= detectionRangeX && yDifference >= -2f && yDifference <= allowedYDifference && canFire)
         {
             StartCoroutine(FireProjectile());
         }
@@ -392,7 +393,12 @@ public class EnemyCanon : MonoBehaviour
     {
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        float totalHeight = allowedYDifference + 2f; 
+        Vector3 detectionCenter = transform.position + new Vector3(0, (allowedYDifference - 2f) / 2, 0);
+        Gizmos.DrawWireCube(
+            detectionCenter,
+            new Vector3(detectionRangeX * 2, totalHeight, 0.1f)
+        );
 
 
         Gizmos.color = Color.yellow;

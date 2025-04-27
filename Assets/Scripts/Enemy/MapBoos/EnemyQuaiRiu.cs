@@ -19,7 +19,8 @@ public class EnemyQuaiRiu : MonoBehaviour
     [Header("Movement & Detection")]
     [SerializeField] private float patrolSpeed = 1.5f;
     [SerializeField] private float chaseSpeed = 3f;
-    [SerializeField] private float detectionRange = 6f;
+    [SerializeField] private float detectionRangeX = 6f;
+    [SerializeField] private float allowedYDifference = 1.5f;
 
 
 
@@ -79,7 +80,7 @@ public class EnemyQuaiRiu : MonoBehaviour
         }
         else
         {
-          
+
             enabled = false;
             return;
         }
@@ -102,7 +103,10 @@ public class EnemyQuaiRiu : MonoBehaviour
             return;
         }
 
+
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+
+
         UpdateCurrentState(distanceToPlayer);
 
         switch (currentState)
@@ -139,13 +143,35 @@ public class EnemyQuaiRiu : MonoBehaviour
     {
         if (isHurt || isDead) return;
 
-        if (distanceToPlayer <= attackRange)
+
+        float yDifference = Mathf.Abs(player.position.y - transform.position.y);
+        float xDistance = Mathf.Abs(player.position.x - transform.position.x);
+
+
+        if (yDifference <= allowedYDifference)
         {
-            currentState = EnemyState.Attack;
-        }
-        else if (distanceToPlayer <= detectionRange)
-        {
-            currentState = EnemyState.Chase;
+            if (xDistance <= attackRange)
+            {
+                currentState = EnemyState.Attack;
+            }
+            else if (xDistance <= detectionRangeX)
+            {
+                currentState = EnemyState.Chase;
+            }
+            else
+            {
+
+                if (currentState == EnemyState.Chase || currentState == EnemyState.Attack)
+                {
+                    currentState = EnemyState.Patrol;
+                    SetPatrolTarget(transform.position.x < patrolCenter.x);
+                }
+                else if (currentState != EnemyState.Patrol && currentState != EnemyState.Idle)
+                {
+                    currentState = EnemyState.Patrol;
+                    SetPatrolTarget(transform.position.x < patrolCenter.x);
+                }
+            }
         }
         else
         {
@@ -153,14 +179,11 @@ public class EnemyQuaiRiu : MonoBehaviour
             if (currentState == EnemyState.Chase || currentState == EnemyState.Attack)
             {
                 currentState = EnemyState.Patrol;
-
                 SetPatrolTarget(transform.position.x < patrolCenter.x);
             }
-
             else if (currentState != EnemyState.Patrol && currentState != EnemyState.Idle)
             {
                 currentState = EnemyState.Patrol;
-
                 SetPatrolTarget(transform.position.x < patrolCenter.x);
             }
         }
@@ -273,7 +296,7 @@ public class EnemyQuaiRiu : MonoBehaviour
             PlayerHealth playerHealth = playerCollider.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-               
+
                 playerHealth.TakeDamage(attackDamage);
             }
         }
@@ -312,11 +335,14 @@ public class EnemyQuaiRiu : MonoBehaviour
     {
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        Vector3 detectionSize = new Vector3(detectionRangeX * 2, allowedYDifference * 2, 0.1f);
+        Gizmos.DrawWireCube(transform.position, detectionSize);
 
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Vector3 attackSize = new Vector3(attackRange * 2, allowedYDifference * 2, 0.1f);
+        Gizmos.DrawWireCube(transform.position, attackSize);
 
 
         if (attackPoint != null)

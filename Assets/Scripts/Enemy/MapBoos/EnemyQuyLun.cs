@@ -20,7 +20,8 @@ public class EnemyQuyLun : MonoBehaviour
     [Header("Movement & Detection")]
     [SerializeField] private float walkSpeed = 1.5f;
     [SerializeField] private float jumpForce = 5f;
-    [SerializeField] private float detectionRange = 7f;
+    [SerializeField] private float detectionRangeX = 7f;
+    [SerializeField] private float allowedYDifference = 1.5f;
     [SerializeField] private float patrolRange = 3f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckDistance = 0.1f;
@@ -215,7 +216,10 @@ public class EnemyQuyLun : MonoBehaviour
             return;
         }
 
-        if (distanceToPlayer <= detectionRange)
+        float yDifference = Mathf.Abs(player.position.y - transform.position.y);
+        float xDistance = Mathf.Abs(player.position.x - transform.position.x);
+
+        if (yDifference <= allowedYDifference && xDistance <= detectionRangeX)
         {
             if (currentActionCoroutine != null)
             {
@@ -320,9 +324,10 @@ public class EnemyQuyLun : MonoBehaviour
 
             UpdateFacingDirection(playerPosition);
 
+            float xDistance = Mathf.Abs(transform.position.x - player.position.x);
+            float yDifference = Mathf.Abs(transform.position.y - player.position.y);
 
-            float distanceToPlayer = Vector2.Distance(transform.position, playerPosition);
-            if (distanceToPlayer <= attackRange)
+            if (xDistance <= attackRange && yDifference <= allowedYDifference)
             {
                 reachedAttackRange = true;
             }
@@ -679,13 +684,13 @@ public class EnemyQuyLun : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-
+        Vector3 detectionSize = new Vector3(detectionRangeX * 2, allowedYDifference * 2, 0.1f);
+        Gizmos.DrawWireCube(transform.position, detectionSize);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Vector3 attackSize = new Vector3(attackRange * 2, allowedYDifference * 2, 0.1f);
+        Gizmos.DrawWireCube(transform.position, attackSize);
 
 
         if (attackPoint != null)

@@ -21,9 +21,10 @@ public class DragonEnemy : MonoBehaviour
     [SerializeField] private float edgeCheckDistance = 1f;
 
     [Header("Detection & Attack")]
-    [SerializeField] private float detectionRange = 8f;
+    [SerializeField] private float detectionRangeX = 8f;
     [SerializeField] private float attackRange = 6f;
     [SerializeField] private float attackCooldown = 2.5f;
+    [SerializeField] private float allowedYDifference = 1.5f;
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject fireballPrefab;
     [SerializeField] private float fireballSpeed = 7f;
@@ -32,7 +33,6 @@ public class DragonEnemy : MonoBehaviour
     [SerializeField] private AudioClip fireSound;
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip deathSound;
-
 
     private Transform player;
     private Vector3 startPosition;
@@ -43,11 +43,9 @@ public class DragonEnemy : MonoBehaviour
     private AudioSource audioSource;
     private bool isAttacking = false;
 
-
     private Vector3 leftPatrolPoint;
     private Vector3 rightPatrolPoint;
     private bool movingRight = true;
-
 
     private readonly int hashIsWalking = Animator.StringToHash("IsWalking");
     private readonly int hashAttack = Animator.StringToHash("Attack");
@@ -56,7 +54,6 @@ public class DragonEnemy : MonoBehaviour
 
     void Awake()
     {
-
         if (animator == null) animator = GetComponent<Animator>();
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (enemyCollider == null) enemyCollider = GetComponent<Collider2D>();
@@ -64,7 +61,6 @@ public class DragonEnemy : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
-
 
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
         if (playerObject != null)
@@ -80,7 +76,6 @@ public class DragonEnemy : MonoBehaviour
 
     void Start()
     {
-
         startPosition = transform.position;
         leftPatrolPoint = startPosition - Vector3.right * patrolRange;
         rightPatrolPoint = startPosition + Vector3.right * patrolRange;
@@ -90,14 +85,12 @@ public class DragonEnemy : MonoBehaviour
     {
         if (isDead || isHurt) return;
 
-
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+        float xDistance = Mathf.Abs(player.position.x - transform.position.x);
+        float yDifference = Mathf.Abs(player.position.y - transform.position.y);
 
         UpdateFacingDirection();
 
-
-        UpdateState(distanceToPlayer);
-
+        UpdateState(xDistance, yDifference);
 
         switch (currentState)
         {
@@ -112,15 +105,12 @@ public class DragonEnemy : MonoBehaviour
                 break;
         }
 
-
         UpdateAnimator();
     }
 
-    void UpdateState(float distanceToPlayer)
+    void UpdateState(float xDistance, float yDifference)
     {
-
         if (isDead || isHurt) return;
-
 
         if (isAttacking)
         {
@@ -130,20 +120,27 @@ public class DragonEnemy : MonoBehaviour
         DragonState previousState = currentState;
 
 
-        if (distanceToPlayer <= attackRange)
+        if (yDifference <= allowedYDifference)
         {
-
-            if (Time.time >= lastAttackTime + attackCooldown)
+            if (xDistance <= attackRange)
             {
-                currentState = DragonState.Attack;
+                if (Time.time >= lastAttackTime + attackCooldown)
+                {
+                    currentState = DragonState.Attack;
+                }
+            }
+            else if (xDistance <= detectionRangeX)
+            {
+                currentState = DragonState.Walk;
+            }
+            else
+            {
+                if (currentState != DragonState.Walk && currentState != DragonState.Idle)
+                {
+                    currentState = DragonState.Walk;
+                }
             }
         }
-
-        else if (distanceToPlayer <= detectionRange)
-        {
-            currentState = DragonState.Walk;
-        }
-
         else
         {
 
@@ -161,12 +158,13 @@ public class DragonEnemy : MonoBehaviour
 
     void Walk()
     {
+        float xDistance = Mathf.Abs(player.position.x - transform.position.x);
+        float yDifference = Mathf.Abs(player.position.y - transform.position.y);
 
-        if (Vector2.Distance(transform.position, player.position) <= detectionRange)
+        if (xDistance <= detectionRangeX && yDifference <= allowedYDifference)
         {
             MoveTowardsPlayer();
         }
-
         else
         {
             Patrol();
@@ -175,10 +173,8 @@ public class DragonEnemy : MonoBehaviour
 
     void MoveTowardsPlayer()
     {
-
         float distanceToPlayer = player.position.x - transform.position.x;
         float direction = Mathf.Sign(distanceToPlayer);
-
 
         if (CanMoveInDirection(direction))
         {
@@ -196,14 +192,11 @@ public class DragonEnemy : MonoBehaviour
         Vector3 targetPoint = movingRight ? rightPatrolPoint : leftPatrolPoint;
         float direction = movingRight ? 1 : -1;
 
-
         if (!CanMoveInDirection(direction))
         {
-
             movingRight = !movingRight;
             direction = -direction;
         }
-
 
         float distanceToTarget = Mathf.Abs(transform.position.x - targetPoint.x);
         if (distanceToTarget < 0.1f)
@@ -211,23 +204,16 @@ public class DragonEnemy : MonoBehaviour
             movingRight = !movingRight;
         }
 
-
         rb.linearVelocity = new Vector2(direction * walkSpeed, rb.linearVelocity.y);
-
 
         UpdateFacingDirection(direction);
     }
 
     bool CanMoveInDirection(float direction)
     {
-
         float groundCheckDepth = 2f;
 
-
         Vector2 checkPosition = (Vector2)transform.position + new Vector2(direction * edgeCheckDistance, 0);
-
-
-
 
         RaycastHit2D groundInfo = Physics2D.BoxCast(
             checkPosition,
@@ -237,20 +223,16 @@ public class DragonEnemy : MonoBehaviour
             groundCheckDepth
         );
 
-
         bool hasGroundAhead = false;
-
 
         if (groundInfo.collider != null && groundInfo.collider.CompareTag("Ground"))
         {
             hasGroundAhead = true;
         }
-
         else if (groundInfo.collider != null)
         {
             hasGroundAhead = true;
         }
-
         else
         {
             RaycastHit2D backupGroundInfo = Physics2D.Raycast(checkPosition, Vector2.down, groundCheckDepth);
@@ -260,10 +242,7 @@ public class DragonEnemy : MonoBehaviour
             }
         }
 
-
         Vector2 wallCheckPosition = (Vector2)transform.position + new Vector2(0, 0.5f);
-
-
 
         RaycastHit2D wallInfo = Physics2D.BoxCast(
             wallCheckPosition,
@@ -276,77 +255,55 @@ public class DragonEnemy : MonoBehaviour
         bool hasWallAhead = false;
         if (wallInfo.collider != null)
         {
-
             if (!wallInfo.collider.CompareTag("Player") && !wallInfo.collider.isTrigger)
             {
                 hasWallAhead = true;
             }
         }
 
-
         bool isOnGround = Physics2D.Raycast(transform.position, Vector2.down, 0.3f).collider != null;
-
 
         return (hasGroundAhead && !hasWallAhead) || isOnGround;
     }
 
     void Attack()
     {
-
         if (isDead || isHurt) return;
 
-
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-
 
         float directionToPlayer = Mathf.Sign(player.position.x - transform.position.x);
         UpdateFacingDirection(directionToPlayer);
 
-
-
-
-
         if (!isAttacking && Time.time >= lastAttackTime + attackCooldown)
         {
-
             lastAttackTime = Time.time;
-
 
             StartCoroutine(AttackSequence());
         }
     }
 
-
     IEnumerator AttackSequence()
     {
-
         isAttacking = true;
-
 
         animator.SetTrigger(hashAttack);
 
-
         float attackAnimDuration = 1.5f;
-
-
 
         yield return new WaitForSeconds(attackAnimDuration);
 
-
         isAttacking = false;
     }
-
 
     public void AnimationEvent_ShootFire()
     {
         if (isDead) return;
 
-
         if (fireSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(fireSound);
         }
-
 
         SpawnFireball();
     }
@@ -355,26 +312,21 @@ public class DragonEnemy : MonoBehaviour
     {
         if (fireballPrefab != null && firePoint != null)
         {
-
             GameObject fireball = Instantiate(fireballPrefab, firePoint.position, Quaternion.identity);
-
 
             FireballProjectile fireballScript = fireball.GetComponent<FireballProjectile>();
             if (fireballScript != null)
             {
-
                 float direction = facingRight ? 1 : -1;
                 fireballScript.Initialize(direction, fireballSpeed, gameObject);
             }
             else
             {
-
                 Rigidbody2D fireballRb = fireball.GetComponent<Rigidbody2D>();
                 if (fireballRb != null)
                 {
                     float direction = facingRight ? 1 : -1;
                     fireballRb.linearVelocity = new Vector2(direction * fireballSpeed, 0);
-
 
                     if (!facingRight)
                     {
@@ -424,8 +376,6 @@ public class DragonEnemy : MonoBehaviour
     {
         if (isDead) return;
 
-
-
         StartCoroutine(HurtSequence());
     }
 
@@ -434,9 +384,7 @@ public class DragonEnemy : MonoBehaviour
         isHurt = true;
         rb.linearVelocity = Vector2.zero;
 
-
         animator.SetTrigger(hashHurt);
-
 
         if (hurtSound != null && audioSource != null)
         {
@@ -453,21 +401,16 @@ public class DragonEnemy : MonoBehaviour
 
         isDead = true;
 
-
         rb.linearVelocity = Vector2.zero;
 
-
         animator.SetTrigger(hashDie);
-
 
         if (deathSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(deathSound);
         }
 
-
         enemyCollider.enabled = false;
-
 
         Destroy(gameObject, 2f);
     }
@@ -476,12 +419,17 @@ public class DragonEnemy : MonoBehaviour
     {
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        Gizmos.DrawWireCube(
+            transform.position,
+            new Vector3(detectionRangeX * 2, allowedYDifference * 2, 0.1f)
+        );
 
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-
+        Gizmos.DrawWireCube(
+            transform.position,
+            new Vector3(attackRange * 2, allowedYDifference * 2, 0.1f)
+        );
 
         if (Application.isPlaying)
         {

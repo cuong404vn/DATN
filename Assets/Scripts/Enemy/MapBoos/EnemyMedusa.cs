@@ -21,7 +21,8 @@ public class EnemyMedusa : MonoBehaviour
     [SerializeField] private float patrolSpeed = 1.2f;
     [SerializeField] private float chaseSpeed = 2.5f;
     [SerializeField] private float retreatSpeed = 3f;
-    [SerializeField] private float detectionRange = 7f;
+    [SerializeField] private float detectionRangeX = 7f;
+    [SerializeField] private float allowedYDifference = 1.5f;
     [SerializeField] private float patrolRange = 3f;
     [SerializeField] private float minimumDistanceFromPlayer = 5f;
     [SerializeField] private float attackRange = 6f;
@@ -34,8 +35,6 @@ public class EnemyMedusa : MonoBehaviour
     [SerializeField] private float rockFallDelay = 0.5f;
     [SerializeField] private AudioClip attackChargeSound;
 
-
-
     private Transform player;
     private float lastAttackTime = -Mathf.Infinity;
     private bool isHurt = false;
@@ -46,7 +45,6 @@ public class EnemyMedusa : MonoBehaviour
     private Vector3 currentPatrolTarget;
     private bool patrollingRight = true;
 
-
     private readonly int hashIsWalking = Animator.StringToHash("IsWalking");
     private readonly int hashAttack = Animator.StringToHash("Attack");
     private readonly int hashHurt = Animator.StringToHash("Hurt");
@@ -54,17 +52,14 @@ public class EnemyMedusa : MonoBehaviour
 
     void Awake()
     {
-
         if (animator == null) animator = GetComponent<Animator>();
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (enemyCollider == null) enemyCollider = GetComponent<Collider2D>();
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
 
-
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
-
 
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
         if (playerObject != null)
@@ -73,11 +68,9 @@ public class EnemyMedusa : MonoBehaviour
         }
         else
         {
-            
             enabled = false;
             return;
         }
-
 
         patrolCenter = transform.position;
         currentHealth = maxHealth;
@@ -124,22 +117,32 @@ public class EnemyMedusa : MonoBehaviour
     {
         if (isHurt || isDead) return;
 
+        float yDifference = Mathf.Abs(player.position.y - transform.position.y);
+        float xDistance = Mathf.Abs(player.position.x - transform.position.x);
 
-        if (distanceToPlayer < minimumDistanceFromPlayer)
+        if (yDifference <= allowedYDifference)
         {
-            currentState = EnemyState.Retreat;
+            if (xDistance < minimumDistanceFromPlayer)
+            {
+                currentState = EnemyState.Retreat;
+            }
+            else if (xDistance <= attackRange)
+            {
+                currentState = EnemyState.Attack;
+            }
+            else if (xDistance <= detectionRangeX)
+            {
+                currentState = EnemyState.Chase;
+            }
+            else
+            {
+                if (currentState != EnemyState.Patrol && currentState != EnemyState.Idle)
+                {
+                    currentState = EnemyState.Patrol;
+                    SetPatrolTarget(transform.position.x < patrolCenter.x);
+                }
+            }
         }
-
-        else if (distanceToPlayer <= attackRange)
-        {
-            currentState = EnemyState.Attack;
-        }
-
-        else if (distanceToPlayer <= detectionRange)
-        {
-            currentState = EnemyState.Chase;
-        }
-
         else
         {
             if (currentState != EnemyState.Patrol && currentState != EnemyState.Idle)
@@ -181,14 +184,19 @@ public class EnemyMedusa : MonoBehaviour
     {
         if (isHurt || isDead) return;
 
+        float yDifference = Mathf.Abs(player.position.y - transform.position.y);
+        float xDistance = Mathf.Abs(player.position.x - transform.position.x);
 
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        if (distanceToPlayer < minimumDistanceFromPlayer)
+        if (yDifference > allowedYDifference)
+        {
+            currentState = EnemyState.Patrol;
+            return;
+        }
+        else if (xDistance < minimumDistanceFromPlayer)
         {
             currentState = EnemyState.Retreat;
             return;
         }
-
 
         Vector2 direction = (player.position - transform.position).normalized;
         rb.linearVelocity = new Vector2(direction.x * chaseSpeed, rb.linearVelocity.y);
@@ -199,16 +207,20 @@ public class EnemyMedusa : MonoBehaviour
     {
         if (isHurt || isDead) return;
 
+        float yDifference = Mathf.Abs(player.position.y - transform.position.y);
+        float xDistance = Mathf.Abs(player.position.x - transform.position.x);
+
+        if (yDifference > allowedYDifference)
+        {
+            currentState = EnemyState.Patrol;
+            return;
+        }
 
         Vector2 direction = (transform.position - player.position).normalized;
         rb.linearVelocity = new Vector2(direction.x * retreatSpeed, rb.linearVelocity.y);
-
-
         UpdateFacingDirection(player.position);
 
-
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        if (distanceToPlayer >= minimumDistanceFromPlayer)
+        if (xDistance >= minimumDistanceFromPlayer)
         {
             currentState = EnemyState.Attack;
         }
@@ -218,26 +230,37 @@ public class EnemyMedusa : MonoBehaviour
     {
         if (isHurt || isDead) return;
 
+        float yDifference = Mathf.Abs(player.position.y - transform.position.y);
+        float xDistance = Mathf.Abs(player.position.x - transform.position.x);
+
+        if (yDifference > allowedYDifference)
+        {
+            currentState = EnemyState.Patrol;
+            return;
+        }
+        else if (xDistance > attackRange)
+        {
+            currentState = EnemyState.Chase;
+            return;
+        }
+        else if (xDistance < minimumDistanceFromPlayer)
+        {
+            currentState = EnemyState.Retreat;
+            return;
+        }
 
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-
-
         UpdateFacingDirection(player.position);
-
 
         if (Time.time >= lastAttackTime + attackCooldown)
         {
             lastAttackTime = Time.time;
-
-
             animator.SetTrigger(hashAttack);
-
 
             if (attackChargeSound != null && audioSource != null)
             {
                 audioSource.PlayOneShot(attackChargeSound);
             }
-
 
             StartCoroutine(SpawnRockAbovePlayer());
         }
@@ -245,29 +268,22 @@ public class EnemyMedusa : MonoBehaviour
 
     IEnumerator SpawnRockAbovePlayer()
     {
-
         yield return new WaitForSeconds(0.5f);
 
         if (rockPrefab != null && player != null)
         {
-
             Vector3 rockPosition = player.position + Vector3.up * rockSpawnHeight;
-
 
             GameObject warningEffect = CreateWarningEffect(player.position);
 
-
             yield return new WaitForSeconds(rockFallDelay);
-
 
             if (warningEffect != null)
             {
                 Destroy(warningEffect);
             }
 
-
             GameObject rock = Instantiate(rockPrefab, rockPosition, Quaternion.identity);
-
 
             VienDaRoi rockComponent = rock.GetComponent<VienDaRoi>();
             if (rockComponent != null)
@@ -276,54 +292,41 @@ public class EnemyMedusa : MonoBehaviour
             }
             else
             {
-
                 Rigidbody2D rockRb = rock.GetComponent<Rigidbody2D>();
                 if (rockRb == null)
                 {
                     rockRb = rock.AddComponent<Rigidbody2D>();
                 }
 
-
                 rockRb.gravityScale = 2f;
                 rockRb.mass = 2f;
 
-
                 RockDamage rockDamage = rock.AddComponent<RockDamage>();
                 rockDamage.damage = attackDamage;
-
 
                 Destroy(rock, 5f);
             }
         }
     }
 
-
     GameObject CreateWarningEffect(Vector3 position)
     {
-
         GameObject warningObj = new GameObject("RockWarning");
         warningObj.transform.position = new Vector3(position.x, position.y + 0.1f, position.z);
-
 
         SpriteRenderer warningSprite = warningObj.AddComponent<SpriteRenderer>();
         warningSprite.color = new Color(1f, 0f, 0f, 0.5f);
 
-
         warningSprite.sprite = CreateCircleSprite();
-
 
         warningObj.transform.localScale = new Vector3(1.5f, 0.2f, 1f);
 
         return warningObj;
     }
 
-
     Sprite CreateCircleSprite()
     {
-
-
         Texture2D texture = new Texture2D(128, 128);
-
 
         for (int y = 0; y < texture.height; y++)
         {
@@ -345,9 +348,6 @@ public class EnemyMedusa : MonoBehaviour
 
         return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
     }
-
-
-
 
     void UpdateAnimator()
     {
@@ -379,18 +379,17 @@ public class EnemyMedusa : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-
+        Vector3 detectionSize = new Vector3(detectionRangeX * 2, allowedYDifference * 2, 0.1f);
+        Gizmos.DrawWireCube(transform.position, detectionSize);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-
+        Vector3 attackSize = new Vector3(attackRange * 2, allowedYDifference * 2, 0.1f);
+        Gizmos.DrawWireCube(transform.position, attackSize);
 
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, minimumDistanceFromPlayer);
-
+        Vector3 minDistanceSize = new Vector3(minimumDistanceFromPlayer * 2, allowedYDifference * 2, 0.1f);
+        Gizmos.DrawWireCube(transform.position, minDistanceSize);
 
         if (Application.isPlaying)
         {
