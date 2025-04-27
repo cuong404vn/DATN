@@ -34,6 +34,9 @@ public class LevelManager : MonoBehaviour
     public TextMeshProUGUI coinsCollectedText;
     public GameObject[] starIcons;
 
+    [Header("Audio")]
+    public AudioClip victorySound;
+
     private float gameTime;
     private int enemiesDefeated;
     private int totalScore;
@@ -243,6 +246,9 @@ public class LevelManager : MonoBehaviour
 
             summaryScreen.SetActive(true);
 
+
+            PlayVictorySound();
+
             int minutes = Mathf.FloorToInt(gameTime / 60);
             int seconds = Mathf.FloorToInt(gameTime % 60);
 
@@ -274,7 +280,7 @@ public class LevelManager : MonoBehaviour
     private void UpdateUI()
     {
         if (scoreText != null)
-            scoreText.text = "Score: " + totalScore;
+            scoreText.text = "" + totalScore;
     }
 
     private IEnumerator UpdateProgressToServer()
@@ -330,6 +336,33 @@ public class LevelManager : MonoBehaviour
 
         Time.timeScale = 1f;
         SceneManager.LoadScene("Home");
+    }
+
+
+    private void PlayVictorySound()
+    {
+        if (victorySound != null)
+        {
+
+            if (GameAudioController.Instance != null)
+            {
+                GameAudioController.Instance.PlayNewMusic(victorySound);
+            }
+            else
+            {
+
+                AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+                audioSource.clip = victorySound;
+                audioSource.volume = 0.7f;
+                audioSource.Play();
+
+
+                if (AudioManager.Instance != null && AudioManager.Instance.IsMuted())
+                {
+                    audioSource.mute = true;
+                }
+            }
+        }
     }
 
     public void RestartLevel()

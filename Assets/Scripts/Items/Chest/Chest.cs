@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using TMPro;
+using System.Collections;
 
 public class Chest : MonoBehaviour
 {
@@ -6,12 +8,18 @@ public class Chest : MonoBehaviour
     public GameObject interactionPrompt;
     public AudioClip openSound;
     public AudioClip lockedSound;
-    public Animator animator; // Optional: if you want chest opening animation
+    public Animator animator;
+
+    [Header("Tích hợp UI")]
+    public GameObject messagePanel;
+    public TextMeshProUGUI messageText;
+    public float messageDuration = 2f;
 
     private bool playerInRange = false;
     private bool isOpen = false;
     private ItemDrop itemDrop;
     private AudioSource audioSource;
+    private Coroutine activeMessageCoroutine;
 
     void Start()
     {
@@ -40,21 +48,18 @@ public class Chest : MonoBehaviour
     {
         if (GameManager.Instance.keys >= keysRequired)
         {
-            // Successful opening
+
             GameManager.Instance.AddKeys(-keysRequired);
             OpenChest();
         }
         else
         {
-            // Not enough keys
-            string message = "Can " + keysRequired + " chia khoa de mo ruong nay";
-            Debug.Log(message);
 
-            // Show message to player if MessageManager exists
-            if (MessageManager.Instance != null)
-            {
-                MessageManager.Instance.ShowMessage(message);
-            }
+            string message = "Need " + keysRequired + " key to open chest!";
+
+
+
+            ShowMessage(message);
 
             if (audioSource != null && lockedSound != null)
             {
@@ -67,34 +72,34 @@ public class Chest : MonoBehaviour
     {
         isOpen = true;
 
-        
+
         if (audioSource != null && openSound != null)
         {
             audioSource.PlayOneShot(openSound);
         }
 
-       
+
         if (animator != null)
         {
             animator.SetTrigger("Open");
 
-            
+
             float animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
             Invoke(nameof(RemoveChest), animationLength);
         }
         else
         {
-            
+
             RemoveChest();
         }
 
-       
+
         if (itemDrop != null)
         {
             itemDrop.DropItem();
         }
 
-        
+
         if (interactionPrompt != null)
         {
             interactionPrompt.SetActive(false);
@@ -103,9 +108,9 @@ public class Chest : MonoBehaviour
 
     void RemoveChest()
     {
-        
+
         gameObject.SetActive(false);
-        
+
     }
 
 
@@ -131,5 +136,39 @@ public class Chest : MonoBehaviour
                 interactionPrompt.SetActive(false);
             }
         }
+    }
+
+
+    public void ShowMessage(string message)
+    {
+        if (messagePanel != null && messageText != null)
+        {
+
+            if (activeMessageCoroutine != null)
+            {
+                StopCoroutine(activeMessageCoroutine);
+            }
+
+
+            activeMessageCoroutine = StartCoroutine(DisplayMessage(message, messageDuration));
+        }
+    }
+
+    private IEnumerator DisplayMessage(string message, float duration)
+    {
+        if (messagePanel != null && messageText != null)
+        {
+
+            messageText.text = message;
+            messagePanel.SetActive(true);
+
+
+            yield return new WaitForSecondsRealtime(duration);
+
+
+            messagePanel.SetActive(false);
+        }
+
+        activeMessageCoroutine = null;
     }
 }
