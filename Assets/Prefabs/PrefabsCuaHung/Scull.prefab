@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3148584261336880466}
   - component: {fileID: 6226565177910166939}
   - component: {fileID: 1984735653897928937}
+  - component: {fileID: 4346807018714714631}
   m_Layer: 0
   m_Name: Scull
   m_TagString: Untagged
@@ -216,5 +217,22 @@ MonoBehaviour:
   exitGateSpawnPoint: {fileID: 0}
   enemyName: Enemy
   healthBarPrefab: {fileID: 0}
+  stunDuration: 0.5
+  knockbackForce: 3
   hitSound: {fileID: 8300000, guid: a5ada45d2885d3b4cac7ae42f8d602bf, type: 3}
   deathSound: {fileID: 8300000, guid: c27e339ad8c711043b64aa3b19e12530, type: 3}
+--- !u!114 &4346807018714714631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621437003323011305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07daf5ae19974f246854686e08d5f2b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  possibleItems: []
+  dropRadius: 1
+  customDropPoint: {fileID: 0}
