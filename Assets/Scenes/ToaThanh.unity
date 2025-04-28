@@ -4252,7 +4252,6 @@ GameObject:
   - component: {fileID: 846855569}
   - component: {fileID: 846855568}
   - component: {fileID: 846855571}
-  - component: {fileID: 846855570}
   m_Layer: 0
   m_Name: DungNham
   m_TagString: DungNham
@@ -8437,19 +8436,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!114 &846855570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 846855566}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a03ca8b165fa06347a9aacd302cd078b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameOver: {fileID: 2861350240403286506}
 --- !u!19719996 &846855571
 TilemapCollider2D:
   m_ObjectHideFlags: 0

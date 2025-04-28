@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SING UP
+  m_text: SIGN UP
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e42973b897537be4585c1f27418d45f3, type: 2}
   m_sharedMaterial: {fileID: 9144110789825746892, guid: e42973b897537be4585c1f27418d45f3, type: 2}
