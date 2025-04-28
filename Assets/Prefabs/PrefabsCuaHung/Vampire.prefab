@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 8164761893446351320}
   - component: {fileID: 1071691935580499351}
   - component: {fileID: -1525415596746956989}
+  - component: {fileID: -6083265101268974158}
   m_Layer: 0
   m_Name: Vampire
   m_TagString: Untagged
@@ -365,3 +366,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-6083265101268974158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2912475882607813620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07daf5ae19974f246854686e08d5f2b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  possibleItems:
+  - itemPrefab: {fileID: 0}
+    dropChance: 0
+    minAmount: 0
+    maxAmount: 0
+  dropRadius: 1
+  customDropPoint: {fileID: 0}

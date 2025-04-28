@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8418425166982352633}
   - component: {fileID: 958754507000700557}
   - component: {fileID: 3359382374495185300}
+  - component: {fileID: -2713260679354975332}
   m_Layer: 0
   m_Name: skeleton01
   m_TagString: Enemy
@@ -329,3 +330,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-2713260679354975332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890839304284427780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07daf5ae19974f246854686e08d5f2b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  possibleItems: []
+  dropRadius: 1
+  customDropPoint: {fileID: 0}
