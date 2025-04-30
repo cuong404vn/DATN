@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      twitter_only_0: -8404729517734085844
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
