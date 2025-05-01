@@ -279,7 +279,7 @@ MonoBehaviour:
   attackCooldown: 2
   attackPoint: {fileID: 700572389089653620}
   attackRadius: 0.5
-  attackSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: 6a0bc7013e8d5f442afd8836ca007d49, type: 3}
   closeDistance: 0
   retreatDistance: 0
   jumpBackDistance: 0
@@ -311,4 +311,4 @@ MonoBehaviour:
   stunDuration: 0.5
   knockbackForce: 3
   hitSound: {fileID: 0}
-  deathSound: {fileID: 0}
+  deathSound: {fileID: 8300000, guid: f0d78c293baa1304abf053c8ecade69e, type: 3}
