@@ -224,8 +224,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   groundCheckDistance: 0.2
-  attackSound: {fileID: 0}
-  swooshSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: fb3de35f70fb92746a43364b5f177290, type: 3}
+  swooshSound: {fileID: 8300000, guid: fb3de35f70fb92746a43364b5f177290, type: 3}
   hurtDuration: 0.3
   hurtSound: {fileID: 0}
   deathSound: {fileID: 0}

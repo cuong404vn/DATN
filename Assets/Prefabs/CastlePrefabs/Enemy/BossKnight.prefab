@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 2618332914431061555}
   - component: {fileID: 1104196204387295626}
   - component: {fileID: 7596077917096663670}
-  - component: {fileID: 3950251837797654780}
   - component: {fileID: 4724787877101325348}
   - component: {fileID: -8445583672120815997}
+  - component: {fileID: 9081564637404774759}
   m_Layer: 0
   m_Name: BossKnight
   m_TagString: Boss
@@ -32,10 +32,11 @@ Transform:
   m_GameObject: {fileID: 989623094969240568}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.2, y: 27.2, z: 0}
+  m_LocalPosition: {x: 396.45, y: 26.844816, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5007382830170583056}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8585984923065596699
@@ -154,7 +155,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.07317495}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -164,7 +165,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.5357144, y: 3.1785715}
+  m_Size: {x: 2.5357144, y: 3.0322218}
   m_EdgeRadius: 0
 --- !u!114 &7596077917096663670
 MonoBehaviour:
@@ -178,9 +179,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 511fc15767188844b9ddb2dd2851afae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
+  maxHealth: 30
   currentHealth: 0
-  isBoss: 0
+  isBoss: 1
   hitEffect: {fileID: 0}
   deathEffect: {fileID: 0}
   itemDrop: {fileID: 0}
@@ -188,36 +189,8 @@ MonoBehaviour:
   enemyName: Enemy
   healthBarPrefab: {fileID: 0}
   stunDuration: 0.5
-  knockbackForce: 3
+  knockbackForce: 1
   hitSound: {fileID: 0}
-  deathSound: {fileID: 0}
---- !u!114 &3950251837797654780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 989623094969240568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d986f92dcacfc348bdce3fb928aa0bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 10
-  meleeDamage: 1
-  moveSpeed: 1
-  moveDistance: 3
-  detectionRange: 5
-  meleeAttackRange: 2
-  meleeAttackCooldown: 1.5
-  specialAttackRange: 0
-  specialAttackCooldown: 0
-  bulletPrefab: {fileID: 0}
-  exitGatePrefab: {fileID: 0}
-  exitGateSpawnPoint: {fileID: 0}
-  healthBarPrefab: {fileID: 0}
-  meleeAttackSound: {fileID: 8300000, guid: 3b339aafe3e797d4386c5ea1046245ea, type: 3}
-  specialAttackSound: {fileID: 0}
   deathSound: {fileID: 8300000, guid: bd93db71dbcb09247924c8ceecd293e1, type: 3}
 --- !u!95 &4724787877101325348
 Animator:
@@ -260,3 +233,83 @@ MonoBehaviour:
     maxAmount: 50
   dropRadius: 1
   customDropPoint: {fileID: 0}
+--- !u!114 &9081564637404774759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989623094969240568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a5ec38512b78a44989c10b189f2dc00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 1
+  previousState: 0
+  animator: {fileID: 4724787877101325348}
+  rb: {fileID: 2618332914431061555}
+  enemyCollider: {fileID: 1104196204387295626}
+  patrolSpeed: 1.5
+  chaseSpeed: 3
+  retreatSpeed: 0
+  detectionRange: 5
+  patrolRange: 9
+  attackRange: 3
+  attackDamage: 1
+  attackCooldown: 1
+  attackDuration: 2
+  attackPoint: {fileID: 5007382830170583056}
+  attackRadius: 2
+  attackSound: {fileID: 8300000, guid: 3b339aafe3e797d4386c5ea1046245ea, type: 3}
+  fireAttackRange: 0
+  firePoint: {fileID: 0}
+  fireballPrefab: {fileID: 0}
+  fireballSpeed: 0
+  fireAttackDuration: 0
+  fireSound: {fileID: 0}
+  fireDamage: 0
+  rockPrefab: {fileID: 0}
+  rockAttackRange: 0
+  rockAttackDuration: 0
+  rockAttackSound: {fileID: 0}
+  rockDamage: 0
+  rockSpawnHeight: 0
+  rockFallDelay: 0
+  initialRetreatDistance: 0
+  furtherJumpBackDistance: 2
+  retreatDelay: 0
+  jumpBackDelay: 6
+  rockCount: 0
+  rockSpacing: 0
+--- !u!1 &1201427440746286608
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5007382830170583056}
+  m_Layer: 0
+  m_Name: AttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5007382830170583056
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201427440746286608}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.44, y: -0.05, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2954619696303344579}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
