@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SoundToggleButton : MonoBehaviour
 {
@@ -7,43 +8,77 @@ public class SoundToggleButton : MonoBehaviour
     public Sprite soundOffSprite;
     public Image iconImage;
 
+    private string buttonName;
+    private string sceneName;
+
+    void Awake()
+    {
+        buttonName = gameObject.name;
+        sceneName = SceneManager.GetActiveScene().name;
+
+    }
+
     void Start()
     {
-      
-        UpdateIcon();
 
-        
-        UpdateAudioState();
+
+
+        if (AudioManager.Instance == null)
+        {
+
+            return;
+        }
+
+
+        UpdateIcon();
     }
 
     public void OnClickToggleSound()
     {
-        
+
+
+
+        if (AudioManager.Instance == null)
+        {
+
+            return;
+        }
+
+
         AudioManager.Instance.ToggleSound();
 
-       
-        UpdateIcon();
 
-       
-        UpdateAudioState();
+        UpdateIcon();
     }
 
     void UpdateIcon()
     {
-      
+
+
+
+        if (AudioManager.Instance == null)
+        {
+
+            return;
+        }
+
+
+        if (iconImage == null)
+        {
+
+            return;
+        }
+
+
+        if (soundOnSprite == null || soundOffSprite == null)
+        {
+
+            return;
+        }
+
+
         bool isMuted = AudioManager.Instance.IsMuted();
         iconImage.sprite = isMuted ? soundOffSprite : soundOnSprite;
-    }
 
-    void UpdateAudioState()
-    {
-      
-        AudioSource[] audioSources = Object.FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
-
-        foreach (var audioSource in audioSources)
-        {
-            
-            audioSource.mute = AudioManager.Instance.IsMuted();
-        }
     }
 }

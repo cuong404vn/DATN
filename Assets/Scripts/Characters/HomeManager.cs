@@ -42,7 +42,7 @@ public class HomeManager : MonoBehaviour
         StartCoroutine(LoadGameProgress());
         logoutButton.onClick.AddListener(Logout);
 
-        // Add click listener for the watch video button
+        
         if (watchVideoButton != null)
         {
             watchVideoButton.onClick.AddListener(WatchStoryVideo);

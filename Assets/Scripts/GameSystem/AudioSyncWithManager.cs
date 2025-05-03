@@ -1,26 +1,68 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioSyncWithManager : MonoBehaviour
 {
-    void Start()
+    private AudioListener audioListener;
+    private string objectName;
+    private string sceneName;
+
+    void Awake()
     {
-        if (AudioManager.Instance != null)
+        objectName = gameObject.name;
+        sceneName = SceneManager.GetActiveScene().name;
+
+
+
+        audioListener = GetComponent<AudioListener>();
+        if (audioListener == null)
         {
-            AudioListener audioListener = GetComponent<AudioListener>();
-            if (audioListener != null)
-            {
-                bool isMuted = AudioManager.Instance.IsMuted();
-                audioListener.enabled = !isMuted;
-                Debug.Log("AudioListener set to " + (!isMuted));
-            }
-            else
-            {
-                Debug.LogWarning("No AudioListener found on Main Camera.");
-            }
+
         }
         else
         {
-            Debug.LogWarning("AudioManager.Instance is null");
+
         }
     }
+
+    void Start()
+    {
+
+
+
+        if (AudioManager.Instance != null)
+        {
+
+
+            if (audioListener != null)
+            {
+
+                bool isMuted = AudioManager.Instance.IsMuted();
+
+
+
+                audioListener.enabled = !isMuted;
+
+            }
+            else
+            {
+
+            }
+        }
+       
+    }
+
+    void OnEnable()
+    {
+
+
+
+        if (audioListener != null && AudioManager.Instance != null)
+        {
+            bool isMuted = AudioManager.Instance.IsMuted();
+            audioListener.enabled = !isMuted;
+
+        }
+    }
+
 }

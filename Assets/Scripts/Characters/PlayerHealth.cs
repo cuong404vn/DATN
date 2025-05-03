@@ -194,7 +194,30 @@ public class PlayerHealth : MonoBehaviour
 
         if (deathSound != null)
         {
-            AudioSource.PlayClipAtPoint(deathSound, transform.position);
+
+            GameObject tempAudio = new GameObject("TempDeathSound");
+            tempAudio.transform.position = transform.position;
+
+
+            AudioSource audioSource = tempAudio.AddComponent<AudioSource>();
+            audioSource.clip = deathSound;
+            audioSource.spatialBlend = 1.0f; // 3D sound
+            audioSource.volume = 1.0f;
+
+
+            if (AudioManager.Instance != null)
+            {
+                audioSource.mute = AudioManager.Instance.IsMuted();
+
+            }
+            else
+            {
+
+            }
+
+
+            audioSource.Play();
+            Destroy(tempAudio, deathSound.length);
         }
 
 
