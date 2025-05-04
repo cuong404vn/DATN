@@ -26,7 +26,7 @@ public class BossBehavior : MonoBehaviour
     [Header("Attack")]
     [SerializeField] private float attackRange = 1.5f;
     [SerializeField] private int attackDamage = 10;
-    [SerializeField] private float attackCooldown = 5f;
+    [SerializeField] private float attackCooldown = 3f;
     [SerializeField] private float attackDuration = 1f;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRadius = 0.5f;
@@ -122,7 +122,8 @@ public class BossBehavior : MonoBehaviour
     {
         SetPatrolTarget(true);
         previousState = currentState;
-        lastActionTime = -attackCooldown;
+        lastActionTime = Time.time - attackCooldown;
+        lastAttackTime = Time.time - attackCooldown;
     }
 
     void Update()
@@ -176,42 +177,30 @@ public class BossBehavior : MonoBehaviour
 
     void UpdateCurrentState(float distanceToPlayer)
     {
+
         if (isHurt || isDead) return;
 
 
         if (currentActionCoroutine != null)
         {
-
-
             return;
         }
-
 
         float distanceToPatrolCenter = Vector2.Distance(transform.position, patrolCenter);
         bool isWithinPatrolArea = distanceToPatrolCenter <= patrolRange * 1.5f;
 
 
-        if ((currentState == EnemyState.Chase || currentState == EnemyState.FireAttack || currentState == EnemyState.RockAttack) &&
-            distanceToPlayer <= attackRange && isWithinPatrolArea)
+        bool canAttack = Time.time - lastActionTime >= attackCooldown;
+
+        if (!canAttack)
         {
 
-
-
-
-            if (currentActionCoroutine != null)
+            if (distanceToPlayer <= detectionRange && isWithinPatrolArea &&
+                currentState != EnemyState.Attack && currentState != EnemyState.FireAttack &&
+                currentState != EnemyState.RockAttack)
             {
-                StopCoroutine(currentActionCoroutine);
+                currentState = EnemyState.Chase;
             }
-            useFireAttack = false;
-            currentActionCoroutine = StartCoroutine(PerformFullAttackSequence());
-            return;
-        }
-
-
-        if (Time.time - lastActionTime < attackCooldown)
-        {
-
-
             return;
         }
 
@@ -219,30 +208,11 @@ public class BossBehavior : MonoBehaviour
         if (distanceToPlayer <= attackRange && isWithinPatrolArea)
         {
 
-
-
-
-            if (currentActionCoroutine != null)
-            {
-                StopCoroutine(currentActionCoroutine);
-            }
             useFireAttack = false;
             currentActionCoroutine = StartCoroutine(PerformFullAttackSequence());
         }
         else if (distanceToPlayer <= fireAttackRange && distanceToPlayer > attackRange && isWithinPatrolArea && useFireAttack)
         {
-
-
-            {
-
-
-            }
-
-            if (currentActionCoroutine != null)
-            {
-                StopCoroutine(currentActionCoroutine);
-            }
-
 
             if (rangedAttackType == 0)
                 currentActionCoroutine = StartCoroutine(PerformFireAttack());
@@ -251,17 +221,13 @@ public class BossBehavior : MonoBehaviour
         }
         else if (distanceToPlayer <= detectionRange && isWithinPatrolArea)
         {
+
             currentState = EnemyState.Chase;
         }
         else
         {
-            if (currentState == EnemyState.Chase || currentState == EnemyState.Attack ||
-                currentState == EnemyState.FireAttack || currentState == EnemyState.RockAttack)
-            {
-                currentState = EnemyState.Patrol;
-                SetPatrolTarget(transform.position.x < patrolCenter.x);
-            }
-            else if (currentState != EnemyState.Patrol && currentState != EnemyState.Idle)
+
+            if (currentState != EnemyState.Patrol && currentState != EnemyState.Idle)
             {
                 currentState = EnemyState.Patrol;
                 SetPatrolTarget(transform.position.x < patrolCenter.x);
@@ -325,74 +291,31 @@ public class BossBehavior : MonoBehaviour
     {
 
         yield return StartCoroutine(PerformAttack());
-
-
         yield return StartCoroutine(RetreatAfterAttack());
-
-
         yield return StartCoroutine(JumpBackFurther());
 
 
         useFireAttack = true;
-
-
         rangedAttackType = Random.Range(0, 2);
 
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         float distanceToPatrolCenter = Vector2.Distance(transform.position, patrolCenter);
-
         float currentRangedAttackRange = (rangedAttackType == 0) ? fireAttackRange : rockAttackRange;
 
-        if (distanceToPlayer <= currentRangedAttackRange && distanceToPlayer > attackRange &&
-            distanceToPatrolCenter <= patrolRange * 1.5f && useFireAttack)
+
+        if (distanceToPlayer <= detectionRange && distanceToPatrolCenter <= patrolRange * 1.5f)
         {
-
-
-            {
-
-
-            }
-
-
-            currentActionCoroutine = null;
-
-
-            if (rangedAttackType == 0)
-                currentActionCoroutine = StartCoroutine(PerformFireAttack());
-            else
-                currentActionCoroutine = StartCoroutine(PerformRockAttack());
-
-        }
-        else if (distanceToPlayer <= detectionRange && distanceToPatrolCenter <= patrolRange * 1.5f)
-        {
-
-
-
-
-
-
             SetState(EnemyState.Chase);
-
-
-
-            lastActionTime = -attackCooldown;
-        }
-        else
-        {
-
-
-
-
-            SetState(EnemyState.Patrol);
-            SetPatrolTarget(transform.position.x < patrolCenter.x);
-
 
             lastActionTime = Time.time;
         }
-
-
-
+        else
+        {
+            SetState(EnemyState.Patrol);
+            SetPatrolTarget(transform.position.x < patrolCenter.x);
+            lastActionTime = Time.time;
+        }
 
 
         currentActionCoroutine = null;
@@ -402,9 +325,6 @@ public class BossBehavior : MonoBehaviour
     {
 
         SetState(EnemyState.Attack);
-
-
-
 
 
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
@@ -733,9 +653,6 @@ public class BossBehavior : MonoBehaviour
         isAttacking = true;
 
 
-
-
-
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         UpdateFacingDirectionTowards(player.position);
 
@@ -746,55 +663,31 @@ public class BossBehavior : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
 
-
-
-
-
         yield return new WaitForSeconds(fireAttackDuration - 0.5f);
 
 
         lastAttackTime = Time.time;
         lastActionTime = Time.time;
         isAttacking = false;
-
-
         useFireAttack = false;
 
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         float distanceToPatrolCenter = Vector2.Distance(transform.position, patrolCenter);
 
-        if (distanceToPlayer <= attackRange && distanceToPatrolCenter <= patrolRange * 1.5f)
+
+        if (distanceToPlayer <= detectionRange && distanceToPatrolCenter <= patrolRange * 1.5f)
         {
-
-
-
-
-
             SetState(EnemyState.Chase);
-            currentActionCoroutine = null;
-
-            lastActionTime = -attackCooldown;
-        }
-        else if (distanceToPlayer <= detectionRange && distanceToPatrolCenter <= patrolRange * 1.5f)
-        {
-
-
-
-
-            SetState(EnemyState.Chase);
-            currentActionCoroutine = null;
         }
         else
         {
-
-
-
-
             SetState(EnemyState.Patrol);
             SetPatrolTarget(transform.position.x < patrolCenter.x);
-            currentActionCoroutine = null;
         }
+
+
+        currentActionCoroutine = null;
     }
 
     void SpawnFireball()
@@ -864,9 +757,6 @@ public class BossBehavior : MonoBehaviour
         rockSpawning = false;
 
 
-
-
-
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         UpdateFacingDirectionTowards(player.position);
 
@@ -875,10 +765,6 @@ public class BossBehavior : MonoBehaviour
 
 
         yield return new WaitForSeconds(0.5f);
-
-
-
-
 
 
         yield return new WaitForSeconds(rockAttackDuration - 0.5f);
@@ -895,37 +781,19 @@ public class BossBehavior : MonoBehaviour
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         float distanceToPatrolCenter = Vector2.Distance(transform.position, patrolCenter);
 
-        if (distanceToPlayer <= attackRange && distanceToPatrolCenter <= patrolRange * 1.5f)
+
+        if (distanceToPlayer <= detectionRange && distanceToPatrolCenter <= patrolRange * 1.5f)
         {
-
-
-
-
-
             SetState(EnemyState.Chase);
-            currentActionCoroutine = null;
-
-            lastActionTime = -attackCooldown;
-        }
-        else if (distanceToPlayer <= detectionRange && distanceToPatrolCenter <= patrolRange * 1.5f)
-        {
-
-
-
-
-            SetState(EnemyState.Chase);
-            currentActionCoroutine = null;
         }
         else
         {
-
-
-
-
             SetState(EnemyState.Patrol);
             SetPatrolTarget(transform.position.x < patrolCenter.x);
-            currentActionCoroutine = null;
         }
+
+
+        currentActionCoroutine = null;
     }
 
 
