@@ -14,7 +14,7 @@ class User {
         $this->conn = $db;
     }
     
-    // Đăng ký user mới
+
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " 
                   SET Username = :username, 
@@ -23,14 +23,14 @@ class User {
  
         $stmt = $this->conn->prepare($query);
  
-        // Sanitize
+
         $this->Username = htmlspecialchars(strip_tags($this->Username));
         $this->Email = htmlspecialchars(strip_tags($this->Email));
         
-        // Hash password
+
         $this->Password = password_hash($this->Password, PASSWORD_DEFAULT);
  
-        // Bind values
+
         $stmt->bindParam(":username", $this->Username);
         $stmt->bindParam(":password", $this->Password);
         $stmt->bindParam(":email", $this->Email);
@@ -41,7 +41,7 @@ class User {
         return false;
     }
     
-    // Kiểm tra đăng nhập
+
     public function login() {
         $query = "SELECT UserID, Username, Password FROM " . $this->table_name . " 
                   WHERE Username = ?";
@@ -60,7 +60,7 @@ class User {
         return false;
     }
     
-    // Kiểm tra username đã tồn tại chưa
+
     public function usernameExists() {
         $query = "SELECT UserID FROM " . $this->table_name . " 
                   WHERE Username = ?";
@@ -72,7 +72,7 @@ class User {
         return $stmt->rowCount() > 0;
     }
     
-    // Cập nhật thời gian đăng nhập
+
     public function updateLastLogin() {
         $query = "UPDATE " . $this->table_name . " 
                   SET LastLogin = NOW() 

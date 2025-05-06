@@ -1,23 +1,23 @@
 <?php
-// Entry point của API
-// Include các file cần thiết
+
+
 include_once './config/cors.php';
 
-// Lấy URL request
-$request_uri = $_SERVER['REQUEST_URI'];
-$base_path = '/api/'; // Đường dẫn cơ sở của API
 
-// Kiểm tra xem URL có bắt đầu bằng /api/ không
+$request_uri = $_SERVER['REQUEST_URI'];
+$base_path = '/api/'; 
+
+
 if (strpos($request_uri, $base_path) === 0) {
-    // Lấy phần path sau /api/
+
     $path = substr($request_uri, strlen($base_path));
     $url_parts = explode('/', trim($path, '/'));
     
-    // Xác định controller và action
+
     $controller = isset($url_parts[0]) ? $url_parts[0] : '';
     $action = isset($url_parts[1]) ? $url_parts[1] : '';
     
-    // Routing
+
     switch ($controller) {
         case 'auth':
             include_once './controllers/AuthController.php';
@@ -37,7 +37,7 @@ if (strpos($request_uri, $base_path) === 0) {
             include_once './middleware/Authentication.php';
             include_once './controllers/GameController.php';
             
-            // Kiểm tra token
+
             $auth = new Authentication();
             if (!$auth->validateToken()) {
                 break;
@@ -59,7 +59,7 @@ if (strpos($request_uri, $base_path) === 0) {
             include_once './middleware/Authentication.php';
             include_once './controllers/InventoryController.php';
             
-            // Kiểm tra token
+
             $auth = new Authentication();
             if (!$auth->validateToken()) {
                 break;
@@ -81,7 +81,7 @@ if (strpos($request_uri, $base_path) === 0) {
             include_once './middleware/Authentication.php';
             include_once './controllers/QuestController.php';
             
-            // Kiểm tra token
+
             $auth = new Authentication();
             if (!$auth->validateToken()) {
                 break;
@@ -105,7 +105,7 @@ if (strpos($request_uri, $base_path) === 0) {
             break;
     }
 } else {
-    // Không phải request API
+
     http_response_code(404);
     echo json_encode(array("status" => "error", "message" => "API endpoint không tồn tại"));
 }

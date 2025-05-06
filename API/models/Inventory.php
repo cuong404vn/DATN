@@ -13,7 +13,7 @@ class Inventory {
         $this->conn = $db;
     }
     
-    // Lấy inventory của user
+
     public function getInventory() {
         $query = "SELECT * FROM " . $this->table_name . " 
                   WHERE UserID = ?";
@@ -25,9 +25,9 @@ class Inventory {
         return $stmt;
     }
     
-    // Thêm/cập nhật item trong inventory
+
     public function updateItem() {
-        // Kiểm tra xem item đã có trong inventory chưa
+
         $query = "SELECT InventoryID, Quantity FROM " . $this->table_name . " 
                   WHERE UserID = ? AND ItemID = ?";
  
@@ -37,12 +37,12 @@ class Inventory {
         $stmt->execute();
  
         if($stmt->rowCount() > 0) {
-            // Item đã tồn tại, cập nhật số lượng
+
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             $current_quantity = $row['Quantity'];
             $new_quantity = $current_quantity + $this->Quantity;
             
-            // Nếu số lượng <= 0, xóa item
+
             if($new_quantity <= 0) {
                 $query = "DELETE FROM " . $this->table_name . " 
                           WHERE InventoryID = ?";
@@ -52,7 +52,7 @@ class Inventory {
                 
                 return $stmt->execute();
             } else {
-                // Cập nhật số lượng
+
                 $query = "UPDATE " . $this->table_name . " 
                           SET Quantity = ?, LastUpdated = NOW() 
                           WHERE InventoryID = ?";
@@ -64,9 +64,9 @@ class Inventory {
                 return $stmt->execute();
             }
         } else {
-            // Item chưa tồn tại, thêm mới
+
             if($this->Quantity <= 0) {
-                return false; // Không thêm item với số lượng <= 0
+                return false; 
             }
             
             $query = "INSERT INTO " . $this->table_name . " 

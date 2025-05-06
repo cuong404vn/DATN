@@ -1,21 +1,21 @@
 <?php
-// Entry point của API
-// Include các file cần thiết
+
+
 include_once './config/cors.php';
 include_once './config/database.php';
 
-// Lấy URL request
+
 $request_uri = $_SERVER['REQUEST_URI'];
 $url_parts = explode('/', trim($request_uri, '/'));
 
-// Bỏ qua phần đầu URL (thường là 'api')
+
 array_shift($url_parts);
 
-// Xác định controller và action
+
 $controller = isset($url_parts[0]) ? $url_parts[0] : '';
 $action = isset($url_parts[1]) ? $url_parts[1] : '';
 
-// Routing
+
 switch ($controller) {
     case 'auth':
         include_once './controllers/AuthController.php';
@@ -35,7 +35,7 @@ switch ($controller) {
         include_once './middleware/Authentication.php';
         include_once './controllers/GameController.php';
         
-        // Kiểm tra token
+
         $auth = new Authentication();
         if (!$auth->validateToken()) {
             break;
@@ -57,7 +57,7 @@ switch ($controller) {
         include_once './middleware/Authentication.php';
         include_once './controllers/InventoryController.php';
         
-        // Kiểm tra token
+
         $auth = new Authentication();
         if (!$auth->validateToken()) {
             break;
@@ -79,7 +79,7 @@ switch ($controller) {
         include_once './middleware/Authentication.php';
         include_once './controllers/QuestController.php';
         
-        // Kiểm tra token
+
         $auth = new Authentication();
         if (!$auth->validateToken()) {
             break;

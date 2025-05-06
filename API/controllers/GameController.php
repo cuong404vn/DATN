@@ -1,5 +1,5 @@
 <?php
-// Import các file cần thiết
+
 include_once './config/database.php';
 include_once './models/GameProgress.php';
 
@@ -8,18 +8,18 @@ class GameController {
     private $game_progress;
     
     public function __construct() {
-        // Kết nối database
+
         $database = new Database();
         $this->db = $database->getConnection();
         $this->game_progress = new GameProgress($this->db);
     }
     
-    // Lấy tiến độ game
+
     public function getProgress($userID) {
         $this->game_progress->UserID = $userID;
         
         if($this->game_progress->getProgress()) {
-            // Chuyển đổi MapUnlocked từ JSON string sang array
+
             $mapUnlocked = json_decode($this->game_progress->MapUnlocked, true);
             
             http_response_code(200);
@@ -30,15 +30,15 @@ class GameController {
                 "unlockedMaps" => $mapUnlocked
             ));
         } else {
-            // Chưa có tiến độ, trả về mặc định
+
             http_response_code(200);
             echo json_encode(array(
                 "status" => "success",
-                "currentMap" => "map1",
+                "currentMap" => "ToaThanh",
                 "totalStars" => 0,
                 "unlockedMaps" => array(
                     array(
-                        "mapID" => "map1",
+                        "mapID" => "ToaThanh",
                         "status" => "unlocked",
                         "stars" => 0,
                         "highScore" => 0
@@ -48,47 +48,56 @@ class GameController {
         }
     }
     
-    // Lưu tiến độ game
+
     public function saveProgress() {
-        // Lấy dữ liệu từ request
+
         $data = json_decode(file_get_contents("php://input"));
         
-        // Validate dữ liệu
+
         if(empty($data->userID) || empty($data->mapID) || !isset($data->score) || !isset($data->stars)) {
             http_response_code(400);
             echo json_encode(array("status" => "error", "message" => "Thiếu thông tin tiến độ"));
             return;
         }
         
-        // Set các giá trị
+
         $this->game_progress->UserID = $data->userID;
         $this->game_progress->CurrentMap = $data->mapID;
         
-        // Lấy tiến độ hiện tại
+
         $this->game_progress->getProgress();
         
-        // Cập nhật tổng số sao
-        $currentStars = $this->game_progress->TotalStars ?: 0;
-        $mapUnlocked = json_decode($this->game_progress->MapUnlocked, true) ?: array();
+
+        $mapUnlocked = json_decode($this->game_progress->MapUnlocked, true);
+        if(!$mapUnlocked) $mapUnlocked = array();
         
-        // Kiểm tra xem map đã tồn tại trong danh sách chưa
-        $mapExists = false;
+
+        $currentStars = $this->game_progress->TotalStars;
         $oldStars = 0;
         
+
+        $mapExists = false;
         foreach($mapUnlocked as &$map) {
             if($map['mapID'] == $data->mapID) {
                 $mapExists = true;
                 $oldStars = $map['stars'];
                 
-                // Cập nhật thông tin map
+
+                if($data->stars > $map['stars']) {
+                    $map['stars'] = $data->stars;
+                }
+                
+
+                if($data->score > $map['highScore']) {
+                    $map['highScore'] = $data->score;
+                }
+                
                 $map['status'] = $data->status;
-                $map['stars'] = max($map['stars'], $data->stars); // Lấy số sao cao nhất
-                $map['highScore'] = max($map['highScore'], $data->score); // Lấy điểm cao nhất
                 break;
             }
         }
         
-        // Nếu map chưa tồn tại, thêm mới
+
         if(!$mapExists) {
             $mapUnlocked[] = array(
                 "mapID" => $data->mapID,
@@ -98,22 +107,81 @@ class GameController {
             );
         }
         
-        // Cập nhật tổng số sao
-        $this->game_progress->TotalStars = $currentStars + ($data->stars - $oldStars);
+
+        if($data->status == "completed") {
+
+            $nextMapID = $this->getNextMapID($data->mapID);
+            if($nextMapID) {
+
+                $nextMapExists = false;
+                foreach($mapUnlocked as &$map) {
+                    if($map['mapID'] == $nextMapID) {
+                        $nextMapExists = true;
+
+                        if($map['status'] == "locked") {
+                            $map['status'] = "unlocked";
+                        }
+                        break;
+                    }
+                }
+                
+
+                if(!$nextMapExists) {
+                    $mapUnlocked[] = array(
+                        "mapID" => $nextMapID,
+                        "status" => "unlocked",
+                        "stars" => 0,
+                        "highScore" => 0
+                    );
+                }
+            }
+        }
+        
+
+        error_log("MapUnlocked before: " . $this->game_progress->MapUnlocked);
+        error_log("TotalStars before: " . $this->game_progress->TotalStars);
+
+
+        $totalStars = 0;
+        foreach($mapUnlocked as $map) {
+            $stars = intval($map['stars']);
+            error_log("Map: " . $map['mapID'] . ", Stars: " . $stars);
+            $totalStars += $stars;
+        }
+        error_log("TotalStars calculated: " . $totalStars);
+        $this->game_progress->TotalStars = $totalStars;
         $this->game_progress->MapUnlocked = json_encode($mapUnlocked);
         
-        // Lưu tiến độ
+
         if($this->game_progress->saveProgress()) {
             http_response_code(200);
             echo json_encode(array(
                 "status" => "success",
                 "message" => "Lưu tiến độ thành công",
-                "totalStars" => $this->game_progress->TotalStars
+                "totalStars" => $this->game_progress->TotalStars,
+                "unlockedMaps" => json_decode($this->game_progress->MapUnlocked)
             ));
         } else {
             http_response_code(500);
             echo json_encode(array("status" => "error", "message" => "Lưu tiến độ thất bại"));
         }
+    }
+
+
+    private function getNextMapID($currentMapID) {
+
+        $mapOrder = array("ToaThanh", "KhuRung", "LongDat", "CamThanh");
+        
+
+        $currentIndex = array_search($currentMapID, $mapOrder);
+        
+
+        if($currentIndex === false || $currentIndex >= count($mapOrder) - 1) {
+            return null;
+        }
+        
+
+        return $mapOrder[$currentIndex + 1];
     }
 }
 ?> 
