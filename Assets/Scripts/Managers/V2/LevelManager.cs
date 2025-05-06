@@ -256,7 +256,7 @@ public class LevelManager : MonoBehaviour
                 finalTimeText.text = string.Format("Time Done: {0:00}:{1:00}", minutes, seconds);
 
             if (finalScoreText != null)
-                finalScoreText.text = "Poin: " + totalScore;
+                finalScoreText.text = "Point: " + totalScore;
 
             if (finalStarsText != null)
                 finalStarsText.text = "Star: " + earnedStars;
